@@ -3,5 +3,125 @@ html {
 }
 
 body {
-	font-family: sans-serif;
+	font-family: 'Open Sans', 'Roboto', sans-serif;
+	color: #292929;
+}
+
+.main-menu-header {
+  background: #F1FEF4 !important;
+}
+
+.main-menu-header__navigation {
+  background: #F1FEF4 !important;
+  z-index: 90;
+  position: fixed;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateX(100%);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  transition: transform 350ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.main-menu-mainNavigation__title {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  padding: 0 15px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.main-menu-header__navigation.isActive {
+  transform: translateX(0);
+}
+
+.main-menu-mainNavigation__title:hover {
+  text-decoration: none;
+}
+
+.menu-siteNavigationToggle__barTop,
+.menu-siteNavigationToggle__barMiddle1,
+.menu-siteNavigationToggle__barMiddle2,
+.menu-siteNavigationToggle__barBottom {
+  transform-origin: 47%;
+  transition: all 250ms ease;
+}
+
+.main-menu-mainNavigation__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-menu-mainNavigation__menuItem {
+  border-bottom: 1px solid #E7E9EC;
+}
+
+.main-menu-mainNavigation__menuItem:last-child {
+  border-bottom: 0;
+}
+
+.main-menu-mainNavigation__menuItem:last-child>a:last-child {
+  border: 0.5px solid #011B33;
+  border-radius: 5px;
+  padding: 5px 18px;
+  line-height: 23px;
+  height: 35px;
+}
+
+.main-menu-header__container {
+  display: flex;
+  align-items: center;
+  padding: 9px 0;
+}
+
+.main-menu-header__branding {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.main-menu-header__logo {
+  width: 128px;
+  height: 32px;
+  display: block;
+}
+
+.main-menu-header__navigationToggle {
+  margin-left: auto;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  width: 33px;
+  height: 48px;
+  cursor: pointer;
+  outline: none;
+}
+
+
+.mobile-overflowHidden {
+  overflow: hidden !important;
+}
+
+.mobile-displayBlock {
+  display: block !important;
+}
+
+.main-menu-mainNavigation__container {
+  padding-right: 0;
+}
+
+.header-logo {
+  width: 150px;
+}
+
+header.main-menu-header a:hover {
+  color: #03A538;
+}
+
+header.main-menu-header a.btn-secondary:hover {
+  color: #fff;
 }
