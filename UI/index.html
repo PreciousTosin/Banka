@@ -2,54 +2,56 @@
 	<html lang="en">
 	<head>
 			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<metaclass="viewport" content="width=device-width, initial-scale=1.0">
 			<meta http-equiv="X-UA-Compatible" content="ie=edge">
 			<title>Banka</title>
+			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+			<link rel="stylesheet" href="./css/style.css">
 	</head>
 	<body>
-		<header className="main-menu-header">
-			<div className="main-menu-header__container container">
-				<Link className="main-menu-header__branding" to="/">
+		<header class="main-menu-header">
+			<div class="main-menu-header__container container">
+				<Link class="main-menu-header__branding" to="/">
 					Banka
 				</Link>
 	
-				{/* -- START: Navigation Toggle */}
-				<button type="button" className="main-menu-header__navigationToggle" id="siteNavigationToggle">
+				<!-- START: Navigation Toggle -->
+				<button type="button" class="main-menu-header__navigationToggle" id="siteNavigationToggle">
 					<svg
-						className="menu-siteNavigationToggle"
+						class="menu-siteNavigationToggle"
 						xmlns="http://www.w3.org/2000/svg"
 						width="40"
 						height="48"
 						viewBox="0 0 48 48"
 					>
 						<g fill="#011B33" fillRule="evenodd">
-							<rect className="menu-siteNavigationToggle__barTop" width="28" height="2" x="8" y="16" rx="1.5" />
-							<rect className="menu-siteNavigationToggle__barMiddle1" width="28" height="2" x="8" y="23" rx="1.5" />
-							<rect className="menu-siteNavigationToggle__barMiddle2" width="28" height="2" x="8" y="23" rx="1.5" />
-							<rect className="menu-siteNavigationToggle__barBottom" width="28" height="2" x="8" y="30" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barTop" width="28" height="2" x="8" y="16" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barMiddle1" width="28" height="2" x="8" y="23" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barMiddle2" width="28" height="2" x="8" y="23" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barBottom" width="28" height="2" x="8" y="30" rx="1.5" />
 						</g>
 					</svg>
 				</button>
-				{/* -- END: Navigation Toggle */}
-				{/* -- START: Header Navigation */}
-				<div className="main-menu-header__navigation" id="siteNavigation">
-					{/* -- START: Main Navigation */}
-					<nav className="main-menu-mainNavigation">
-						<div className="main-menu-mainNavigation__container container">
-							<ul className="main-menu-mainNavigation__menu">
-								<li className="main-menu-mainNavigation__menuItem">
-									<Link className="main-menu-mainNavigation__title" to="/profile.html">Profile</Link>
+				<!-- END: Navigation Toggle -->
+				<!-- START: Header Navigation -->
+				<div class="main-menu-header__navigation" id="siteNavigation">
+					<!-- START: Main Navigation -->
+					<nav class="main-menu-mainNavigation">
+						<div class="main-menu-mainNavigation__container container">
+							<ul class="main-menu-mainNavigation__menu">
+								<li class="main-menu-mainNavigation__menuItem">
+									<Link class="main-menu-mainNavigation__title" to="/profile.html">Profile</Link>
 								</li>
-								<li className="main-menu-mainNavigation__menuItem">
-									<a className="main-menu-mainNavigation__title" href="./login.html">Login</a>
-									<a className="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
+								<li class="main-menu-mainNavigation__menuItem">
+									<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
+									<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
 								</li>
 							</ul>
 						</div>
 					</nav>
-					{/* -- END: Main Navigation */}
+					<!-- END: Main Navigation -->
 				</div>
-				{/* -- END: Header Navigation */}
+				<!-- END: Header Navigation -->
 			</div>
 		</header>
 	</body>
