@@ -399,7 +399,7 @@ footer a {
 /* --------------------------- SIGNUP --------------------------------------- */
 .signup-container {
   display: flex;
-  max-width: 370px;
+  max-width: 350px;
   margin: 2rem auto;
   background-color: #fff;
   border-radius: 0.2rem;
