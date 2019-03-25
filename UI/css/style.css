@@ -143,6 +143,64 @@ button.close {
   }
 }
 
+/* ----------------- General Table Styles --------------------- */
+table {
+  width: 100%;
+  background-color: #fff;
+  border-collapse: collapse;
+}
+
+.gen--table th {
+  font-size: 12px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.4;
+  text-transform: uppercase;
+  background-color: #9452a8;
+}
+
+.gen--table td {
+  font-size: 14px;
+  color: #808080;
+  line-height: 1.4;
+}
+
+.gen--table tbody tr:nth-child(even) {
+  background-color: #efd7f7;
+}
+
+.table--row.head th {
+  padding-top: 24px;
+  padding-bottom: 20px;
+}
+
+.table--column.column1 {
+  width: 265px;
+  padding-left: 42px;
+}
+
+.table--column {
+  width: 130px;
+  padding-left: 25px;
+}
+
+.table--row td {
+  padding-top: 18px;
+  padding-bottom: 14px;
+}
+
+th, td {
+  font-weight: unset;
+  padding-right: 10px;
+}
+th {
+  text-align: left;
+}
+
+td {
+  border: none;
+}
+
 
 /*-------------------------- Navbar styles -----------------------  */
 .main-menu-header {
@@ -468,7 +526,7 @@ footer a {
   }
 }
 
-/* --------------------------- auth --------------------------------------- */
+/* --------------------------- Profile --------------------------------------- */
 .profile--container {
   width: 350px;
   margin: 2rem auto;
@@ -548,4 +606,13 @@ footer a {
   .profile--container {
     width: 750px;
   }
+}
+
+/* --------------------------- Transaction --------------------------------------- */
+.transaction--container {
+  width: 80%;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #ffff;
+  border-radius: 0.25rem;
 }
