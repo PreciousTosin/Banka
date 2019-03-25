@@ -396,8 +396,8 @@ footer a {
   }
 }
 
-/* --------------------------- SIGNUP --------------------------------------- */
-.signup-container {
+/* --------------------------- auth --------------------------------------- */
+.auth-container {
   display: flex;
   max-width: 350px;
   margin: 2rem auto;
@@ -405,32 +405,32 @@ footer a {
   border-radius: 0.2rem;
 }
 
-.signup--image {
+.auth--image {
   display: none;
   border-radius: 0.2rem 0 0 0.2rem;
 }
 
-.signup--image img {
+.auth--image img {
   border-radius: 0.2rem 0 0 0.2rem;
 }
 
-.signup--form {
+.auth--form {
   margin: 2rem auto;
   width: 70%;
   padding: 1rem 2rem;
 }
 
 @media screen and (min-width: 500px) {
-  .signup-container {
+  .auth-container {
     max-width: 490px;
   }
 
-  .signup--image {
+  .auth--image {
     display: block;
     max-width: 370px;
   }
 
-  .signup--form {
+  .auth--form {
     width: 32%;
     border: 0.5px solid rgba(1, 27, 51, 0.1);
     border-radius: 5px;
@@ -442,17 +442,17 @@ footer a {
 }
 
 @media screen and (min-width: 700px) {
-  .signup-container {
+  .auth-container {
     max-width: 650px;
   }
 }
 
 @media screen and (min-width: 1000px) {
-  .signup-container {
+  .auth-container {
     max-width: 950px;
   }
 
-  .signup--image {
+  .auth--image {
     max-width: 700px;
   }
 }
