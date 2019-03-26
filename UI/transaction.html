@@ -4,7 +4,8 @@
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<meta http-equiv="X-UA-Compatible" content="ie=edge">
-			<title>Banka</title>
+      <title>Banka</title>
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="./css/style.css">
 	</head>
@@ -60,7 +61,7 @@
 
 		<div class="transaction--container">
       <div class="gen--table">
-        <table>
+        <table id="staticTable">
           <thead>
             <tr class="table--row head">
               <th class="table--column column1">Date</th>
@@ -102,6 +103,10 @@
           </tbody>
         </table>
       </div>
+
+      <div class="dynamic--table">
+        <table id="dynamicTable"></table>
+      </div>
     </div>
 
 		<!-- START: Footer -->
@@ -127,6 +132,15 @@
 				</div>
 			</div>
 		</footer>
-		<!-- END: Footer -->
+    <!-- END: Footer -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+      window.onload = function() {
+        $(document).ready( function () {
+          $('#staticTable').DataTable();
+        });
+      }
+    </script>
 	</body>
 </html>

@@ -149,6 +149,23 @@ table {
   background-color: #fff;
   border-collapse: collapse;
 }
+.gen--table .dataTables_length {
+  margin-bottom: 5px;
+}
+
+.gen--table select, input {
+  height: calc(1.8rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.gen--table a {}
 
 .gen--table th {
   font-size: 12px;
@@ -184,9 +201,9 @@ table {
   padding-left: 25px;
 }
 
-.table--row td {
-  padding-top: 18px;
-  padding-bottom: 14px;
+table td {
+  padding-top: 18px !important;
+  padding-bottom: 14px !important;
 }
 
 th, td {
@@ -199,6 +216,15 @@ th {
 
 td {
   border: none;
+}
+
+/* ------------- DataTables css styling -----------------*/
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.1rem 1rem;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: #EFD7F7 !important;
+  border-color: #EFD7F7 !important
 }
 
 
@@ -615,4 +641,8 @@ footer a {
   padding: 1.5rem;
   background-color: #ffff;
   border-radius: 0.25rem;
+}
+
+.dynamic--table {
+  margin-top: 25px;
 }
