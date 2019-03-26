@@ -137,6 +137,12 @@ button.close {
   border-color: #302840;
 }
 
+.btn-danger {
+  color: #fff;
+  background-color: #C9302C;
+  border-color: #C9302C;
+}
+
 @media screen and (min-width: 500px) {
   .form--group {
     flex-direction: column;
@@ -163,6 +169,7 @@ table {
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: .25rem;
+  margin-bottom: 10px;
 }
 
 .gen--table a {}
@@ -225,6 +232,43 @@ td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
   background: #EFD7F7 !important;
   border-color: #EFD7F7 !important
+}
+
+.dataTables_wrapper .dataTables_filter {
+  float: right;
+  text-align: right;
+  margin-right: 0.5rem;
+}
+
+.dataTables_wrapper .dt-buttons {
+  margin-left: 0.5rem;
+}
+
+.dataTables_wrapper .dt-buttons button {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .25rem .75rem;
+  font-size: 0.8rem;
+  /* color: #808080; */
+  color: #fff;
+  background: #302840 !important;
+  border-color: #302840;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.dataTables_wrapper .delete--btn {
+  padding: .15rem .65rem;
+  font-size: 0.8rem;
 }
 
 
@@ -645,4 +689,21 @@ footer a {
 
 .dynamic--table {
   margin-top: 25px;
+}
+
+/* --------------------------- Bank Records --------------------------------------- */
+.records--container {
+  width: 80%;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #ffff;
+  border-radius: 0.25rem;
+}
+
+
+/* ------------ Detailed Bank Records --------------- */
+.detailed-records-container {
+  padding: 1.5rem;
+  background-color: #ffff;
+  border-radius: 0.25rem;
 }

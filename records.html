@@ -5,6 +5,10 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<meta http-equiv="X-UA-Compatible" content="ie=edge">
 			<title>Banka</title>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css"/>
+			<!-- Default theme -->
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/default.min.css"/>
+			<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/r-2.2.2/sl-1.3.0/datatables.min.css"/>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="./css/style.css">
 	</head>
@@ -46,9 +50,6 @@
 									<a class="main-menu-mainNavigation__title" href="./transaction.html">Transaction</a>
 								</li>
 								<li class="main-menu-mainNavigation__menuItem">
-									<a class="main-menu-mainNavigation__title" href="./records.html">Records</a>
-								</li>
-								<li class="main-menu-mainNavigation__menuItem">
 									<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
 									<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
 								</li>
@@ -61,7 +62,56 @@
 			</div>
 		</header>
 
-		<div class="home-container"></div>
+		<div class="records--container">
+			<div class="gen--table">
+				<table id="recordsTable">
+          <thead>
+            <tr class="table--row head">
+              <th class="table--column column1">Id</th>
+              <th class="table--column">Acc/Name</th>
+              <th class="table--column">Acc/No</th>
+              <th class="table--column">Value</th>
+							<th class="table--column">Date</th>
+							<th class="table--column">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table--row">
+							<td class="table--column column1">36956655716265</td>
+							<td class="table--column">John Wayne</td>
+							<td class="table--column">0187925874</td>
+              <td class="table--column">100000</td>
+							<td class="table--column">2019-03-10</td>
+							<td class="table--column"></td>
+            </tr>
+            <tr class="table--row">
+              <td class="table--column column1">65897567145632</td>
+							<td class="table--column">James Donovan</td>
+							<td class="table--column">0151370846</td>
+							<td class="table--column">50000</td>
+							<td class="table--column">2019-03-01</td>
+							<td class="table--column"></td>
+            </tr>
+            <tr class="table--row">
+							<td class="table--column column1">54875558726968</td>
+							<td class="table--column">Tyler Ross</td>
+							<td class="table--column">2147378033</td>
+              <td class="table--column">250000</td>
+							<td class="table--column">2019-02-25</td>
+							<td class="table--column"></td>
+            </tr>
+            <tr class="table--row">
+							<td class="table--column column1">23568974210520</td>
+							<td class="table--column">Micheal Flannigan</td>
+              <td class="table--column">4594440081</td>
+							<td class="table--column">200000</td>
+							<td class="table--column">2019-02-10</td>
+							<td class="table--column"></td>
+            </tr>  
+          </tbody>
+        </table>
+			</div>
+		</div>
 
 		<!-- START: Footer -->
 		<footer>
@@ -87,5 +137,9 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/r-2.2.2/sl-1.3.0/datatables.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+		<script type="text/javascript" src="./js/records.js"></script>
 	</body>
 </html>
