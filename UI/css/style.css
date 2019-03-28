@@ -137,7 +137,7 @@ button.close {
   border-color: #302840;
 }
 
-.btn-danger {
+.btn--danger {
   color: #fff;
   background-color: #C9302C;
   border-color: #C9302C;
@@ -266,7 +266,7 @@ td {
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.dataTables_wrapper .delete--btn {
+.dataTables_wrapper .btn {
   padding: .15rem .65rem;
   font-size: 0.8rem;
 }
@@ -691,8 +691,8 @@ footer a {
   margin-top: 25px;
 }
 
-/* --------------------------- Bank Records --------------------------------------- */
-.records--container {
+/* --------------------------- Admin Bank Records --------------------------------------- */
+.admin--container {
   width: 80%;
   margin: 2rem auto;
   padding: 1.5rem;
@@ -700,10 +700,48 @@ footer a {
   border-radius: 0.25rem;
 }
 
+.admin--header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.admin--header ul {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0;
+}
+
+.admin--header--item:first-child {
+  margin-left: 0;
+}
+
+.admin--header--item {
+  padding: 6px;
+  margin-left: 10px;
+  border-radius: 0.2rem;
+  background: #302840;
+  color: #fff;
+  cursor: pointer;
+}
+
+.admin--container .gen--table {
+  overflow-x: scroll;
+}
+
+
 
 /* ------------ Detailed Bank Records --------------- */
 .detailed-records-container {
   padding: 1.5rem;
   background-color: #ffff;
   border-radius: 0.25rem;
+}
+
+/** -------------- DIALOG FORMS -------------------- */
+.dialog--form {
+  width: 80%;
+  margin: auto;
+  text-align: center;
 }
