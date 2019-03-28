@@ -90,6 +90,19 @@ button.close {
   margin-bottom: 13px;
 }
 
+.form--group label {
+  margin-bottom: 5px;
+}
+
+.super--form--group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.super--form--group .form--group {
+  width: 48%
+}
+
 .form--control {
   display: block;
   width: 100%;
@@ -103,6 +116,10 @@ button.close {
   border: 1px solid #ced4da;
   border-radius: .25rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+select.form--control {
+  height: calc(1.2rem + 16px);
 }
 
 .form--button {
@@ -268,6 +285,11 @@ td {
 
 .dataTables_wrapper .btn {
   padding: .15rem .65rem;
+  font-size: 0.8rem;
+}
+
+.dataTables_wrapper .activate--btn.btn {
+  padding: .15rem 1.1rem;
   font-size: 0.8rem;
 }
 
@@ -721,13 +743,36 @@ footer a {
   padding: 6px;
   margin-left: 10px;
   border-radius: 0.2rem;
-  background: #302840;
-  color: #fff;
   cursor: pointer;
 }
 
+.admin--header--item.active {
+  background: #302840;
+  color: #fff;
+}
+
+
 .admin--container .gen--table {
   overflow-x: scroll;
+}
+
+.admin--container .create-user-form {
+  width: 60%;
+  margin: 2rem auto;
+  text-align: center
+}
+
+.create-user-form {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.create-user-form .form--header {
+  text-align: center
+}
+
+.create-user-form .submit--btn {
+  text-align: center;
 }
 
 

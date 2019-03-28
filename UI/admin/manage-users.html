@@ -44,8 +44,14 @@
 						<div class="main-menu-mainNavigation__container container">
 							<ul class="main-menu-mainNavigation__menu">
 								<li class="main-menu-mainNavigation__menuItem">
-									<a class="main-menu-mainNavigation__title" href="../login.html">Login</a>
-									<a class="main-menu-mainNavigation__title" href="../signup.html">Sign Up</a>
+									<a class="main-menu-mainNavigation__title" href="./profile.html">Profile</a>
+								</li>
+								<li class="main-menu-mainNavigation__menuItem">
+									<a class="main-menu-mainNavigation__title" href="./transaction.html">Transaction</a>
+								</li>
+								<li class="main-menu-mainNavigation__menuItem">
+									<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
+									<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
 								</li>
 							</ul>
 						</div>
@@ -61,58 +67,96 @@
 				<ul>
 					<li onclick="initializeDefaultAdmin()" class="admin--header--item active">Manage Bank Accounts</li>
 					<li onclick="initializeConsumateAdmin()" class="admin--header--item">Debit/Credit Accounts</li>
-					<li onclick="initializeManageUsersAdmin()" class="admin--header--item">Manage Users</li>
+					<li onclick="" class="admin--header--item">Manage Users</li>
 				</ul>
 			</div>
+
+			<!-- <div class="create-user-form">
+				<h3>Create Staff Account</h3>
+				<form id="createUserForm" action="" method="POST" name="createUserForm">
+					<div class="form--group">
+						<input type="text" class="form--control" id="firstName" placeholder="First Name" name="firstName" required>
+					</div>
+					<div class="form--group">
+						<input type="text" class="form--control" id="lastName" placeholder="Last Name" name="lastName" required>
+					</div>
+					<div class="form--group">
+						<input type="email" class="form--control" id="email" placeholder="Email" name="email" required>
+					</div>
+					<div class="form--group">
+						<input type="password" class="form--control" id="password" placeholder="Password" name="password" required>
+					</div>
+					<div class="form--group">
+						<input type="text" class="form--control" id="type" placeholder="Staff" name="type" value="staff" required>
+					</div>
+					<div class="form--group">
+						<select class="form--control" id="IsAdmin" name="IsAdmin" required>
+							<option value="true">True</option>
+							<option value="false" selected>False</option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn--primary">Submit</button>
+				</form>
+			</div> -->
 			<div class="admin--body">
-					<!--<div class="gen--table">
-							<table id="recordsTable">
+					<div class="gen--table">
+							<table id="manageUserRecordsTable">
 								<thead>
 									<tr class="table--row head">
 										<th class="table--column column1">Id</th>
-										<th class="table--column">Acc/Name</th>
-										<th class="table--column">Acc/No</th>
-										<th class="table--column">Balance</th>
-										<th class="table--column">Date</th>
-										<th class="table--column">Delete</th>
+										<th class="table--column">First Name</th>
+										<th class="table--column">Last Name</th>
+										<th class="table--column">Type</th>
+										<th class="table--column">IsAdmin</th>
+										<th class="table--column">Status</th>
+										<th class="table--column">Created</th>
+										<th class="table--column">Modify</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr class="table--row">
 										<td class="table--column column1">36956655716265</td>
-										<td class="table--column">John Wayne</td>
-										<td class="table--column">0187925874</td>
-										<td class="table--column">100000</td>
+										<td class="table--column">John</td>
+										<td class="table--column">Wayne</td>
+										<td class="table--column">staff</td>
+										<td class="table--column">false</td>
+										<td class="table--column">active</td>
 										<td class="table--column">2019-03-10</td>
 										<td class="table--column"></td>
 									</tr>
 									<tr class="table--row">
 										<td class="table--column column1">65897567145632</td>
-										<td class="table--column">James Donovan</td>
-										<td class="table--column">0151370846</td>
-										<td class="table--column">50000</td>
+										<td class="table--column">James</td>
+										<td class="table--column">Donovan</td>
+										<td class="table--column">client</td>
+										<td class="table--column">false</td>
+										<td class="table--column">active</td>
 										<td class="table--column">2019-03-01</td>
 										<td class="table--column"></td>
 									</tr>
 									<tr class="table--row">
 										<td class="table--column column1">54875558726968</td>
-										<td class="table--column">Tyler Ross</td>
-										<td class="table--column">2147378033</td>
-										<td class="table--column">250000</td>
+										<td class="table--column">Tyler</td>
+										<td class="table--column">Ross</td>
+										<td class="table--column">staff</td>
+										<td class="table--column">true</td>
+										<td class="table--column">active</td>
 										<td class="table--column">2019-02-25</td>
 										<td class="table--column"></td>
 									</tr>
 									<tr class="table--row">
 										<td class="table--column column1">23568974210520</td>
-										<td class="table--column">Micheal Flannigan</td>
-										<td class="table--column">4594440081</td>
-										<td class="table--column">200000</td>
+										<td class="table--column">Micheal</td>
+										<td class="table--column">Flannigan</td>
+										<td class="table--column">client</td>
+										<td class="table--column">false</td>
+										<td class="table--column">inactive</td>
 										<td class="table--column">2019-02-10</td>
 										<td class="table--column"></td>
-									</tr>  
+									</tr>
 								</tbody>
 							</table>
-						</div>-->
+						</div>
 			</div>
 		</div>
 
