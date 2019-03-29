@@ -108,5 +108,42 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
+		<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script>
+				$(document).ready(() => {
+					$("a.nav-link[data-toggle='dropdown']").click((e) => {
+						$('.dropdown-menu').fadeToggle();
+						e.stopPropagation();
+					});
+	
+					$(document).click((e) => {
+						if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
+							$('.dropdown-menu').fadeOut();
+						}
+					});
+	
+					$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
+						$('.sub-menu').fadeToggle();
+						e.stopPropagation();
+					});
+	
+					/* Code block to toggle navbar visibility */
+					const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+					const siteNavigation = document.getElementById('siteNavigation');
+	
+					siteNavigationToggle.addEventListener('click', () => {
+						if (siteNavigation.classList.contains('isActive')) {
+							siteNavigationToggle.removeAttribute('aria-pressed');
+						} else {
+							siteNavigationToggle.setAttribute('aria-pressed', true);
+						}
+	
+						document.body.classList.toggle('mobile-overflowHidden');
+	
+						siteNavigation.classList.toggle('isActive');
+						siteNavigationToggle.classList.toggle('isActive');
+					});
+				});
+			</script>
 	</body>
 </html>
