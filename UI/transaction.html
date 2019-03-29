@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Banka</title>
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
+			<link rel="stylesheet" href="./css/style.css">
+	</head>
+	<body>
+		<header class="main-menu-header">
+			<div class="main-menu-header__container container">
+				<a class="main-menu-header__branding" href="./index.html">
+					Banka
+				</a>
+	
+				<!-- START: Navigation Toggle -->
+				<button type="button" class="main-menu-header__navigationToggle" id="siteNavigationToggle">
+					<svg
+						class="menu-siteNavigationToggle"
+						xmlns="http://www.w3.org/2000/svg"
+						width="40"
+						height="48"
+						viewBox="0 0 48 48"
+					>
+						<g fill="#011B33" fillRule="evenodd">
+							<rect class="menu-siteNavigationToggle__barTop" width="28" height="2" x="8" y="16" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barMiddle1" width="28" height="2" x="8" y="23" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barMiddle2" width="28" height="2" x="8" y="23" rx="1.5" />
+							<rect class="menu-siteNavigationToggle__barBottom" width="28" height="2" x="8" y="30" rx="1.5" />
+						</g>
+					</svg>
+				</button>
+				<!-- END: Navigation Toggle -->
+				<!-- START: Header Navigation -->
+				<div class="main-menu-header__navigation" id="siteNavigation">
+					<!-- START: Main Navigation -->
+					<nav class="main-menu-mainNavigation">
+						<div class="main-menu-mainNavigation__container container">
+							<ul class="main-menu-mainNavigation__menu">
+								<li class="main-menu-mainNavigation__menuItem">
+									<a class="main-menu-mainNavigation__title" href="./profile.html">Profile</a>
+                </li>
+                <li class="main-menu-mainNavigation__menuItem">
+                  <a class="main-menu-mainNavigation__title" href="./transaction.html">Transaction</a>
+                </li>
+								<li class="main-menu-mainNavigation__menuItem">
+									<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
+									<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+					<!-- END: Main Navigation -->
+				</div>
+				<!-- END: Header Navigation -->
+			</div>
+		</header>
+
+		<div class="transaction--container">
+      <div class="gen--table">
+        <table id="staticTable">
+          <thead>
+            <tr class="table--row head">
+              <th class="table--column column1">Date</th>
+              <th class="table--column">Type</th>
+              <th class="table--column">Amount</th>
+              <th class="table--column">Sender</th>
+              <th class="table--column">Recipient</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table--row">
+              <td class="table--column column1">2019-03-10</td>
+              <td class="table--column">Debit</td>
+              <td class="table--column">100000</td>
+              <td class="table--column">--</td>
+              <td class="table--column">0187925874</td>
+            </tr>
+            <tr class="table--row">
+              <td class="table--column column1">2019-03-01</td>
+              <td class="table--column">Debit</td>
+              <td class="table--column">50000</td>
+              <td class="table--column">--</td>
+              <td class="table--column">0151370846</td>
+            </tr>
+            <tr class="table--row">
+              <td class="table--column column1">2019-02-25</td>
+              <td class="table--column">Credit</td>
+              <td class="table--column">250000</td>
+              <td class="table--column">2147378033</td>
+              <td class="table--column">--</td>
+            </tr>
+            <tr class="table--row">
+              <td class="table--column column1">2019-02-10</td>
+              <td class="table--column">Credit</td>
+              <td class="table--column">200000</td>
+              <td class="table--column">4594440081</td>
+              <td class="table--column">--</td>
+            </tr>  
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dynamic--table">
+        <table id="dynamicTable"></table>
+      </div>
+    </div>
+
+		<!-- START: Footer -->
+		<footer>
+			<div class="footer-container">
+				<div class="footer--logo">
+					<a to="/">
+						Banka
+					</Link>
+				</div>
+				<div class="">
+					<a href="#">Faq</a>
+					<a href="#">Terms</a>
+					<a href="#">Privacy</a>
+				</div>
+				<div class="">
+					<div class="copyright">
+						<p class="text-center text-white">
+							<span>2019</span>
+							Banka. All Rights Reserved
+						</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+    <!-- END: Footer -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+      window.onload = function() {
+        $(document).ready( function () {
+          $('#staticTable').DataTable();
+        });
+      }
+		</script>
+		<script>
+				$(document).ready(() => {
+					$("a.nav-link[data-toggle='dropdown']").click((e) => {
+						$('.dropdown-menu').fadeToggle();
+						e.stopPropagation();
+					});
+	
+					$(document).click((e) => {
+						if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
+							$('.dropdown-menu').fadeOut();
+						}
+					});
+	
+					$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
+						$('.sub-menu').fadeToggle();
+						e.stopPropagation();
+					});
+	
+					/* Code block to toggle navbar visibility */
+					const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+					const siteNavigation = document.getElementById('siteNavigation');
+	
+					siteNavigationToggle.addEventListener('click', () => {
+						if (siteNavigation.classList.contains('isActive')) {
+							siteNavigationToggle.removeAttribute('aria-pressed');
+						} else {
+							siteNavigationToggle.setAttribute('aria-pressed', true);
+						}
+	
+						document.body.classList.toggle('mobile-overflowHidden');
+	
+						siteNavigation.classList.toggle('isActive');
+						siteNavigationToggle.classList.toggle('isActive');
+					});
+				});
+			</script>
+	</body>
+</html>
