@@ -53,6 +53,53 @@ const createConsumateForm = transactionType => (
     </form>
    </div>`
 );
+
+/* --------------- CREATE STAFF USER FORM ------------- */
+function createStaffUserForm() {
+	return (
+		`<div class="create-user-form">
+		<div class="form--header">
+			<h3>Create Staff Account</h3>
+		</div>
+		<form id="createStaffUserForm" action="" method="POST" name="createStaffUserForm">
+			<div class="super--form--group">
+				<div class="form--group">
+					<label for="firstName">First Name</label>
+					<input type="text" class="form--control" id="firstName" name="firstName" required>
+				</div>
+				<div class="form--group">
+					<label for="lastName">Last Name</label>
+					<input type="text" class="form--control" id="lastName" name="lastName" required>
+				</div>
+			</div>
+			<div class="form--group">
+				<label for="email">Email</label>
+				<input type="email" class="form--control" id="email" name="email" required>
+			</div>
+			<div class="form--group">
+				<label for="password">Password</label>
+				<input type="password" class="form--control" id="password" name="password" required>
+			</div>
+			<div class="super--form--group">
+				<div class="form--group">
+					<label for="type">Type</label>
+					<input type="text" class="form--control" id="type" name="type" value="staff" required>
+				</div>
+				<div class="form--group">
+					<label for="IsAdmin">IsAdmin</label>
+					<select class="form--control" id="IsAdmin" name="IsAdmin" required>
+						<option value="true">True</option>
+						<option value="false" selected>False</option>
+					</select>
+				</div>
+			</div>
+			<div class="submit--btn">
+				<button type="submit" class="btn btn--primary">Submit</button>
+			</div>
+		</form>
+	</div>`
+	);
+}
 /* ------ Bank accounts management admin template ------ */
 function bankAccountsAdminTemplate() {
 	return (`
@@ -171,6 +218,70 @@ function consumateAdminTemplate() {
 	);
 }
 
+function manageUsersTableTemplate() {
+	return (
+		`<div class="gen--table">
+			<table id="manageUserRecordsTable">
+				<thead>
+					<tr class="table--row head">
+						<th class="table--column column1">Id</th>
+						<th class="table--column">First Name</th>
+						<th class="table--column">Last Name</th>
+						<th class="table--column">Type</th>
+						<th class="table--column">IsAdmin</th>
+						<th class="table--column">Status</th>
+						<th class="table--column">Created</th>
+						<th class="table--column">Modify</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table--row">
+						<td class="table--column column1">36956655716265</td>
+						<td class="table--column">John</td>
+						<td class="table--column">Wayne</td>
+						<td class="table--column">staff</td>
+						<td class="table--column">false</td>
+						<td class="table--column">active</td>
+						<td class="table--column">2019-03-10</td>
+						<td class="table--column"></td>
+					</tr>
+					<tr class="table--row">
+						<td class="table--column column1">65897567145632</td>
+						<td class="table--column">James</td>
+						<td class="table--column">Donovan</td>
+						<td class="table--column">client</td>
+						<td class="table--column">false</td>
+						<td class="table--column">active</td>
+						<td class="table--column">2019-03-01</td>
+						<td class="table--column"></td>
+					</tr>
+					<tr class="table--row">
+						<td class="table--column column1">54875558726968</td>
+						<td class="table--column">Tyler</td>
+						<td class="table--column">Ross</td>
+						<td class="table--column">staff</td>
+						<td class="table--column">true</td>
+						<td class="table--column">active</td>
+						<td class="table--column">2019-02-25</td>
+						<td class="table--column"></td>
+					</tr>
+					<tr class="table--row">
+						<td class="table--column column1">23568974210520</td>
+						<td class="table--column">Micheal</td>
+						<td class="table--column">Flannigan</td>
+						<td class="table--column">client</td>
+						<td class="table--column">false</td>
+						<td class="table--column">inactive</td>
+						<td class="table--column">2019-02-10</td>
+						<td class="table--column"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>`
+	);
+}
+
 
 	/** ----------------------------------- CUSTOM DIALOGS --------------------------------- */
 (function createViewDialog() {
@@ -209,9 +320,9 @@ function consumateAdminTemplate() {
 		}
 }());
 
-(function createConsumateDialog() {
-  if (!alertify.consumateDialog) {
-    alertify.dialog('consumateDialog', function() {
+(function createFormDialog() {
+  if (!alertify.formDialog) {
+    alertify.dialog('formDialog', function() {
 			return ({
 				main(content) {
 					this.setContent(content);
@@ -279,6 +390,22 @@ const consumateDataEvent = () => {
 		}
   });
 };
+
+const createStaffUserDataEvent = () => {
+  $('body').on('submit', '#createStaffUserForm', (event) => {
+		event.preventDefault();
+		const formData = $("#createStaffUserForm").serializeArray(); // GET FORM DATA
+		console.log('STAFF USER FORM DATA', formData);
+  });
+};
+
+/* ----- EVENT FOR TOGGLING ACTIVE CLASS FOR DASHBOARD TABS ----- */
+function addTabsEvent() {
+	$('body').on('click', '.admin--header ul li', function() {
+		$('ul li.active').removeClass('active');
+		$(this).closest('li').addClass('active');
+	});
+}
 
 /** ------------------------------ TABLE INITIALIZATION LOGIC -----------------------------------------  */
 function initializeTable() {
@@ -379,6 +506,63 @@ function initializeConsumateTable() {
 	return recordTable;
 }
 
+function initializeUserManagementTable() {
+	let recordTable = $('#manageUserRecordsTable').DataTable({
+		columns: [
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			{
+				className: 'manage--btn',
+				orderable: false,
+				/* data: null, */
+				width: '5%',
+			},
+		],
+		lengthChange: false,
+		select: {
+			style: 'single',
+		},
+		dom: 'Bfrtip',
+		buttons: [
+			{
+				text: 'Create Account',
+				action() {
+					console.log('CREATE ACCOUNT BUTTON CLICKED');
+					alertify.formDialog(createStaffUserForm());
+				},
+			},
+		],
+		columnDefs: [
+			{
+				targets: -1,
+				data: function (row, type, value, meta) {
+					// console.log('RowType', type);
+					// console.log('DataRow', row);
+					// return row[5];
+					if (row[5] === 'active') {
+						return '<button id="deactivate-btn" class="deactivate--btn btn btn--danger">Deactivate</button>'
+					} else {
+						return '<button id="activate-btn" class="activate--btn btn btn--danger">Activate</button>'
+					}
+					// return row.status;
+				},
+				/* defaultContent: '<button id="debit-btn" class="debit--btn btn btn--danger">Manage</button>', */
+			},
+		],
+		initComplete() {
+			/* recordTable.buttons().container()
+				.appendTo($('.col-md-6:eq(0)', recordTable.table().container())); */
+		},
+	});
+
+	return recordTable;
+}
+
 /** ---------------- Record Operations ----------------------- */
 const deleteRecord = (data, target) => {
 	const rowData = data.row($(target).parents('tr')).data();
@@ -388,13 +572,13 @@ const deleteRecord = (data, target) => {
 const creditAccount = (data, target) => {
 	const rowData = data.row($(target).parents('tr')).data();
 	console.log('ACCOUNT TO CREDIT: ', rowData);
-	alertify.consumateDialog(createConsumateForm('Credit'));
+	alertify.formDialog(createConsumateForm('Credit'));
 }
 
 const debitAccount = (data, target) => {
 	const rowData = data.row($(target).parents('tr')).data();
 	console.log('ACCOUNT TO DEBIT: ', rowData);
-	alertify.consumateDialog(createConsumateForm('Debit'));
+	alertify.formDialog(createConsumateForm('Debit'));
 }
 
 /** --------------- Initialize default admin page ------------------ */
@@ -425,9 +609,24 @@ function initializeConsumateAdmin() {
 	consumateDataEvent();
 }
 
+/** --------------- Initialize Manage users page ------------------ */
+function findandSetManageHtml() {
+	const template = manageUsersTableTemplate();
+	const container = document.querySelector('.admin--body');
+	container.innerHTML = template;
+} 
+
+function initializeManageUsersAdmin() {
+	findandSetManageHtml();
+	const table = initializeUserManagementTable();
+	createStaffUserDataEvent();
+}
+
 /** ---------------- Initialize admin dashboard -------------------------------- */
 window.onload = function() {
 	// createViewDialog();
+	addTabsEvent();
 	initializeDefaultAdmin();
 	// initializeConsumateAdmin();
+	// initializeManageUsersAdmin();
 }
