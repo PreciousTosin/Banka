@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 app.use(methodOverride());
 app.use(express.json());
-app.use('/', homeRoute);
+app.use(`/${process.env.API_VERSION}`, homeRoute);
 
 const server = app.listen(process.env.PORT, () => {
   const { address, port } = server.address();
