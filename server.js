@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 
 /* -------- ROUTES ---------------- */
 const homeRoute = require('./routes/home');
+const userRoute = require('./routes/user');
 
 /* -------- CONTROLLERS ---------------- */
 
@@ -16,7 +17,10 @@ if (process.env.NODE_ENV !== 'test') {
 }
 app.use(methodOverride());
 app.use(express.json());
+app.use(express.urlencoded());
+
 app.use(`/${process.env.API_VERSION}`, homeRoute);
+app.use(`/${process.env.API_VERSION}/user`, userRoute);
 
 const server = app.listen(process.env.PORT, () => {
   const { address, port } = server.address();
