@@ -5,7 +5,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const { deleteUser } = require('../controllers/user');
+const { testDelete } = require('../controllers/user');
 
 chai.should();
 const { expect } = chai;
@@ -42,8 +42,8 @@ describe('/GET Users', () => {
 });
 
 describe('/POST User', () => {
-  beforeEach(async () => {
-    await deleteUser('precioustosin@hotmail.com');
+  beforeEach(() => {
+    testDelete('precioustosin@hotmail.com');
   });
   it('it should return status of 200 ok', (done) => {
     const user = {

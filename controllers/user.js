@@ -62,4 +62,8 @@ module.exports = {
       reject(Object.assign({}, { status: 400, error: 'User not found' }));
     }
   }),
+
+  testDelete: email => usersModel.forEach((user, index) => {
+    if (user.get('email') === email) usersModel = usersModel.delete(index);
+  }),
 };
