@@ -4,9 +4,9 @@ const user = require('../controllers/user');
 const router = express.Router();
 
 
-router.get('/', (req, res) => res.json(user.returnAllUsers()));
+router.get('/', async (req, res) => res.json(await user.returnAllUsers()));
 
-router.get('/:id', (req, res) => res.json(user.findUserById(req.params.id)));
+router.get('/:id', async (req, res) => res.json(await user.findUserById(req.params.id)));
 
 router.post('/', async (req, res) => {
   try {

@@ -42,8 +42,8 @@ describe('/GET Users', () => {
 });
 
 describe('/POST User', () => {
-  beforeEach(() => {
-    deleteUser('precioustosin@hotmail.com');
+  beforeEach(async () => {
+    await deleteUser('precioustosin@hotmail.com');
   });
   it('it should return status of 200 ok', (done) => {
     const user = {

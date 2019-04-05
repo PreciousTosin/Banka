@@ -13,17 +13,25 @@ function makeId() {
 }
 
 module.exports = {
-  returnAllUsers: () => usersModel,
+  returnAllUsers: () => new Promise((resolve) => {
+    resolve(usersModel);
+  }),
 
-  findUserById: id => usersModel.filter(user => user.get('id') === id).get(0),
+  findUserById: id => new Promise((resolve) => {
+    const filteredUser = usersModel.filter(user => user.get('id') === id).get(0);
+    resolve(filteredUser);
+  }),
 
-  findUserByEmail: email => usersModel.filter(user => user.get('email') === email).get(0),
+  findUserByEmail: email => new Promise((resolve) => {
+    const filteredUser = usersModel.filter(user => user.get('email') === email).get(0);
+    resolve(filteredUser);
+  }),
 
   createUser: payload => new Promise((resolve, reject) => {
     const newUser = Map(payload);
     // check first if email exists, if it does, throw an error
     const checkEmailArr = usersModel.filter(user => user.get('email') === newUser.get('email'));
-    if (checkEmailArr.size !== 0) throw Object.assign({}, {}, { error: 'User exists' });
+    if (checkEmailArr.size !== 0) throw Object.assign({}, {}, { status: 400, error: 'User exists' });
     asyncHashPassword(newUser.get('password'))
       .then((hash) => {
         const newObj = fromJS({
@@ -37,7 +45,8 @@ module.exports = {
       }).catch(error => reject(error));
   }),
 
-  deleteUser: email => usersModel.forEach((user, index) => {
+  deleteUser: email => new Promise(resolve => usersModel.forEach((user, index) => {
     if (user.get('email') === email) usersModel = usersModel.delete(index);
-  }),
+    resolve();
+  })),
 };
