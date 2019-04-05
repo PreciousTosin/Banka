@@ -45,8 +45,21 @@ module.exports = {
       }).catch(error => reject(error));
   }),
 
-  deleteUser: email => new Promise(resolve => usersModel.forEach((user, index) => {
-    if (user.get('email') === email) usersModel = usersModel.delete(index);
-    resolve();
-  })),
+  deleteUser: id => new Promise((resolve, reject) => {
+    let deletedUser = '';
+    usersModel.forEach((user, index) => {
+      if (user.get('id') === id) {
+        usersModel = usersModel.delete(index);
+        deletedUser = user;
+      } else if (user.get('email') === id) {
+        usersModel = usersModel.delete(index);
+        deletedUser = user;
+      }
+    });
+    if (deletedUser !== '') {
+      resolve(Object.assign({}, { status: 200, message: 'User Deleted successfully', data: deletedUser }));
+    } else {
+      reject(Object.assign({}, { status: 400, error: 'User not found' }));
+    }
+  }),
 };
