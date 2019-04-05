@@ -45,6 +45,26 @@ module.exports = {
       }).catch(error => reject(error));
   }),
 
+  updateUser: payload => new Promise((resolve, reject) => {
+    let userIndex = '';
+    const update = Map(payload);
+    const userToUpdate = usersModel.filter((user, index) => {
+      userIndex = index;
+      return user.get('id') === update.get('id');
+    }).get(0);
+    if (userToUpdate === undefined) {
+      reject(Object.assign({}, { status: 400, error: 'User not found' }));
+    }
+    const updatedUser = userToUpdate.reduce((map, value, key) => {
+      // if new data has current key, update the old user data with the new value
+      if (update.has(key)) return map.set(key, update.get(key));
+      return map;
+    }, userToUpdate);
+    // update global users state
+    usersModel = usersModel.splice(userIndex, 1, updatedUser);
+    resolve(Object.assign({}, { status: 200, message: 'User updated successfully', data: updatedUser }));
+  }),
+
   deleteUser: id => new Promise((resolve, reject) => {
     let deletedUser = '';
     usersModel.forEach((user, index) => {

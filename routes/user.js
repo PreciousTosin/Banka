@@ -20,6 +20,19 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const updatePayload = {
+      id: req.params.id,
+      ...req.body,
+    };
+    const updatedUser = await user.updateUser(updatePayload);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
     const response = await user.deleteUser(req.params.id);
