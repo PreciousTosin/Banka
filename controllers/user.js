@@ -1,6 +1,7 @@
 const { List, Map, fromJS } = require('immutable');
 let usersModel = require('../models/user');
-const { asyncHashPassword } = require('./password');
+const { asyncHashPassword, asyncComparePassword } = require('./password');
+const { createToken, verifyToken } = require('./jwt-token');
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
 function makeId() {
@@ -10,6 +11,10 @@ function makeId() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return `banka-${text}`;
+}
+
+function generatePayload(user) {
+  return user.delete('password').toObject();
 }
 
 module.exports = {
@@ -41,9 +46,44 @@ module.exports = {
         const updatedUser = newUser.merge(newObj); // update id and password
         const newUserArray = List([updatedUser]); // create list from user map
         usersModel = usersModel.concat(newUserArray); // update global user state
-        resolve(usersModel);
-      }).catch(error => reject(error));
+        createToken(generatePayload(newObj)).then((token) => {
+          const tokenizedUser = updatedUser.set('token', token); // add token
+          const clientPayload = tokenizedUser.delete('password'); // remove password key/value
+          resolve(clientPayload);
+        }).catch(error => reject(error));
+      }).catch(error => error);
   }),
+
+  loginUser: async (payload) => {
+    try {
+      const userData = usersModel.filter(user => user.get('email') === payload.email).get(0);
+      if (userData === undefined) {
+        return Object.assign({}, { status: 400, error: 'User does not exist' });
+      }
+      // console.log('USER DATA: ', userData, payload);
+      const isValidUser = await asyncComparePassword(payload.password, userData.get('password'));
+      if (isValidUser === true) {
+        const tokenPayload = generatePayload(userData);
+        const token = await createToken(tokenPayload);
+        const tokenizedUser = userData.set('token', token);
+        const clientPayload = tokenizedUser.delete('password');
+        return Object.assign({}, { status: 200, data: clientPayload });
+      }
+      return Object.assign({}, { status: 400, error: 'Password is incorrect' });
+    } catch (e) {
+      console.log(e);
+      return Object.assign({}, { status: 400, error: e });
+    }
+  },
+
+  verifyUser: async (token) => {
+    try {
+      await verifyToken(token);
+      return Object.assign({}, { status: 200, message: 'token is valid' });
+    } catch (e) {
+      return Object.assign({}, { status: 400, error: e.message });
+    }
+  },
 
   updateUser: payload => new Promise((resolve, reject) => {
     let userIndex = '';
