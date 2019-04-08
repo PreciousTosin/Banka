@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.use(`/${process.env.API_VERSION}`, homeRoute);
-app.use(`/${process.env.API_VERSION}/user`, userRoute);
+app.use(`/${process.env.API_VERSION}/auth`, userRoute);
 
 const server = app.listen(process.env.PORT, () => {
   const { address, port } = server.address();

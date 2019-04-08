@@ -1,18 +1,22 @@
 const express = require('express');
 const user = require('../controllers/user');
+const { isUser, isAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
 
+router.get('/users', isUser, async (req, res) => res.json(await user.returnAllUsers()));
 
-router.get('/', async (req, res) => res.json(await user.returnAllUsers()));
+router.get('/users/:id', isUser, async (req, res) => res.json(await user.findUserById(req.params.id)));
 
-router.get('/:id', async (req, res) => res.json(await user.findUserById(req.params.id)));
-
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     const userPayload = req.body;
     const updatedUser = await user.createUser(userPayload);
-    res.status(200).json(updatedUser);
+    const response = Object.assign({}, {
+      status: 200,
+      data: updatedUser,
+    });
+    res.status(200).json(response);
   } catch (error) {
     // console.log(error);
     res.status(400).json(error);
@@ -20,7 +24,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.post('/signin', async (req, res) => {
+  try {
+    const userPayload = req.body;
+    const response = await user.loginUser(userPayload);
+    res.status(response.status).json(response);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+router.put('/users/:id', isUser, async (req, res) => {
   try {
     const updatePayload = {
       id: req.params.id,
@@ -33,7 +47,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/users/:id', isAdmin, async (req, res) => {
   try {
     const response = await user.deleteUser(req.params.id);
     res.status(200).json(response);
