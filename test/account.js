@@ -42,3 +42,18 @@ describe('/GET accounts', () => {
       });
   });
 });
+
+describe('/PATCH accounts', () => {
+  it('it should patch account and return status of 200', (done) => {
+    chai.request(server)
+      .patch(`/v1/accounts/${37091127128041550}`)
+      .send({ status: 'active' })
+      .end((err, res) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(err).to.be.null;
+        expect(res).to.have.status(200);
+        expect(res.body.data.status).to.be.equal('active');
+        done();
+      });
+  });
+});

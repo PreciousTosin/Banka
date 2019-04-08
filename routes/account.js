@@ -34,4 +34,20 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const payload = {
+      id: Number(id),
+      ...req.body,
+    };
+    const patchPayload = await account.patchBankAccount(payload);
+    const response = Object.assign({}, { status: 200, data: patchPayload });
+    res.status(response.status).json(response);
+  } catch (e) {
+    const errorResponse = Object.assign({}, { status: 400, error: e });
+    res.status(400).json(errorResponse);
+  }
+});
+
 module.exports = router;

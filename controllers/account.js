@@ -65,4 +65,26 @@ module.exports = {
       })
       .catch(err => reject(err));
   }),
+
+  patchBankAccount: payload => new Promise((resolve) => {
+    const { id } = payload;
+    const patchPayload = Map(payload);
+    const patch = patchPayload.delete('id');
+    const patchedOutput = {};
+    const patched = accountsModel.map((account) => {
+      if (account.get('id') === Number(id)) {
+        patchedOutput.accountNumber = account.get('accountNumber'); // add account number
+        return account.reduce((map, value, key) => {
+          if (patch.has(key)) {
+            patchedOutput[key] = patchPayload.get(key); // add key/value pairs of patched data
+            return map.set(key, patch.get(key));
+          }
+          return map;
+        }, account);
+      }
+      return account;
+    });
+    accountsModel = patched; // update global account state;
+    resolve(patchedOutput);
+  }),
 };
