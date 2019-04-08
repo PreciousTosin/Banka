@@ -2,7 +2,7 @@ const { List, Map } = require('immutable');
 
 const defaultUsers = [
   {
-    id: 'banka-23568974210520',
+    id: 23568974210520,
     email: 'michealflan@gmail.com',
     firstName: 'Micheal',
     lastName: 'Flannigan',
@@ -11,7 +11,7 @@ const defaultUsers = [
     isAdmin: false,
     status: 'inactive',
   }, {
-    id: 'banka-36956655716265',
+    id: 36956655716265,
     email: 'johnwayne@gmail.com',
     firstName: 'John',
     lastName: 'Wayne',
@@ -20,7 +20,7 @@ const defaultUsers = [
     isAdmin: false,
     status: 'active',
   }, {
-    id: 'banka-54875558726968',
+    id: 54875558726968,
     email: 'tylerross@gmail.com',
     firstName: 'Tyler',
     lastName: 'Ross',
@@ -29,7 +29,7 @@ const defaultUsers = [
     isAdmin: true,
     status: 'active',
   }, {
-    id: 'banka-65897567145632',
+    id: 65897567145632,
     email: 'jamesdonovan@gmail.com',
     firstName: 'James',
     lastName: 'Donovan',
