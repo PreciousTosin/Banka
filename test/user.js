@@ -86,7 +86,7 @@ describe('/POST User', () => {
   });
 });
 
-describe('POST/ Users', () => {
+describe('POST/ User', () => {
   it('it should prevent duplicate users', (done) => {
     const user = {
       id: '',
@@ -103,6 +103,22 @@ describe('POST/ Users', () => {
       .send(user)
       .end((err, res) => {
         expect(res.body.error).to.be.equal('User exists');
+        done();
+      });
+  });
+});
+
+describe('POST/ User', () => {
+  it('it should log user in', (done) => {
+    const user = {
+      email: 'jamesdonovan@gmail.com',
+      password: 'jamesdonovan',
+    };
+    chai.request(server)
+      .post('/v1/user/login')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.a.status(200);
         done();
       });
   });
