@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 /* -------- ROUTES ---------------- */
 const homeRoute = require('./routes/home');
 const userRoute = require('./routes/user');
+const accountRoute = require('./routes/account');
 
 /* -------- CONTROLLERS ---------------- */
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded());
 
 app.use(`/${process.env.API_VERSION}`, homeRoute);
 app.use(`/${process.env.API_VERSION}/auth`, userRoute);
+app.use(`/${process.env.API_VERSION}/accounts`, accountRoute);
 
 const server = app.listen(process.env.PORT, () => {
   const { address, port } = server.address();
