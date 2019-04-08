@@ -23,7 +23,7 @@ module.exports = {
   }),
 
   findUserById: id => new Promise((resolve) => {
-    const filteredUser = usersModel.filter(user => user.get('id') === id).get(0);
+    const filteredUser = usersModel.filter(user => user.get('id') === Number(id)).get(0);
     resolve(filteredUser);
   }),
 
