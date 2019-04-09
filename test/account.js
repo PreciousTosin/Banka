@@ -8,6 +8,7 @@ const server = require('../server');
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
+const account = require('../controllers/account');
 
 function setTokenHeader(token) {
   return `Bearer ${token}`;
@@ -77,6 +78,26 @@ describe('/GET AND /PATCH acccounts', () => {
           expect(res).to.have.status(200);
           expect(res.body.data.status).to.be.equal('active');
           done();
+        });
+    });
+  });
+
+  describe('/DELETE accounts', () => {
+    it('it should delete account', (done) => {
+      chai.request(server)
+        .delete(`/v1/accounts/${2869502843}`)
+        .set('Authorization', token)
+        .end(async (err, res) => {
+          try {
+            const userAccount = await account.getUserAccounts(2869502843);
+            const allAccounts = await account.returnAllAccounts();
+            expect(res.body.message).to.be.equal('Account successfully deleted');
+            expect(userAccount.size).to.be.equal(0);
+            expect(allAccounts.size).to.be.equal(2);
+            done();
+          } catch (e) {
+            done(e);
+          }
         });
     });
   });
