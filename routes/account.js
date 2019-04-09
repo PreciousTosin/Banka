@@ -52,4 +52,14 @@ router.patch('/:accountNumber', isAdmin, async (req, res) => {
   }
 });
 
+router.delete('/:accountNumber', isAdmin, async (req, res) => {
+  try {
+    const { accountNumber } = req.params;
+    const response = await account.deleteBankAccount(accountNumber);
+    res.status(response.status).json(response);
+  } catch (e) {
+    res.status(400).json(e);
+  }
+});
+
 module.exports = router;

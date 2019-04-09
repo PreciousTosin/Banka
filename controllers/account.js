@@ -26,8 +26,8 @@ module.exports = {
     resolve(accountsModel);
   }),
 
-  getUserAccounts: id => new Promise((resolve) => {
-    const userAccounts = accountsModel.filter(account => account.get('id') === Number(id));
+  getUserAccounts: accountNumber => new Promise((resolve) => {
+    const userAccounts = accountsModel.filter(account => account.get('accountNumber') === Number(accountNumber));
     resolve(userAccounts);
   }),
 
@@ -85,5 +85,20 @@ module.exports = {
     }
     accountsModel = patched; // update global account state;
     resolve(patchPayload);
+  }),
+
+  deleteBankAccount: accountNumber => new Promise((resolve, reject) => {
+    let deletedAccount = '';
+    accountsModel.forEach((account, index) => {
+      if (account.get('accountNumber') === Number(accountNumber)) {
+        accountsModel = accountsModel.delete(index);
+        deletedAccount = account;
+      }
+    });
+    if (deletedAccount !== '') {
+      resolve(Object.assign({}, { status: 200, message: 'Account successfully deleted' }));
+    } else {
+      reject(Object.assign({}, { status: 400, error: 'Account not found' }));
+    }
   }),
 };
