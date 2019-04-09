@@ -15,7 +15,7 @@ function makeAccountId() {
 function makeAccountNumber() {
   let text = '';
   const possible = '0123456789';
-  for (let i = 0; i < 9; i += 1) {
+  for (let i = 0; i < 8; i += 1) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return Number(`28${text}`);
