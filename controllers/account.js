@@ -67,27 +67,23 @@ module.exports = {
   }),
 
   patchBankAccount: payload => new Promise((resolve, reject) => {
-    const { id } = payload;
+    const { accountNumber } = payload;
     const patchPayload = Map(payload);
-    const patch = patchPayload.delete('id');
-    const patchedOutput = {};
     const patched = accountsModel.map((account) => {
-      if (account.get('id') === Number(id)) {
-        patchedOutput.accountNumber = account.get('accountNumber'); // add account number
+      if (account.get('accountNumber') === Number(accountNumber)) {
         return account.reduce((map, value, key) => {
-          if (patch.has(key)) {
-            patchedOutput[key] = patchPayload.get(key); // add key/value pairs of patched data
-            return map.set(key, patch.get(key));
+          if (patchPayload.has(key)) {
+            return map.set(key, patchPayload.get(key));
           }
           return map;
         }, account);
       }
       return account;
     });
-    if (patched.length === 0 || Object.keys(patchedOutput).length === 0) {
+    if (patched.length === 0 || Object.keys(patchPayload).length === 0) {
       reject(Object.assign({}, { status: 400, error: 'user not found' }));
     }
     accountsModel = patched; // update global account state;
-    resolve(patchedOutput);
+    resolve(patchPayload);
   }),
 };
