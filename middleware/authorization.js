@@ -42,7 +42,7 @@ function isAdmin(req, res, next) {
     verifyToken(token)
       .then((response) => {
         if (response.isAdmin === true) {
-          next();
+          return next();
         }
         return res.status(401).json({
           status: 401,

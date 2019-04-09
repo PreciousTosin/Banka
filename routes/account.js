@@ -1,9 +1,10 @@
 const express = require('express');
 const account = require('../controllers/account');
+const { isUser, isAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', isAdmin, async (req, res) => {
   try {
     const accounts = await account.returnAllAccounts();
     res.status(200).json(accounts);
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', isUser, async (req, res) => {
   try {
     console.log('ID', req.params.id);
     const accounts = await account.getUserAccounts(req.params.id);
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const payload = {
@@ -45,6 +46,7 @@ router.patch('/:id', async (req, res) => {
     const response = Object.assign({}, { status: 200, data: patchPayload });
     res.status(response.status).json(response);
   } catch (e) {
+    console.log('ERROR: ', e);
     const errorResponse = Object.assign({}, { status: 400, error: e });
     res.status(400).json(errorResponse);
   }

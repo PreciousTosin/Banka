@@ -66,7 +66,7 @@ module.exports = {
       .catch(err => reject(err));
   }),
 
-  patchBankAccount: payload => new Promise((resolve) => {
+  patchBankAccount: payload => new Promise((resolve, reject) => {
     const { id } = payload;
     const patchPayload = Map(payload);
     const patch = patchPayload.delete('id');
@@ -84,6 +84,9 @@ module.exports = {
       }
       return account;
     });
+    if (patched.length === 0 || Object.keys(patchedOutput).length === 0) {
+      reject(Object.assign({}, { status: 400, error: 'user not found' }));
+    }
     accountsModel = patched; // update global account state;
     resolve(patchedOutput);
   }),
