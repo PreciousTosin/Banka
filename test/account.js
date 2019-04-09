@@ -68,7 +68,7 @@ describe('/GET AND /PATCH acccounts', () => {
   describe('/PATCH accounts', () => {
     it('it should patch account and return status of 200', (done) => {
       chai.request(server)
-        .patch(`/v1/accounts/${37091127128041550}`)
+        .patch(`/v1/accounts/${2869502843}`)
         .set('Authorization', token)
         .send({ status: 'active' })
         .end((err, res) => {

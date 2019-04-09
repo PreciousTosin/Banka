@@ -35,11 +35,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', isAdmin, async (req, res) => {
+router.patch('/:accountNumber', isAdmin, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { accountNumber } = req.params;
     const payload = {
-      id: Number(id),
+      accountNumber: Number(accountNumber),
       ...req.body,
     };
     const patchPayload = await account.patchBankAccount(payload);
