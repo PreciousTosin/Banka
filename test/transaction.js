@@ -18,8 +18,8 @@ describe('/POST and /GET transactions', () => {
   let token = '';
   it('it should log user in', (done) => {
     const user = {
-      email: 'tylerross@gmail.com',
-      password: 'tylerross',
+      email: 'johnwayne@gmail.com',
+      password: 'johnwayne',
     };
     chai.request(server)
       .post('/v1/auth/signin')

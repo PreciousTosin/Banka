@@ -1,10 +1,10 @@
 const express = require('express');
 const transaction = require('../controllers/transaction');
-const { isAdmin } = require('../middleware/authorization');
+const { isStaff } = require('../middleware/authorization');
 
 const router = express.Router();
 
-router.get('/', isAdmin, async (req, res) => {
+router.get('/', isStaff, async (req, res) => {
   try {
     const transactions = await transaction.returnAllTransations();
     const response = Object.assign({}, { status: 200, data: transactions });
@@ -15,7 +15,7 @@ router.get('/', isAdmin, async (req, res) => {
   }
 });
 
-router.post('/:accountNumber/credit', isAdmin, async (req, res) => {
+router.post('/:accountNumber/credit', isStaff, async (req, res) => {
   try {
     const creditPayload = {
       id: '',
