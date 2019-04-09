@@ -24,6 +24,7 @@
   "homepage": "https://github.com/PreciousTosin/Banka#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "decimal.js": "^10.1.1",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "immutable": "^4.0.0-rc.12",
