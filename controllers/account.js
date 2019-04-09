@@ -27,7 +27,7 @@ module.exports = {
   }),
 
   getUserAccounts: accountNumber => new Promise((resolve) => {
-    const userAccounts = accountsModel.filter(account => account.get('accountNumber') === Number(accountNumber));
+    const userAccounts = accountsModel.filter(account => account.get('accountNumber') === Number(accountNumber)).get(0);
     resolve(userAccounts);
   }),
 

@@ -11,8 +11,8 @@ const defaultAccounts = [
     createdOn: dateTime(0),
     owner: 23568974210520,
     type: 'savings',
-    status: 'draft',
-    balance: 0.00,
+    status: 'active',
+    balance: 500.00,
   }, {
     id: 37091127128041553,
     accountNumber: 2869502843,
@@ -20,7 +20,7 @@ const defaultAccounts = [
     owner: 65897567145632,
     type: 'current',
     status: 'draft',
-    balance: 0.00,
+    balance: 1000.00,
   },
 ];
 
