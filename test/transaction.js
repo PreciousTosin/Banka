@@ -31,7 +31,7 @@ describe('/POST and /GET transactions', () => {
       });
   });
 
-  describe('/POST transactions', () => {
+  describe('/POST credit transactions', () => {
     it('it should create a new credit transaction', (done) => {
       const payload = {
         type: 'credit',
@@ -65,6 +65,31 @@ describe('/POST and /GET transactions', () => {
           res.should.have.a.status(200);
           expect(res.body.data.length).to.be.equal(2);
           done();
+        });
+    });
+  });
+
+  describe('/POST debit transactions', () => {
+    it('it should create a new debit transaction', (done) => {
+      const payload = {
+        type: 'debit',
+        cashier: 36956655716265,
+        amount: 200,
+      };
+      chai.request(server)
+        .post(`/v1/transactions/${2816408925}/debit`)
+        .set('Authorization', token)
+        .send(payload)
+        .end(async (err, res) => {
+          try {
+            const allTransactions = await transaction.returnAllTransations();
+            res.should.have.a.status(200);
+            expect(allTransactions.size).to.be.equal(3);
+            expect(res.body.data.accountBalance).to.be.equal('450');
+            done();
+          } catch (e) {
+            done(e);
+          }
         });
     });
   });
