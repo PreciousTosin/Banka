@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const homeRoute = require('./routes/home');
 const userRoute = require('./routes/user');
 const accountRoute = require('./routes/account');
+const transactionRoute = require('./routes/transaction');
 
 /* -------- CONTROLLERS ---------------- */
 
@@ -23,6 +24,7 @@ app.use(express.urlencoded());
 app.use(`/${process.env.API_VERSION}`, homeRoute);
 app.use(`/${process.env.API_VERSION}/auth`, userRoute);
 app.use(`/${process.env.API_VERSION}/accounts`, accountRoute);
+app.use(`/${process.env.API_VERSION}/transactions`, transactionRoute);
 
 const server = app.listen(process.env.PORT, () => {
   const { address, port } = server.address();
