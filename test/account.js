@@ -9,6 +9,10 @@ chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
 
+function setTokenHeader(token) {
+  return `Bearer ${token}`;
+}
+
 describe('/POST accounts', () => {
   const newAccount = {
     id: 12586085672261283,
@@ -31,29 +35,49 @@ describe('/POST accounts', () => {
   });
 });
 
-describe('/GET accounts', () => {
-  it('it should retrieve all accounts and return status of 200', (done) => {
+describe('/GET AND /PATCH acccounts', () => {
+  let token = '';
+  it('it should log user in', (done) => {
+    const user = {
+      email: 'tylerross@gmail.com',
+      password: 'tylerross',
+    };
     chai.request(server)
-      .get('/v1/accounts')
+      .post('/v1/auth/signin')
+      .send(user)
       .end((err, res) => {
+        token = setTokenHeader(res.body.data.token);
         res.should.have.a.status(200);
-        expect(res.body).to.have.lengthOf(3);
         done();
       });
   });
-});
 
-describe('/PATCH accounts', () => {
-  it('it should patch account and return status of 200', (done) => {
-    chai.request(server)
-      .patch(`/v1/accounts/${37091127128041550}`)
-      .send({ status: 'active' })
-      .end((err, res) => {
-        // eslint-disable-next-line no-unused-expressions
-        expect(err).to.be.null;
-        expect(res).to.have.status(200);
-        expect(res.body.data.status).to.be.equal('active');
-        done();
-      });
+  describe('/GET accounts', () => {
+    it('it should retrieve all accounts and return status of 200', (done) => {
+      chai.request(server)
+        .get('/v1/accounts')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(200);
+          expect(res.body).to.have.lengthOf(3);
+          done();
+        });
+    });
+  });
+
+  describe('/PATCH accounts', () => {
+    it('it should patch account and return status of 200', (done) => {
+      chai.request(server)
+        .patch(`/v1/accounts/${37091127128041550}`)
+        .set('Authorization', token)
+        .send({ status: 'active' })
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(err).to.be.null;
+          expect(res).to.have.status(200);
+          expect(res.body.data.status).to.be.equal('active');
+          done();
+        });
+    });
   });
 });
