@@ -92,7 +92,7 @@ describe('/GET AND /PATCH acccounts', () => {
             const userAccount = await account.getUserAccounts(2869502843);
             const allAccounts = await account.returnAllAccounts();
             expect(res.body.message).to.be.equal('Account successfully deleted');
-            expect(userAccount.size).to.be.equal(0);
+            expect(userAccount).to.be.equal(undefined);
             expect(allAccounts.size).to.be.equal(2);
             done();
           } catch (e) {
