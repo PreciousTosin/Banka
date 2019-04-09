@@ -86,6 +86,7 @@ describe('/GET AND /PATCH acccounts', () => {
     it('it should delete account', (done) => {
       chai.request(server)
         .delete(`/v1/accounts/${2869502843}`)
+        .set('Authorization', token)
         .end(async (err, res) => {
           try {
             const userAccount = await account.getUserAccounts(2869502843);
