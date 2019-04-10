@@ -6,5 +6,5 @@ cache:
     - "node_modules"
 before_script:
   - npm install --only=dev
-script: npm run lint
-script: npm test
+script:
+  - npm run lint && npm test
