@@ -10,5 +10,5 @@ env:
   - API_VERSION=v1
   - SECRET_KEY=bankasecretkey89457;
 before_script:
-  - npm install
+  - npm install --only=dev
 script: npm run lint
