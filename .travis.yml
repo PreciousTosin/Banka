@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - "node_modules"
+env:
+  - NODE_ENV=production
+  - PORT=9000
+  - API_VERSION=v1
+  - SECRET_KEY=bankasecretkey89457;
+before_script:
+  - npm install
+script: npm run lint
