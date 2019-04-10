@@ -2,7 +2,7 @@
 
 ## A lightweight core banking application
 
-[![Build Status](https://travis-ci.org/PreciousTosin/Banka.svg?branch=master)](https://travis-ci.org/precioustosin/Banka)
+[![Build Status](https://travis-ci.org/PreciousTosin/Banka.svg?branch=master)](https://travis-ci.org/PreciousTosin/Banka)
 [![Coverage Status](https://coveralls.io/repos/github/PreciousTosin/Banka/badge.svg?branch=master)](https://coveralls.io/github/PreciousTosin/Banka?branch=master)
 
 ## Quickstart 
