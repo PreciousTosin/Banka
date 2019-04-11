@@ -22,3 +22,25 @@
 1. `npm start` - starts express server
 2. `npm run lint` - runs eslint to check for lint errors
 3. `npm test` - runs unit tests
+
+### Heroku API
+##### Link - https://bankar.herokuapp.com/v1
+##### Documentation - https://documenter.getpostman.com/view/938650/S1ENxJKx
+
+### Test User Accounts
+#### Admin
+email - `tylerross@gmail.com`
+password - `tylerross`
+
+#### Staff
+email - `johnwayne@gmail.com`
+password - `johnwayne`
+
+#### Client
+email - `jamesdonovan@gmail.com`
+password - `jamesdonovan`
+
+### Test Bank Accounts
+Account Number - `2869502843` status - `draft`
+
+Account Number - `2816408925` status - `active`
