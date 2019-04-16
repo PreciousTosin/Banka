@@ -3,7 +3,7 @@ function logOut() {
 	localStorage.setItem('isStaff', 'false');
 	localStorage.setItem('isAdmin', 'false');
 	localStorage.setItem('isUser', 'false');
-	const testRegex = /admin/ig;
+	const testRegex = /admin|staff/ig;
 	const regexResult = testRegex.test(window.location.pathname);
 	if (regexResult === true) {
 		window.location.href = '../index.html';
@@ -13,7 +13,7 @@ function logOut() {
 }
 
 function returnHome() {
-	const testRegex = /admin/ig;
+	const testRegex = /admin|staff/ig;
 	const regexResult = testRegex.test(window.location.pathname);
 	if (regexResult === true) {
 		window.location.href = '../index.html';
@@ -75,7 +75,7 @@ function loggedOut(isLoggedIn, showAdmin, showUser) {
 	</div>`;
 }
 
-function loggedIn(isLoggedIn, showAdmin, showUser) {
+function loggedIn(isLoggedIn, showAdmin, showUser, showStaff) {
 	return `
 	<div class="main-menu-header__container container">
 		<a class="main-menu-header__branding" onclick="returnHome()">
@@ -113,7 +113,10 @@ function loggedIn(isLoggedIn, showAdmin, showUser) {
 							<a class="main-menu-mainNavigation__title" href="./transaction.html">Transaction</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${showAdmin === false && 'hidden' }">
-							<a class="main-menu-mainNavigation__title" href="./admin/admin.html">Admin</a>
+							<a class="main-menu-mainNavigation__title" href="../admin/admin.html">Admin</a>
+						</li>
+						<li class="main-menu-mainNavigation__menuItem ${showStaff === false && 'hidden' }">
+							<a class="main-menu-mainNavigation__title" href="../staff/staff.html">Staff</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${isLoggedIn === "false" && 'hidden'}">
 							<a class="main-menu-mainNavigation__title" onclick="logOut()">Sign Out</a>
@@ -136,6 +139,6 @@ function NavBar() {
 	const showStaff = isStaff === 'true' && isLoggedIn === 'true';
 	const showUser = isUser === 'true' && isLoggedIn === 'true';
 	
-	if (isLoggedIn === 'true') return loggedIn(isLoggedIn, showAdmin, showUser);
+	if (isLoggedIn === 'true') return loggedIn(isLoggedIn, showAdmin, showUser, showStaff);
 	return loggedOut(isLoggedIn, showAdmin, showUser);
 }

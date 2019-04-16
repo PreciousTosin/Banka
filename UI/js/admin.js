@@ -40,19 +40,6 @@ const displayDetailedData = data => (
 		</div>
 	</div>
 	`);
-/* ---------------- CREDIT AND DEBIT FORM ------------- */
-const createConsumateForm = transactionType => (
-	`<div class="consumate--form dialog--form">
-		<h3>Consumate ${transactionType} Transaction</h3>
-		<form id="consumateForm" action="" method="POST" name="consumateForm">
-		<input type="text" class="form--control" id="type" style="visibility: hidden" name="type" value="${transactionType}">
-			<div class="form--group">
-				<input type="text" class="form--control" id="amount" placeholder="Amount" name="amount" required>
-			</div>
-      <button type="submit" class="btn btn--primary">Submit</button>
-    </form>
-   </div>`
-);
 
 /* --------------- CREATE STAFF USER FORM ------------- */
 function createStaffUserForm() {
@@ -152,70 +139,6 @@ function bankAccountsAdminTemplate() {
 			</table>
 		</div>
 	`);
-}
-
-function consumateAdminTemplate() {
-	return (
-		`<div class="gen--table">
-		<table id="consumateRecordsTable">
-			<thead>
-				<tr class="table--row head">
-					<th class="table--column column1">Id</th>
-					<th class="table--column">Acc/Name</th>
-					<th class="table--column">Acc/No</th>
-					<th class="table--column">Status</th>
-					<th class="table--column">Balance</th>
-					<th class="table--column">Date</th>
-					<th class="table--column">Credit</th>
-					<th class="table--column">Debit</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="table--row">
-					<td class="table--column column1">36956655716265</td>
-					<td class="table--column">John Wayne</td>
-					<td class="table--column">0187925874</td>
-					<td class="table--column">draft</td>
-					<td class="table--column">100000</td>
-					<td class="table--column">2019-03-10</td>
-					<td class="table--column"></td>
-					<td class="table--column"></td>
-				</tr>
-				<tr class="table--row">
-					<td class="table--column column1">65897567145632</td>
-					<td class="table--column">James Donovan</td>
-					<td class="table--column">0151370846</td>
-					<td class="table--column">active</td>
-					<td class="table--column">50000</td>
-					<td class="table--column">2019-03-01</td>
-					<td class="table--column"></td>
-					<td class="table--column"></td>
-				</tr>
-				<tr class="table--row">
-					<td class="table--column column1">54875558726968</td>
-					<td class="table--column">Tyler Ross</td>
-					<td class="table--column">2147378033</td>
-					<td class="table--column">draft</td>
-					<td class="table--column">250000</td>
-					<td class="table--column">2019-02-25</td>
-					<td class="table--column"></td>
-					<td class="table--column"></td>
-				</tr>
-				<tr class="table--row">
-					<td class="table--column column1">23568974210520</td>
-					<td class="table--column">Micheal Flannigan</td>
-					<td class="table--column">4594440081</td>
-					<td class="table--column">draft</td>
-					<td class="table--column">200000</td>
-					<td class="table--column">2019-02-10</td>
-					<td class="table--column"></td>
-					<td class="table--column"></td>
-				</tr>  
-			</tbody>
-		</table>
-	</div>
-</div>`
-	);
 }
 
 function manageUsersTableTemplate() {
@@ -350,6 +273,7 @@ function manageUsersTableTemplate() {
 		});
   }
 }());
+
 //* -------------------------- EVENTS FOR THE BUTTONS ------------------------------ */
 const deleteRecordEvent = (callback) => {
   $('#recordsTable').on('click', 'td.delete--btn', (event) => {
@@ -360,36 +284,7 @@ const deleteRecordEvent = (callback) => {
   });
 };
 
-const creditAccountEvent = (callback) => {
-  $('#consumateRecordsTable').on('click', 'td.credit--btn', (event) => {
-		// const obj = $(`#${event.target.id}`);
-		console.log('EVENT TARGET: ', event.currentTarget);
-		const target = event.currentTarget;
-    callback(target);
-  });
-};
-
-const debitAccountEvent = (callback) => {
-  $('#consumateRecordsTable').on('click', 'td.debit--btn', (event) => {
-		// const obj = $(`#${event.target.id}`);
-		console.log('EVENT TARGET: ', event.currentTarget);
-		const target = event.currentTarget;
-    callback(target);
-  });
-};
-
 /* -------------- EVENTS FOR FORM SUBMISSIONS ------------- */
-const consumateDataEvent = () => {
-  $('body').on('submit', '#consumateForm', (event) => {
-		event.preventDefault();
-		const formData = $("#consumateForm").serializeArray(); // GET FORM DATA
-		if (formData[0].value === 'Credit') {
-			console.log('CREDIT CONSUMATION TRANSACTION', formData);
-		} else {
-			console.log('DEBIT CONSUMATION TRANSACTION', formData);
-		}
-  });
-};
 
 const createStaffUserDataEvent = () => {
   $('body').on('submit', '#createStaffUserForm', (event) => {
@@ -448,53 +343,6 @@ function initializeTable() {
 				targets: -1,
 				data: null,
 				defaultContent: '<button id="delete-btn" class="delete--btn btn btn--danger">Delete</button>',
-			},
-		],
-		initComplete() {
-			/* recordTable.buttons().container()
-				.appendTo($('.col-md-6:eq(0)', recordTable.table().container())); */
-		},
-	});
-
-	return recordTable;
-}
-
-function initializeConsumateTable() {
-	let recordTable = $('#consumateRecordsTable').DataTable({
-		columns: [
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			{
-				className: 'credit--btn',
-				orderable: false,
-				data: null,
-				width: '5%',
-			},
-			{
-				className: 'debit--btn',
-				orderable: false,
-				data: null,
-				width: '5%',
-			},
-		],
-		lengthChange: false,
-		select: {
-			style: 'single',
-		},
-		columnDefs: [
-			{
-				targets: -2,
-				data: null,
-				defaultContent: '<button id="credit-btn" class="credit--btn btn btn--primary">Credit</button>',
-			},
-			{
-				targets: -1,
-				data: null,
-				defaultContent: '<button id="debit-btn" class="debit--btn btn btn--danger">Debit</button>',
 			},
 		],
 		initComplete() {
@@ -569,18 +417,6 @@ const deleteRecord = (data, target) => {
 	console.log('DATA TO DELETE: ', rowData);
 }
 
-const creditAccount = (data, target) => {
-	const rowData = data.row($(target).parents('tr')).data();
-	console.log('ACCOUNT TO CREDIT: ', rowData);
-	alertify.formDialog(createConsumateForm('Credit'));
-}
-
-const debitAccount = (data, target) => {
-	const rowData = data.row($(target).parents('tr')).data();
-	console.log('ACCOUNT TO DEBIT: ', rowData);
-	alertify.formDialog(createConsumateForm('Debit'));
-}
-
 /** --------------- Initialize default admin page ------------------ */
 function findandSetAdminHtml() {
 	const bankRecordsTemplate = bankAccountsAdminTemplate();
@@ -592,21 +428,6 @@ function initializeDefaultAdmin() {
 	findandSetAdminHtml();
 	const table = initializeTable();
 	deleteRecordEvent((target) => deleteRecord(table, target));
-}
-
-/** --------------- Initialize consumate admin page ------------------ */
-function findandSetConsumateHtml() {
-	const bankRecordsTemplate = consumateAdminTemplate();
-	const container = document.querySelector('.admin--body');
-	container.innerHTML = bankRecordsTemplate;
-} 
-
-function initializeConsumateAdmin() {
-	findandSetConsumateHtml();
-	const table = initializeConsumateTable();
-	creditAccountEvent((target) => creditAccount(table, target));
-	debitAccountEvent((target) => debitAccount(table, target));
-	consumateDataEvent();
 }
 
 /** --------------- Initialize Manage users page ------------------ */
