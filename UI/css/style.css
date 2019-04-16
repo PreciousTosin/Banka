@@ -176,6 +176,12 @@ select.form--control {
   border-color: #C9302C;
 }
 
+.btn--success {
+  color: #fff;
+  background-color: #119108;
+  border-color: #119108;
+}
+
 @media screen and (min-width: 500px) {
   .form--group {
     flex-direction: column;

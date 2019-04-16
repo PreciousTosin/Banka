@@ -395,7 +395,7 @@ function initializeUserManagementTable() {
 					if (row[5] === 'active') {
 						return '<button id="deactivate-btn" class="deactivate--btn btn btn--danger">Deactivate</button>'
 					} else {
-						return '<button id="activate-btn" class="activate--btn btn btn--danger">Activate</button>'
+						return '<button id="activate-btn" class="activate--btn btn btn--success">Activate</button>'
 					}
 					// return row.status;
 				},
