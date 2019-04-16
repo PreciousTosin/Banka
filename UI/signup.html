@@ -10,49 +10,7 @@
 	</head>
 	<body>
 		<header class="main-menu-header">
-			<div class="main-menu-header__container container">
-				<a class="main-menu-header__branding" href="./index.html">
-					Banka
-				</a>
-	
-				<!-- START: Navigation Toggle -->
-				<button type="button" class="main-menu-header__navigationToggle" id="siteNavigationToggle">
-					<svg
-						class="menu-siteNavigationToggle"
-						xmlns="http://www.w3.org/2000/svg"
-						width="40"
-						height="48"
-						viewBox="0 0 48 48"
-					>
-						<g fill="#011B33" fillRule="evenodd">
-							<rect class="menu-siteNavigationToggle__barTop" width="28" height="2" x="8" y="16" rx="1.5" />
-							<rect class="menu-siteNavigationToggle__barMiddle1" width="28" height="2" x="8" y="23" rx="1.5" />
-							<rect class="menu-siteNavigationToggle__barMiddle2" width="28" height="2" x="8" y="23" rx="1.5" />
-							<rect class="menu-siteNavigationToggle__barBottom" width="28" height="2" x="8" y="30" rx="1.5" />
-						</g>
-					</svg>
-				</button>
-				<!-- END: Navigation Toggle -->
-				<!-- START: Header Navigation -->
-				<div class="main-menu-header__navigation" id="siteNavigation">
-					<!-- START: Main Navigation -->
-					<nav class="main-menu-mainNavigation">
-						<div class="main-menu-mainNavigation__container container">
-							<ul class="main-menu-mainNavigation__menu">
-								<li class="main-menu-mainNavigation__menuItem">
-									<a class="main-menu-mainNavigation__title" href="./profile.html">Profile</a>
-								</li>
-								<li class="main-menu-mainNavigation__menuItem">
-									<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
-									<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
-								</li>
-							</ul>
-						</div>
-					</nav>
-					<!-- END: Main Navigation -->
-				</div>
-				<!-- END: Header Navigation -->
-			</div>
+			
 		</header>
 
 		<div class="auth-container">
@@ -60,7 +18,7 @@
 				<img src="./img/signup.jpg" alt="sign_up">
 			</div>
 			<div class="auth--form">
-				<form action="">
+				<form id="login-form" action="POST">
 					<div class="form--group">
 						<!--<label for="firstName">First Name</label>-->
 						<input type="text" placeholder="First Name" class="form--control" name="firstName" id="firstName" required>
@@ -109,8 +67,14 @@
 		</footer>
 		<!-- END: Footer -->
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="./js/navbar.js"></script>
+		<script type="text/javascript" src="./js/login.js"></script>
 		<script>
 				$(document).ready(() => {
+					// navbar init
+					const navbarContainer = document.querySelector(".main-menu-header");
+					navbarContainer.innerHTML = NavBar();
+
 					$("a.nav-link[data-toggle='dropdown']").click((e) => {
 						$('.dropdown-menu').fadeToggle();
 						e.stopPropagation();
