@@ -4,12 +4,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 
 /* -------- ROUTES ---------------- */
-const homeRoute = require('./routes/home');
-const userRoute = require('./routes/user');
-const accountRoute = require('./routes/account');
-const transactionRoute = require('./routes/transaction');
-
-/* -------- CONTROLLERS ---------------- */
+const appRoutes = require('./routes/index');
 
 dotenv.config();
 const app = express();
@@ -21,10 +16,8 @@ app.use(methodOverride());
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.use(`/${process.env.API_VERSION}`, homeRoute);
-app.use(`/${process.env.API_VERSION}/auth`, userRoute);
-app.use(`/${process.env.API_VERSION}/accounts`, accountRoute);
-app.use(`/${process.env.API_VERSION}/transactions`, transactionRoute);
+app.use(`/${process.env.API_VERSION}`, appRoutes);
+
 
 const server = app.listen(process.env.PORT, () => {
   const { address, port } = server.address();
