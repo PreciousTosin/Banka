@@ -33,6 +33,14 @@ hr {
     );
 }
 
+.hidden {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
 /* ------------------------- box shadow effect -------------------------- */
 .shadow-effect {
   -webkit-box-shadow: 3px 3px 3px 2px #ccc;
@@ -363,7 +371,7 @@ td {
 
 .main-menu-mainNavigation__menuItem:last-child>a:last-child {
   padding: 5px 18px;
-  line-height: 23px;
+  line-height: 41px;
   height: 35px;
 }
 
@@ -432,6 +440,7 @@ header.main-menu-header a.btn-secondary:hover {
 header a {
   color: #302840;
   text-decoration: none;
+  cursor: pointer;
 }
 
 /* ---------------- Footer ------------------------ */
@@ -470,6 +479,12 @@ footer a {
 
 .copyright {
   margin-top: 4%;
+}
+
+@media screen and (min-width: 700px) {
+  .main-menu-header {
+    min-height: 66px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
