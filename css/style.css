@@ -608,6 +608,7 @@ footer a {
 }
 
 .banner--text {
+  text-align: center;
   order: 2;
 }
 
@@ -680,6 +681,7 @@ footer a {
   }
 
   .banner--text {
+    text-align: left;
     max-width: 66.666667%;
     order: 1;
   }
