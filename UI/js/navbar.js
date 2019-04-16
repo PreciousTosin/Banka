@@ -76,6 +76,9 @@ function loggedOut(isLoggedIn, showAdmin, showUser) {
 }
 
 function loggedIn(isLoggedIn, showAdmin, showUser, showStaff) {
+	const isIndex = window.location.pathname.split('/').slice(-1).join('') === 'index.html';
+	const baseUrl = isIndex === true ? './' : '../';
+	console.log('URL SPLITTING: ', window.location.pathname.split('/').slice(-1).join('') === 'index.html');
 	return `
 	<div class="main-menu-header__container container">
 		<a class="main-menu-header__branding" onclick="returnHome()">
@@ -113,10 +116,10 @@ function loggedIn(isLoggedIn, showAdmin, showUser, showStaff) {
 							<a class="main-menu-mainNavigation__title" href="./transaction.html">Transaction</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${showAdmin === false && 'hidden' }">
-							<a class="main-menu-mainNavigation__title" href="../admin/admin.html">Admin</a>
+							<a class="main-menu-mainNavigation__title" href="${baseUrl}admin/admin.html">Admin</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${showStaff === false && 'hidden' }">
-							<a class="main-menu-mainNavigation__title" href="../staff/staff.html">Staff</a>
+							<a class="main-menu-mainNavigation__title" href="${baseUrl}staff/staff.html">Staff</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${isLoggedIn === "false" && 'hidden'}">
 							<a class="main-menu-mainNavigation__title" onclick="logOut()">Sign Out</a>
