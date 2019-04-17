@@ -1,104 +1,48 @@
-const { List, Map } = require('immutable');
-let accountsModel = require('../data/account');
+const { Map } = require('immutable');
+const account = require('../models/accounts');
 const user = require('../controllers/user');
 
-/* --------------- UTILITY FUNCTIONS ----------------------- */
-function makeAccountId() {
-  let text = '';
-  const possible = '0123456789';
-  for (let i = 0; i < 18; i += 1) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return Number(text);
-}
-
-function makeAccountNumber() {
-  let text = '';
-  const possible = '0123456789';
-  for (let i = 0; i < 8; i += 1) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return Number(`28${text}`);
-}
-
-module.exports = {
+const accountController = {
   returnAllAccounts: () => new Promise((resolve) => {
-    resolve(accountsModel);
+    account.findAll().then(data => resolve(data));
   }),
 
   getUserAccounts: accountNumber => new Promise((resolve) => {
-    const userAccounts = accountsModel.filter(account => account.get('accountNumber') === Number(accountNumber)).get(0);
-    resolve(userAccounts);
+    account.findOneById(accountNumber).then(data => resolve(data));
   }),
 
   createBankAccount: payload => new Promise((resolve, reject) => {
-    const cleanPayload = {};
-    Object.keys(payload).forEach((key) => {
-      if (key === 'owner') cleanPayload.owner = Number(payload.owner);
-    });
-    const updatedPayload = {
-      id: makeAccountId(),
-      accountNumber: makeAccountNumber(),
-      createdOn: new Date(Date.now()),
-      ...cleanPayload,
-      type: payload.type,
-      status: payload.status,
-      balance: 0.00,
-    };
-    const newAccount = Map(updatedPayload);
-    const newAccountList = List([newAccount]);
-    const id = newAccount.get('owner');
-    user.findUserById(id)
+    user.findUserById(payload.owner)
       .then((userPayload) => {
-        const clientPayload = {
-          id: newAccount.get('id'),
-          accountNumber: newAccount.get('accountNumber'),
-          firstName: userPayload.get('firstName'),
-          lastName: userPayload.get('lastName'),
-          email: userPayload.get('email'),
-          type: newAccount.get('type'),
-          status: newAccount.get('status'),
-          openingBalance: newAccount.get('balance'),
-        };
-        accountsModel = accountsModel.concat(newAccountList); // update accounts global state
-        resolve(clientPayload);
+        if (userPayload === undefined) {
+          throw Object.assign({}, {}, { status: 400, error: 'You cannot create account for user that does not exist' });
+        }
+        account.create(payload, userPayload).then((createdAccount) => {
+          resolve(createdAccount);
+        }).catch(error => error);
       })
       .catch(err => reject(err));
   }),
 
   patchBankAccount: payload => new Promise((resolve, reject) => {
-    const { accountNumber } = payload;
     const patchPayload = Map(payload);
-    const patched = accountsModel.map((account) => {
-      if (account.get('accountNumber') === Number(accountNumber)) {
-        return account.reduce((map, value, key) => {
-          if (patchPayload.has(key)) {
-            return map.set(key, patchPayload.get(key));
-          }
-          return map;
-        }, account);
+    account.update(patchPayload).then((patched) => {
+      if (patched.length === 0 || Object.keys(patchPayload).length === 0) {
+        reject(Object.assign({}, { status: 400, error: 'Account not found' }));
       }
-      return account;
-    });
-    if (patched.length === 0 || Object.keys(patchPayload).length === 0) {
-      reject(Object.assign({}, { status: 400, error: 'user not found' }));
-    }
-    accountsModel = patched; // update global account state;
-    resolve(patchPayload);
+      resolve(patchPayload);
+    }).catch(error => error);
   }),
 
   deleteBankAccount: accountNumber => new Promise((resolve, reject) => {
-    let deletedAccount = '';
-    accountsModel.forEach((account, index) => {
-      if (account.get('accountNumber') === Number(accountNumber)) {
-        accountsModel = accountsModel.delete(index);
-        deletedAccount = account;
+    account.delete(accountNumber).then((deletedAccount) => {
+      if (deletedAccount !== '') {
+        resolve(Object.assign({}, { status: 200, message: 'Account successfully deleted' }));
+      } else {
+        reject(Object.assign({}, { status: 400, error: 'Account not found' }));
       }
-    });
-    if (deletedAccount !== '') {
-      resolve(Object.assign({}, { status: 200, message: 'Account successfully deleted' }));
-    } else {
-      reject(Object.assign({}, { status: 400, error: 'Account not found' }));
-    }
+    }).catch(error => error);
   }),
 };
+
+module.exports = accountController;

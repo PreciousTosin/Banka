@@ -1,10 +1,10 @@
 const express = require('express');
 const transaction = require('../controllers/transaction');
-const { isStaff } = require('../middleware/authorization');
+const { isStaff, isUser } = require('../middleware/authorization');
 
 const router = express.Router();
 
-router.get('/', isStaff, async (req, res) => {
+router.get('/', isUser, async (req, res) => {
   try {
     const transactions = await transaction.returnAllTransations();
     const response = Object.assign({}, { status: 200, data: transactions });
@@ -12,6 +12,15 @@ router.get('/', isStaff, async (req, res) => {
   } catch (e) {
     const errResponse = Object.assign({}, { status: 400, error: e });
     res.status(400).json(errResponse);
+  }
+});
+
+router.get('/:id', isUser, async (req, res) => {
+  try {
+    const transactions = await transaction.getOneTransaction(req.params.id);
+    res.status(200).json(transactions);
+  } catch (e) {
+    res.status(400).json(e);
   }
 });
 
