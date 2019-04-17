@@ -26,7 +26,7 @@ const userController = {
     // check first if email exists, if it does, throw an error
     // if user does not exist, create an account
     user.findOneByEmail(payload.email).then((foundUser) => {
-      if (foundUser !== undefined) throw Object.assign({}, {}, { status: 400, error: 'User exists' });
+      if (foundUser !== undefined) throw Object.assign({}, {}, { status: 409, error: 'User exists' });
       user.create(newUser).then((userCreated) => {
         createToken(generatePayload(userCreated)).then((token) => {
           const tokenizedUser = userCreated.set('token', token); // add token
