@@ -15,6 +15,15 @@ router.get('/', isUser, async (req, res) => {
   }
 });
 
+router.get('/:id', isUser, async (req, res) => {
+  try {
+    const transactions = await transaction.getOneTransaction(req.params.id);
+    res.status(200).json(transactions);
+  } catch (e) {
+    res.status(400).json(e);
+  }
+});
+
 router.post('/:accountNumber/credit', isStaff, async (req, res) => {
   try {
     const creditPayload = {

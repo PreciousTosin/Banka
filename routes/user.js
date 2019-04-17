@@ -34,7 +34,7 @@ router.post('/signin', async (req, res) => {
   }
 });
 
-router.put('/users/:id', isUser, async (req, res) => {
+router.patch('/users/:id', isUser, async (req, res) => {
   try {
     const updatePayload = {
       id: req.params.id,

@@ -69,6 +69,19 @@ describe('/POST and /GET transactions', () => {
     });
   });
 
+  describe('/GET transactions', () => {
+    it('it should get a specific transaction with an id return and 200 status', (done) => {
+      chai.request(server)
+        .get('/v1/transactions/61287962375006273000')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(200);
+          expect(res.body.id).to.be.equal(61287962375006273000);
+          done();
+        });
+    });
+  });
+
   describe('/POST debit transactions', () => {
     it('it should create a new debit transaction', (done) => {
       const payload = {

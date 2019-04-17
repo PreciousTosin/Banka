@@ -107,4 +107,53 @@ describe('POST/ User', () => {
         });
     });
   });
+
+  describe('PATCH/ User Account', () => {
+    it('it should update user admin status and return status of 200', (done) => {
+      chai.request(server)
+        .patch(`/v1/auth/users/${23568974210520}`)
+        .set('Authorization', token)
+        .send({ isAdmin: true })
+        .end((err, res) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(err).to.be.null;
+          expect(res).to.have.status(200);
+          expect(res.body.message).to.be.equal('User updated successfully');
+          done();
+        });
+    });
+  });
+});
+
+describe('DELETE/ User Account', () => {
+  let token = '';
+  it('it should log admin in', (done) => {
+    const user = {
+      email: 'tylerross@gmail.com',
+      password: 'tylerross',
+    };
+    chai.request(server)
+      .post('/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        token = setTokenHeader(res.body.data.token);
+        res.should.have.a.status(200);
+        done();
+      });
+  });
+
+  it('it should delete user account', (done) => {
+    chai.request(server)
+      .delete(`/v1/auth/users/${23568974210520}`)
+      .set('Authorization', token)
+      .end(async (err, res) => {
+        try {
+          expect(res.body.message).to.be.equal('User Deleted successfully');
+          expect(res.body.data.id).to.be.equal(23568974210520);
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+  });
 });

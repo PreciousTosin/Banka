@@ -95,12 +95,8 @@ class User {
     return new Promise((resolve) => {
       const patched = this.users.map((userObj) => {
         if (userObj.get('id') === Number(payload.get('id'))) {
-          console.log('USER PRESENT: ', userObj.get('id') === Number(payload.get('id')));
           return userObj.reduce((map, value, key) => {
             if (payload.has(key)) {
-              const currentKeyType = typeof payload.get(key);
-              console.log('HAS KEY: ', key, currentKeyType);
-              console.log('SETTING KEY: ', payload.get(key));
               switch (this.schema[key]) {
                 case 'number':
                   return map.set(key, Number(payload.get(key)));
