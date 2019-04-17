@@ -1,62 +1,45 @@
-const { List, Map, fromJS } = require('immutable');
-let usersModel = require('../data/user');
-const { asyncHashPassword, asyncComparePassword } = require('./password');
+const { Map } = require('immutable');
+const user = require('../models/user');
+const { asyncComparePassword } = require('./password');
 const { createToken, verifyToken } = require('./jwt-token');
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
-function makeId() {
-  let text = '';
-  const possible = '0123456789';
-  for (let i = 0; i < 15; i += 1) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return Number(text);
+function generatePayload(userPayload) {
+  return userPayload.delete('password').toObject();
 }
 
-function generatePayload(user) {
-  return user.delete('password').toObject();
-}
-
-module.exports = {
+const userController = {
   returnAllUsers: () => new Promise((resolve) => {
-    resolve(usersModel);
+    user.findAll().then(data => resolve(data));
   }),
 
   findUserById: id => new Promise((resolve) => {
-    const filteredUser = usersModel.filter(user => user.get('id') === Number(id)).get(0);
-    resolve(filteredUser);
+    user.findOneById(id).then(data => resolve(data));
   }),
 
   findUserByEmail: email => new Promise((resolve) => {
-    const filteredUser = usersModel.filter(user => user.get('email') === email).get(0);
-    resolve(filteredUser);
+    user.findOneByEmail(email).then(data => resolve(data));
   }),
 
   createUser: payload => new Promise((resolve, reject) => {
     const newUser = Map(payload);
     // check first if email exists, if it does, throw an error
-    const checkEmailArr = usersModel.filter(user => user.get('email') === newUser.get('email'));
-    if (checkEmailArr.size !== 0) throw Object.assign({}, {}, { status: 400, error: 'User exists' });
-    asyncHashPassword(newUser.get('password'))
-      .then((hash) => {
-        const newObj = fromJS({
-          id: makeId(),
-          password: hash,
-        });
-        const updatedUser = newUser.merge(newObj); // update id and password
-        const newUserArray = List([updatedUser]); // create list from user map
-        usersModel = usersModel.concat(newUserArray); // update global user state
-        createToken(generatePayload(newObj)).then((token) => {
-          const tokenizedUser = updatedUser.set('token', token); // add token
+    // if user does not exist, create an account
+    user.findOneByEmail(payload.email).then((foundUser) => {
+      if (foundUser !== undefined) throw Object.assign({}, {}, { status: 400, error: 'User exists' });
+      user.create(newUser).then((userCreated) => {
+        createToken(generatePayload(userCreated)).then((token) => {
+          const tokenizedUser = userCreated.set('token', token); // add token
           const clientPayload = tokenizedUser.delete('password'); // remove password key/value
           resolve(clientPayload);
-        }).catch(error => reject(error));
+        }).catch(error => error);
       }).catch(error => error);
+    }).catch(error => reject(error));
   }),
 
   loginUser: async (payload) => {
     try {
-      const userData = usersModel.filter(user => user.get('email') === payload.email).get(0);
+      const userData = await user.findOneByEmail(payload.email);
       if (userData === undefined) {
         return Object.assign({}, { status: 400, error: 'User does not exist' });
       }
@@ -86,44 +69,27 @@ module.exports = {
   },
 
   updateUser: payload => new Promise((resolve, reject) => {
-    let userIndex = '';
     const update = Map(payload);
-    const userToUpdate = usersModel.filter((user, index) => {
-      userIndex = index;
-      return user.get('id') === update.get('id');
-    }).get(0);
-    if (userToUpdate === undefined) {
-      reject(Object.assign({}, { status: 400, error: 'User not found' }));
-    }
-    const updatedUser = userToUpdate.reduce((map, value, key) => {
-      // if new data has current key, update the old user data with the new value
-      if (update.has(key)) return map.set(key, update.get(key));
-      return map;
-    }, userToUpdate);
-    // update global users state
-    usersModel = usersModel.splice(userIndex, 1, updatedUser);
-    resolve(Object.assign({}, { status: 200, message: 'User updated successfully', data: updatedUser }));
+    const userID = Number(update.get('id'));
+    user.findOneById(userID).then((userData) => {
+      if (userData === undefined) {
+        reject(Object.assign({}, { status: 400, error: 'User not found' }));
+      }
+      user.update(update).then((patched) => {
+        resolve(Object.assign({}, { status: 200, message: 'User updated successfully', data: patched }));
+      }).catch(error => error);
+    }).catch(error => reject(error));
   }),
 
   deleteUser: id => new Promise((resolve, reject) => {
-    let deletedUser = '';
-    usersModel.forEach((user, index) => {
-      if (user.get('id') === id) {
-        usersModel = usersModel.delete(index);
-        deletedUser = user;
-      } else if (user.get('email') === id) {
-        usersModel = usersModel.delete(index);
-        deletedUser = user;
+    user.delete(id).then((deletedUser) => {
+      if (deletedUser !== '') {
+        resolve(Object.assign({}, { status: 200, message: 'User Deleted successfully', data: deletedUser }));
+      } else {
+        reject(Object.assign({}, { status: 400, error: 'User not found' }));
       }
-    });
-    if (deletedUser !== '') {
-      resolve(Object.assign({}, { status: 200, message: 'User Deleted successfully', data: deletedUser }));
-    } else {
-      reject(Object.assign({}, { status: 400, error: 'User not found' }));
-    }
-  }),
-
-  testDelete: email => usersModel.forEach((user, index) => {
-    if (user.get('email') === email) usersModel = usersModel.delete(index);
+    }).catch(error => reject(error));
   }),
 };
+
+module.exports = userController;
