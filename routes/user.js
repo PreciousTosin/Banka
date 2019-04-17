@@ -16,10 +16,10 @@ router.post('/signup', async (req, res) => {
       status: 200,
       data: updatedUser,
     });
-    res.status(200).json(response);
+    res.status(response.status).json(response);
   } catch (error) {
     // console.log(error);
-    res.status(400).json(error);
+    res.status(error.status).json(error);
     // next(error);
   }
 });
