@@ -1,5 +1,5 @@
 const { List, Map } = require('immutable');
-let accountsModel = require('../models/accounts');
+let accountsModel = require('../data/account');
 const user = require('../controllers/user');
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
