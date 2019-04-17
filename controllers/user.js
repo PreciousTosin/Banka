@@ -1,5 +1,5 @@
 const { List, Map, fromJS } = require('immutable');
-let usersModel = require('../models/user');
+let usersModel = require('../data/user');
 const { asyncHashPassword, asyncComparePassword } = require('./password');
 const { createToken, verifyToken } = require('./jwt-token');
 

@@ -1,6 +1,6 @@
 const { List, Map } = require('immutable');
 const Decimal = require('decimal.js');
-let transactionModel = require('../models/transaction');
+let transactionModel = require('../data/transaction');
 const account = require('../controllers/account');
 
 function makeTransactionId() {
