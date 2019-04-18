@@ -1,5 +1,5 @@
 const { List, Map } = require('immutable');
-const accountData = require('../../data/account');
+const accountData = require('../data/account');
 
 const accountSchema = {
   id: 'number',
