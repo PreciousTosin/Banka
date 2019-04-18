@@ -1,4 +1,4 @@
-const { verifyToken } = require('../controllers/jwt-token');
+const { verifyToken } = require('../utilities/jwt-token');
 
 function extractToken(req) {
   const token = req.headers['x-access-token'] || req.headers.authorization;
