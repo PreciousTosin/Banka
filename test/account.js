@@ -8,7 +8,7 @@ const server = require('../server');
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
-const account = require('../controllers/account');
+const account = require('../data-structure/controllers/account');
 
 function setTokenHeader(token) {
   return `Bearer ${token}`;

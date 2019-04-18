@@ -1,7 +1,7 @@
 const { Map } = require('immutable');
 const user = require('../models/user');
-const { asyncComparePassword } = require('../utilities/password');
-const { createToken, verifyToken } = require('../utilities/jwt-token');
+const { asyncComparePassword } = require('../../utilities/password');
+const { createToken, verifyToken } = require('../../utilities/jwt-token');
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
 function generatePayload(userPayload) {

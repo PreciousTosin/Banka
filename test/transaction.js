@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const transaction = require('../controllers/transaction');
+const transaction = require('../data-structure/controllers/transaction');
 
 chai.should();
 chai.use(chaiHttp);

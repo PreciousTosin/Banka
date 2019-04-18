@@ -1,5 +1,5 @@
 const transaction = require('../models/transaction');
-const account = require('../controllers/account');
+const account = require('./account');
 
 
 const transactionController = {

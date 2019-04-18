@@ -1,5 +1,5 @@
 const express = require('express');
-const transaction = require('../controllers/transaction');
+const transaction = require('../data-structure/controllers/transaction');
 const { isStaff, isUser } = require('../middleware/authorization');
 
 const router = express.Router();

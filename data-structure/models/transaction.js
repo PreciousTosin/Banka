@@ -1,6 +1,6 @@
 const { List, Map } = require('immutable');
 const Decimal = require('decimal.js');
-const transactionData = require('../data/transaction');
+const transactionData = require('../../data/transaction');
 const account = require('../controllers/account');
 
 const transactionSchema = {
