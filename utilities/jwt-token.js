@@ -3,7 +3,7 @@ require('dotenv').config();
 
 function createToken(payload) {
   return new Promise((resolve, reject) => {
-    jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: 5 * 60 }, (err, token) => {
+    jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: 10 * 60 }, (err, token) => {
       if (err) reject(err);
       resolve(token);
     });

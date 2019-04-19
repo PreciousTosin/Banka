@@ -1,10 +1,15 @@
 const express = require('express');
-const user = require('../data-structure/controllers/user');
+const dotenv = require('dotenv');
+
+dotenv.config();
+const user = process.env.DATASOURCE === 'datastructure'
+  ? require('../data-structure/controllers/user')
+  : require('../database/controllers/user');
 const { isUser, isAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
 
-router.get('/users', isUser, async (req, res) => res.json(await user.returnAllUsers()));
+router.get('/users', isAdmin, async (req, res) => res.json(await user.returnAllUsers()));
 
 router.get('/users/:id', isUser, async (req, res) => res.json(await user.findUserById(req.params.id)));
 
@@ -18,7 +23,7 @@ router.post('/signup', async (req, res) => {
     });
     res.status(response.status).json(response);
   } catch (error) {
-    // console.log(error);
+    // console.log('ROUTE ERROR', error);
     res.status(error.status).json(error);
     // next(error);
   }
@@ -43,7 +48,7 @@ router.patch('/users/:id', isUser, async (req, res) => {
     const updatedUser = await user.updateUser(updatePayload);
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(error.status).json(error);
   }
 });
 
