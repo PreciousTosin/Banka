@@ -72,9 +72,9 @@ const userController = {
       // console.log('USER DATA: ', userData, payload);
       const isValidUser = await asyncComparePassword(payload.password, userData[0].password);
       if (isValidUser === true) {
-        const tokenPayload = generateUserPrint(userData);
-        userData.token = await createToken(tokenPayload);
-        const tokenizedUser = userData;
+        const tokenPayload = generateUserPrint(userData[0]);
+        userData[0].token = await createToken(tokenPayload);
+        const tokenizedUser = userData[0];
         delete tokenizedUser.password;
         return Object.assign({}, { status: 200, data: tokenizedUser });
       }

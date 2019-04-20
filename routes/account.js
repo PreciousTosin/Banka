@@ -1,10 +1,15 @@
 const express = require('express');
-const account = require('../data-structure/controllers/account');
-const { isUser, isAdmin } = require('../middleware/authorization');
+const dotenv = require('dotenv');
+
+dotenv.config();
+const account = process.env.DATASOURCE === 'datastructure'
+  ? require('../data-structure/controllers/account')
+  : require('../database/controllers/account');
+const { isUser, isStaffOrAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
 
-router.get('/', isAdmin, async (req, res) => {
+router.get('/', isStaffOrAdmin, async (req, res) => {
   try {
     const accounts = await account.returnAllAccounts();
     res.status(200).json(accounts);
@@ -15,7 +20,6 @@ router.get('/', isAdmin, async (req, res) => {
 
 router.get('/:id', isUser, async (req, res) => {
   try {
-    console.log('ID', req.params.id);
     const accounts = await account.getUserAccounts(req.params.id);
     res.status(200).json(accounts);
   } catch (e) {
@@ -23,7 +27,7 @@ router.get('/:id', isUser, async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', isUser, async (req, res) => {
   try {
     const payload = req.body;
     const newAccount = await account.createBankAccount(payload);
@@ -35,7 +39,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:accountNumber', isAdmin, async (req, res) => {
+router.patch('/:accountNumber', isStaffOrAdmin, async (req, res) => {
   try {
     const { accountNumber } = req.params;
     const payload = {
@@ -52,7 +56,7 @@ router.patch('/:accountNumber', isAdmin, async (req, res) => {
   }
 });
 
-router.delete('/:accountNumber', isAdmin, async (req, res) => {
+router.delete('/:accountNumber', isStaffOrAdmin, async (req, res) => {
   try {
     const { accountNumber } = req.params;
     const response = await account.deleteBankAccount(accountNumber);

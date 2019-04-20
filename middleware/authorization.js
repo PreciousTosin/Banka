@@ -89,4 +89,36 @@ function isStaff(req, res, next) {
   return 'token error';
 }
 
-module.exports = { isUser, isAdmin, isStaff };
+function isStaffOrAdmin(req, res, next) {
+  const token = extractToken(req);
+
+  if (token !== false) {
+    verifyToken(token)
+      .then((response) => {
+        if (response.type === 'staff' || response.type === 'admin') {
+          return next();
+        }
+        return res.status(401).json({
+          status: 401,
+          error: 'User is neither a staff nor admin',
+        });
+      })
+      .catch(error => res.status(401).json({
+        status: 401,
+        error: error.message,
+      }));
+  } else {
+    return res.status(401).json({
+      status: 401,
+      error: 'Auth token is not supplied',
+    });
+  }
+  return 'token error';
+}
+
+module.exports = {
+  isUser,
+  isAdmin,
+  isStaff,
+  isStaffOrAdmin,
+};
