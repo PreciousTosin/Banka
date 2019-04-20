@@ -28,4 +28,28 @@ module.exports = {
         });
     });
   },
+
+  transaction(queryOne, queryTwo) {
+    let queryOneResults = '';
+    let queryTwoResults = '';
+    return new Promise((resolve, reject) => {
+      pool.query('BEGIN')
+        .then(() => queryOne())
+        .then((one) => {
+          queryOneResults = one;
+          return queryTwo();
+        })
+        .then((two) => {
+          queryTwoResults = two;
+          return pool.query('COMMIT');
+        })
+        .then(() => resolve([queryOneResults, queryTwoResults]))
+        .catch(error => pool.query('ROLLBACK')
+          .catch(err => reject(err))
+          .then(() => {
+            console.log('ROLLBACK ERROR: ', error);
+            reject(error);
+          }));
+    });
+  },
 };

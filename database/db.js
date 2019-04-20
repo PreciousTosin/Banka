@@ -14,7 +14,7 @@ const prodConfig = {
   connectionString: process.env.DATABASE_URL,
 };
 
-const pool = new Pool(process.env.NODE_ENV === 'production' ? prodConfig : devConfig);
+const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : prodConfig);
 
 pool.on('connect', () => {
   console.log(`CONNECTED TO ${process.env.DATABASE}`);
@@ -78,6 +78,34 @@ const createAccountTable = () => {
 };
 
 /**
+ * Create Transaction Table
+ */
+const createTransactionTable = () => {
+  const queryText = `CREATE TABLE IF NOT EXISTS
+      Transactions(
+        id INTEGER PRIMARY KEY,
+        createdOn TIMESTAMP WITH TIME ZONE NOT NULL,
+        type VARCHAR(20) NOT NULL,
+        accountNumber INTEGER NOT NULL,
+        cashier INTEGER NOT NULL,
+        amount NUMERIC NOT NULL,
+        oldBalance NUMERIC NOT NULL,
+        newBalance NUMERIC NOT NULL
+      )`;
+
+  pool.connect()
+    .then(client => client.query(queryText)
+      .then((res) => {
+        client.release();
+        console.log('CREATE TRANSACTION TABLE RESPONSE: ', res);
+      })
+      .catch((e) => {
+        client.release();
+        console.log('CREATE TRANSACTION TABLE ERROR: ', e);
+      }));
+};
+
+/**
  * Drop User Table
  */
 const dropUserTable = () => {
@@ -103,11 +131,28 @@ const dropAccountTable = () => {
     .then(client => client.query(queryText)
       .then((res) => {
         client.release();
-        console.log('CREATE USER TABLE RESPONSE: ', res);
+        console.log('DROP ACCOUNT TABLE RESPONSE: ', res);
       })
       .catch((e) => {
         client.release();
-        console.log('CREATE USER TABLE ERROR: ', e);
+        console.log('DROP ACCOUNT TABLE ERROR: ', e);
+      }));
+};
+
+/**
+ * Drop Transaction Table
+ */
+const dropTransactionTable = () => {
+  const queryText = 'DROP TABLE IF EXISTS Transactions';
+  pool.connect()
+    .then(client => client.query(queryText)
+      .then((res) => {
+        client.release();
+        console.log('DROP TRANSACTION TABLE RESPONSE: ', res);
+      })
+      .catch((e) => {
+        client.release();
+        console.log('DROP TRANSACTION TABLE ERROR: ', e);
       }));
 };
 
@@ -117,6 +162,7 @@ const dropAccountTable = () => {
 const createAllTables = () => {
   createUserTable();
   createAccountTable();
+  createTransactionTable();
 };
 /**
  * Drop All Tables
@@ -124,6 +170,7 @@ const createAllTables = () => {
 const dropAllTables = () => {
   dropUserTable();
   dropAccountTable();
+  dropTransactionTable();
 };
 
 pool.on('remove', () => {
@@ -135,9 +182,11 @@ pool.on('remove', () => {
 module.exports = {
   createAccountTable,
   createUserTable,
+  createTransactionTable,
   createAllTables,
   dropUserTable,
   dropAccountTable,
+  dropTransactionTable,
   dropAllTables,
 };
 
