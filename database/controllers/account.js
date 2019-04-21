@@ -54,7 +54,7 @@ const accountController = {
     const updatePayload = payload;
     delete updatePayload.accountNumber;
     account.update(accountNumber, updatePayload).then((patched) => {
-      resolve(patched);
+      if (patched.length !== 0) resolve({ accountNumber, ...payload });
     }).catch(error => reject(error));
   }),
 

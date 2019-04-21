@@ -10,11 +10,12 @@ const devConfig = {
   password: process.env.DATABASE_PASSWORD,
 };
 
+// eslint-disable-next-line no-unused-vars
 const prodConfig = {
   connectionString: process.env.DATABASE_URL,
 };
 
-const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : prodConfig);
+const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : devConfig);
 
 module.exports = {
   query(text, params = []) {

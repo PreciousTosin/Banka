@@ -48,6 +48,7 @@ const User = {
           resolve();
         })
         .catch((error) => {
+          if (error.message) reject(error.message);
           reject(error);
         });
     });
@@ -104,14 +105,9 @@ const User = {
       default:
         queryText = `UPDATE Users SET ${parameter}=${value} WHERE id = ${id};`;
     }
-    console.log('UPDATE PARAMS: ', payload);
     return new Promise((resolve, reject) => {
-      console.log('UPDATE PARAMS: ', payload, typeof payload);
-      console.log('UPDATE KEY: ', parameter, typeof parameter);
-      console.log('UPDATE VALUE: ', value, typeof value);
       queryDb.query(queryText)
         .then((res) => {
-          console.log('UPDATE RESPONSE: ', res);
           if (res.rowCount === 1) {
             return queryDb.query(`SELECT * FROM Users WHERE id=${id};`);
           }

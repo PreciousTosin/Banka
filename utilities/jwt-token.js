@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 function createToken(payload) {
+  // eslint-disable-next-line no-param-reassign
+  if (payload.password) delete payload.password;
   return new Promise((resolve, reject) => {
     jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: 10 * 60 }, (err, token) => {
       if (err) reject(err);

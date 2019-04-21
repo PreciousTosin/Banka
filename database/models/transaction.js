@@ -53,11 +53,12 @@ const Transaction = {
       queryDb.transaction(createTransaction, updateAccount)
         .then((results) => {
           const createTxOperation = results[0];
-          const updateAccOperation = results[1][0];
+          const updateAccOperation = results[1];
           if (createTxOperation.rowCount !== 1) {
             throw new Error('Transaction failed');
           }
-          resolve(updateAccOperation);
+          // console.log('Transaction Model: ', results);
+          resolve([update, updateAccOperation]);
         })
         .catch(error => reject(error));
     });
@@ -85,6 +86,28 @@ const Transaction = {
         })
         .catch((e) => {
           console.log('RETURN ALL TRANSACTION RECORDS ERROR: ', e);
+        });
+    });
+  },
+
+  delete(id) {
+    let transactionPayload = '';
+    return new Promise((resolve, reject) => {
+      const queryText = `DELETE FROM Transactions WHERE id=${id};`;
+      queryDb.query(`SELECT * FROM Transactions WHERE id=${id};`)
+        .then((res) => {
+          transactionPayload = res.rows;
+          return queryDb.query(queryText);
+        })
+        .then((res) => {
+          if (res.rowCount === 1) {
+            resolve(transactionPayload);
+          }
+          resolve();
+        })
+        .catch((e) => {
+          console.log('DELETE TRANSACTION RECORD ERROR: ', e);
+          reject(e);
         });
     });
   },

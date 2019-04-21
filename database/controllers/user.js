@@ -5,19 +5,18 @@ const { createToken, verifyToken } = require('../../utilities/jwt-token');
 /* --------------- UTILITY FUNCTIONS ----------------------- */
 function generateUserPrint(userPayload) {
   return {
-    id: userPayload.id,
+    id: userPayload.id ? userPayload.id : userPayload.id,
     email: userPayload.email,
-    firstName: userPayload.firstName,
-    lastName: userPayload.lastName,
+    firstName: userPayload.firstName ? userPayload.firstName : userPayload.firstname,
+    lastName: userPayload.lastName ? userPayload.lastName : userPayload.lastname,
     password: userPayload.password,
     type: userPayload.type,
-    isAdmin: userPayload.isAdmin,
+    isAdmin: userPayload.isAdmin ? userPayload.isAdmin : userPayload.isadmin,
     status: userPayload.status,
   };
 }
 
 function tokenizeUser(userWithoutToken) {
-  console.log('ABOUT TO TOKENIZE: ', userWithoutToken);
   return new Promise((resolve, reject) => createToken(userWithoutToken)
     .then((token) => {
       resolve({
@@ -60,7 +59,10 @@ const userController = {
         delete clientPayload.password; // remove password key/value
         resolve(clientPayload);
       })
-      .catch(error => reject(Object.assign({}, {}, { status: 400, error })));
+      .catch((error) => {
+        if (typeof error === 'object') reject(error);
+        reject(Object.assign({}, {}, { status: 400, error }));
+      });
   }),
 
   loginUser: async (payload) => {
