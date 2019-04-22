@@ -15,7 +15,7 @@ const prodConfig = {
   connectionString: process.env.DATABASE_URL,
 };
 
-const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : devConfig);
+const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : prodConfig);
 
 module.exports = {
   query(text, params = []) {
