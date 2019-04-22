@@ -1,6 +1,6 @@
 const { Map } = require('immutable');
 const account = require('../models/accounts');
-const user = require('../controllers/user');
+const user = require('./user');
 
 const accountController = {
   returnAllAccounts: () => new Promise((resolve) => {

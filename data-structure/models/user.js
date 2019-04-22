@@ -1,6 +1,6 @@
 const { List, fromJS } = require('immutable');
 const userData = require('../data/user');
-const { asyncHashPassword } = require('../controllers/password');
+const { asyncHashPassword } = require('../../utilities/password');
 
 const userSchema = {
   id: 'number',

@@ -1,24 +1,27 @@
 const express = require('express');
-const transaction = require('../controllers/transaction');
-const { isStaff, isUser } = require('../middleware/authorization');
+const dotenv = require('dotenv');
+
+dotenv.config();
+const transaction = process.env.DATASOURCE === 'datastructure'
+  ? require('../data-structure/controllers/transaction')
+  : require('../database/controllers/transaction');
+const { isStaff, isStaffOrAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
 
-router.get('/', isUser, async (req, res) => {
+router.get('/', isStaffOrAdmin, async (req, res) => {
   try {
-    const transactions = await transaction.returnAllTransations();
-    const response = Object.assign({}, { status: 200, data: transactions });
+    const response = await transaction.returnAllTransations();
     res.status(200).json(response);
   } catch (e) {
-    const errResponse = Object.assign({}, { status: 400, error: e });
-    res.status(400).json(errResponse);
+    res.status(400).json(e);
   }
 });
 
-router.get('/:id', isUser, async (req, res) => {
+router.get('/:id', isStaffOrAdmin, async (req, res) => {
   try {
-    const transactions = await transaction.getOneTransaction(req.params.id);
-    res.status(200).json(transactions);
+    const response = await transaction.getOneTransaction(req.params.id);
+    res.status(200).json(response);
   } catch (e) {
     res.status(400).json(e);
   }
@@ -36,18 +39,16 @@ router.post('/:accountNumber/credit', isStaff, async (req, res) => {
       oldBalance: 0,
       newBalance: 0,
     };
-    const newTransaction = await transaction.createTransaction(creditPayload);
-    const response = Object.assign({}, { status: 200, data: newTransaction });
+    const response = await transaction.createTransaction(creditPayload);
     res.status(200).json(response);
   } catch (e) {
-    const errResponse = Object.assign({}, { status: 400, error: e });
-    res.status(400).json(errResponse);
+    res.status(400).json(Object.assign({}, { status: 400, error: e.message }));
   }
 });
 
 router.post('/:accountNumber/debit', isStaff, async (req, res) => {
   try {
-    const creditPayload = {
+    const debitPayload = {
       id: '',
       createdOn: '',
       type: req.body.type,
@@ -57,12 +58,10 @@ router.post('/:accountNumber/debit', isStaff, async (req, res) => {
       oldBalance: 0,
       newBalance: 0,
     };
-    const newTransaction = await transaction.createTransaction(creditPayload);
-    const response = Object.assign({}, { status: 200, data: newTransaction });
+    const response = await transaction.createTransaction(debitPayload);
     res.status(200).json(response);
   } catch (e) {
-    const errResponse = Object.assign({}, { status: 400, error: e });
-    res.status(400).json(errResponse);
+    res.status(400).json(Object.assign({}, { status: 400, error: e.message }));
   }
 });
 
