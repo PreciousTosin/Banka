@@ -4,7 +4,17 @@ const user = require('./user');
 const accountController = {
   returnAllAccounts: () => new Promise((resolve, reject) => {
     account.findAll()
-      .then(data => resolve(Object.assign({}, { status: 200, data })))
+      .then((data) => {
+        const output = data.map(accountData => ({
+          createdOn: accountData.createdon,
+          accountNumber: accountData.accountnumber,
+          ownerEmail: accountData.email,
+          type: accountData.type,
+          status: accountData.status,
+          balance: accountData.balance,
+        }));
+        resolve(Object.assign({}, { status: 200, data: output }));
+      })
       .catch(error => reject(Object.assign({}, { status: 404, error })));
   }),
 
@@ -16,16 +26,16 @@ const accountController = {
 
   getAccountsByStatus: status => new Promise((resolve, reject) => {
     account.findByStatus(status)
-      .then((accountData) => {
-        const response = [{
-          createdOn: accountData[0].createdon,
-          accountNumber: accountData[0].accountnumber,
-          ownerEmail: accountData[0].email,
-          type: accountData[0].type,
-          status: accountData[0].status,
-          balance: accountData[0].balance,
-        }];
-        resolve(Object.assign({}, { status: 200, data: response }));
+      .then((data) => {
+        const output = data.map(accountData => ({
+          createdOn: accountData.createdon,
+          accountNumber: accountData.accountnumber,
+          ownerEmail: accountData.email,
+          type: accountData.type,
+          status: accountData.status,
+          balance: accountData.balance,
+        }));
+        resolve(Object.assign({}, { status: 200, data: output }));
       })
       .catch(error => reject(Object.assign({}, { status: 404, error })));
   }),

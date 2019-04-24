@@ -23,9 +23,9 @@ router.get('/', async (req, res) => {
   return true;
 });
 
-router.get('/:id', isUser, async (req, res) => {
+router.get('/:accountNumber', async (req, res) => {
   try {
-    const accounts = await account.getUserAccounts(req.params.id);
+    const accounts = await account.getUserAccounts(req.params.accountNumber);
     res.status(200).json(accounts);
   } catch (e) {
     res.status(400).json(e);
