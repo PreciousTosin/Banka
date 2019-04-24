@@ -99,7 +99,7 @@ describe('/POST and /GET transactions', () => {
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
-          expect(res.body.data[0].id).to.be.equal(612879);
+          expect(res.body.data[0].transactionId).to.be.equal(612879);
           done();
         });
     });
@@ -130,7 +130,7 @@ describe('/POST and /GET transactions', () => {
   });
 
   after((done) => {
-    console.log('Action after Tests');
+    console.log('Action after Tests', transactionIds);
     account.deleteBankAccount(createdAccount.accountNumber)
       .then(() => transactionIds.map(id => transaction.deleteTransaction(id)))
       .then((transactionRes) => {
