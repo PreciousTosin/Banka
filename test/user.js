@@ -111,6 +111,19 @@ describe('User Tests', () => {
       });
     });
 
+    describe('/GET User accounts using their email', () => {
+      it('It should return status of 200 and list of user accounts', (done) => {
+        chai.request(server)
+          .get('/v1/user/jamesdonovan@gmail.com/accounts')
+          .set('Authorization', token)
+          .end((err, res) => {
+            res.should.have.a.status(200);
+            expect(res.body.data.length).to.be.above(0);
+            done();
+          });
+      });
+    });
+
     describe('PATCH/ User Account', () => {
       it('it should update user admin status and return status of 200', (done) => {
         chai.request(server)
