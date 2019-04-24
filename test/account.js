@@ -84,6 +84,20 @@ describe('/GET, POST and /PATCH acccounts', () => {
     });
   });
 
+  describe('/GET Active accounts', () => {
+    it('it should retrieve all accounts that have an active status', (done) => {
+      chai.request(server)
+        .get('/v1/accounts?status=active')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(200);
+          expect(res.body.data.length).to.be.above(0);
+          expect(res.body.data[0].status).to.be.equal('active');
+          done();
+        });
+    });
+  });
+
   describe('/PATCH accounts', () => {
     it('it should patch account and return status of 200', (done) => {
       chai.request(server)

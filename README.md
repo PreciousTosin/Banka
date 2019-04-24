@@ -28,19 +28,15 @@
 ##### Documentation - https://documenter.getpostman.com/view/938650/S1ENxJKx
 
 ### Test User Accounts
-#### Admin
-email - `tylerross@gmail.com`
-password - `tylerross`
-
-#### Staff
-email - `johnwayne@gmail.com`
-password - `johnwayne`
-
-#### Client
-email - `jamesdonovan@gmail.com`
-password - `jamesdonovan`
+|          Email         |    Password   | Account Type |
+| ---------------------- | ------------- | ------------ |
+| tylerross@gmail.com    |    tylerross  |     admin    |
+| johnwayne@gmail.com    |    johnwayne  |     staff    |
+| jamesdonovan@gmail.com |  jamesdonovan |     client   |
 
 ### Test Bank Accounts
-Account Number - `2869502843` status - `draft`
 
-Account Number - `2816408925` status - `active`
+| Account Number |    status     |
+| -------------- | ------------- |
+|   2869502843   |     draft     |
+|   2816408925   |     active    |
