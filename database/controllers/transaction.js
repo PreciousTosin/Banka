@@ -24,6 +24,7 @@ const transactionController = {
         transactionType: payload.type,
         accountBalance: String(updatedTransaction[1].balance),
       };
+      // console.log('CLIENT PAYLOAD: ', clientPayload);
       return Object.assign({}, { status: 200, data: clientPayload });
     } catch (e) {
       if (e.message) throw new Error(e.message);

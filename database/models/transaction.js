@@ -34,7 +34,7 @@ const Transaction = {
         id: makeTransactionId(),
         createdOn: returnCurrentDateTime(),
         type: payload.type,
-        accountNumber: accountInformation.accountnumber,
+        accountNumber: accountInformation.accountNumber,
         cashier: payload.cashier,
         amount: Number(payload.amount),
         oldBalance: Number(oldBalance.toFixed(2)),

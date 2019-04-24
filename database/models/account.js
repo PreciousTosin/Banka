@@ -69,7 +69,11 @@ const Account = {
 
   findOneByAccountNo(accountNumber) {
     return new Promise((resolve, reject) => {
-      const queryText = `SELECT * FROM Accounts WHERE accountNumber=${accountNumber};`;
+      const queryText = `SELECT
+          Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
+        FROM Accounts
+        LEFT JOIN Users
+        ON Users.id = Accounts.owner WHERE accountNumber=${accountNumber};`;
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);

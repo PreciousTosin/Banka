@@ -70,6 +70,19 @@ describe('/GET, POST and /PATCH acccounts', () => {
     });
   });
 
+  describe('/GET a specific account', () => {
+    it('it should retrieve a specific account using the accNo and return status of 200', (done) => {
+      chai.request(server)
+        .get('/v1/accounts/281640892')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(200);
+          expect(res.body.data.length).to.be.above(0);
+          done();
+        });
+    });
+  });
+
   describe('/GET Dormant accounts', () => {
     it('it should retrieve all accounts that have dormant status', (done) => {
       chai.request(server)
