@@ -14,6 +14,22 @@ const accountController = {
       .catch(error => reject(Object.assign({}, { status: 404, error })));
   }),
 
+  getAccountsByStatus: status => new Promise((resolve, reject) => {
+    account.findByStatus(status)
+      .then((accountData) => {
+        const response = [{
+          createdOn: accountData[0].createdon,
+          accountNumber: accountData[0].accountnumber,
+          ownerEmail: accountData[0].email,
+          type: accountData[0].type,
+          status: accountData[0].status,
+          balance: accountData[0].balance,
+        }];
+        resolve(Object.assign({}, { status: 200, data: response }));
+      })
+      .catch(error => reject(Object.assign({}, { status: 404, error })));
+  }),
+
   createBankAccount: payload => new Promise((resolve, reject) => {
     let userAccount = '';
     user.findUserById(payload.owner)

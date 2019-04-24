@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 const queryDb = require('../query');
 
 const accountSchema = {
@@ -69,6 +70,25 @@ const Account = {
   findOneByAccountNo(accountNumber) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT * FROM Accounts WHERE accountNumber=${accountNumber};`;
+      queryDb.query(queryText)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch((err) => {
+          console.log('GET ACCOUNT ERROR: ', err);
+          reject(err);
+        });
+    });
+  },
+
+  findByStatus(status) {
+    return new Promise((resolve, reject) => {
+      const queryText = `SELECT
+          Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
+        FROM Accounts
+        LEFT JOIN Users
+        ON Users.id = Accounts.owner
+        WHERE Accounts.status='${status}';`;
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);
