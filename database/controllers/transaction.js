@@ -8,7 +8,18 @@ const transactionController = {
     .catch(error => reject(Object.assign({}, { status: 404, error })))),
 
   getOneTransaction: id => new Promise((resolve, reject) => transaction.findOneById(id)
-    .then(data => resolve(Object.assign({}, { status: 200, data })))
+    .then((data) => {
+      const response = data.map(tx => ({
+        transactionId: tx.id,
+        createdOn: tx.createdon,
+        type: tx.type,
+        accountNumber: tx.accountnumber,
+        amount: tx.amount,
+        oldBalance: tx.oldbalance,
+        newBalance: tx.newbalance,
+      }));
+      resolve(Object.assign({}, { status: 200, data: response }));
+    })
     .catch(error => reject(Object.assign({}, { status: 404, error })))),
 
   createTransaction: async (payload) => {
