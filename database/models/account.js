@@ -102,7 +102,11 @@ const Account = {
 
   findAll() {
     return new Promise((resolve) => {
-      const queryText = 'SELECT * FROM Accounts;';
+      const queryText = `SELECT
+          Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
+        FROM Accounts
+        LEFT JOIN Users
+        ON Users.id = Accounts.owner;`;
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);
