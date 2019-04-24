@@ -5,6 +5,9 @@ dotenv.config();
 const user = process.env.DATASOURCE === 'datastructure'
   ? require('../data-structure/controllers/user')
   : require('../database/controllers/user');
+const account = process.env.DATASOURCE === 'datastructure'
+  ? require('../data-structure/controllers/account')
+  : require('../database/controllers/account');
 const { isUser, isAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
@@ -12,6 +15,15 @@ const router = express.Router();
 router.get('/users', isAdmin, async (req, res) => res.json(await user.returnAllUsers()));
 
 router.get('/users/:id', isUser, async (req, res) => res.json(await user.findUserById(req.params.id)));
+
+router.get('/users/:email/accounts', async (req, res) => {
+  try {
+    const response = await account.getUserAccountsByEmail(req.params.email);
+    res.status(response.status).json(response);
+  } catch (e) {
+    res.status(e.status).json(e);
+  }
+});
 
 router.post('/signup', async (req, res) => {
   try {

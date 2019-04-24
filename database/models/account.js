@@ -121,6 +121,24 @@ const Account = {
     });
   },
 
+  findAllAccountsByEmail(email) {
+    return new Promise((resolve) => {
+      // const queryText = 'SELECT * FROM Users;';
+      const queryText = `SELECT
+          Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
+        FROM Accounts
+        LEFT JOIN Users
+        ON Users.id = Accounts.owner WHERE Users.email='${email}';`;
+      queryDb.query(queryText)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch((e) => {
+          console.log('RETURN ALL USERS RECORDS ERROR: ', e);
+        });
+    });
+  },
+
   update(accountNumber, payload) {
     let accountPayload = '';
     const parameter = Object.keys(payload)[0];

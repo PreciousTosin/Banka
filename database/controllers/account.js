@@ -34,6 +34,22 @@ const accountController = {
       .catch(error => reject(Object.assign({}, { status: 404, error })));
   }),
 
+  getUserAccountsByEmail: email => new Promise((resolve, reject) => {
+    account.findAllAccountsByEmail(email)
+      .then((data) => {
+        const output = data.map(accountData => ({
+          createdOn: accountData.createdon,
+          accountNumber: accountData.accountnumber,
+          ownerEmail: accountData.email,
+          type: accountData.type,
+          status: accountData.status,
+          balance: accountData.balance,
+        }));
+        resolve(Object.assign({}, { status: 200, data: output }));
+      })
+      .catch(error => reject(Object.assign({}, { status: 404, error })));
+  }),
+
   getAccountsByStatus: status => new Promise((resolve, reject) => {
     account.findByStatus(status)
       .then((data) => {
