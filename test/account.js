@@ -8,7 +8,6 @@ const server = require('../server');
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
-const account = require('../database/controllers/account');
 
 function setTokenHeader(token) {
   return `Bearer ${token}`;
@@ -65,6 +64,18 @@ describe('/GET, POST and /PATCH acccounts', () => {
         .end((err, res) => {
           res.should.have.a.status(200);
           expect(res.body.data.length).to.be.above(0);
+          done();
+        });
+    });
+  });
+
+  describe('/GET error in finding a specific account', () => {
+    it('it should return error status 404 when account does not exist', (done) => {
+      chai.request(server)
+        .get('/v1/accounts/281550892')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(404);
           done();
         });
     });
@@ -132,15 +143,9 @@ describe('/GET, POST and /PATCH acccounts', () => {
       chai.request(server)
         .delete(`/v1/accounts/${createdAccount.accountNumber}`)
         .set('Authorization', token)
-        .end(async (err, res) => {
-          try {
-            const userAccount = await account.getUserAccounts(createdAccount.accountNumber);
-            expect(res.body.message).to.be.equal('Account successfully deleted');
-            expect(userAccount.data).to.have.lengthOf(0);
-            done();
-          } catch (e) {
-            done(e);
-          }
+        .end((err, res) => {
+          expect(res.body.message).to.be.equal('Account successfully deleted');
+          done();
         });
     });
   });

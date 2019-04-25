@@ -90,6 +90,19 @@ const Transaction = {
     });
   },
 
+  findAllByAccount(accountNumber) {
+    return new Promise((resolve) => {
+      const queryText = `SELECT * FROM Transactions WHERE accountNumber=${accountNumber};`;
+      queryDb.query(queryText)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch((e) => {
+          console.log('RETURN ALL TRANSACTION RECORDS ERROR: ', e);
+        });
+    });
+  },
+
   delete(id) {
     let transactionPayload = '';
     return new Promise((resolve, reject) => {

@@ -5,6 +5,9 @@ dotenv.config();
 const account = process.env.DATASOURCE === 'datastructure'
   ? require('../data-structure/controllers/account')
   : require('../database/controllers/account');
+const transaction = process.env.DATASOURCE === 'datastructure'
+  ? require('../data-structure/controllers/transaction')
+  : require('../database/controllers/transaction');
 const { isUser, isStaffOrAdmin } = require('../middleware/authorization');
 
 const router = express.Router();
@@ -28,7 +31,16 @@ router.get('/:accountNumber', async (req, res) => {
     const accounts = await account.getUserAccounts(req.params.accountNumber);
     res.status(200).json(accounts);
   } catch (e) {
-    res.status(400).json(e);
+    res.status(e.status).json(e);
+  }
+});
+
+router.get('/:accountNumber/transactions', async (req, res) => {
+  try {
+    const accounts = await transaction.getTransactionByAccount(req.params.accountNumber);
+    res.status(200).json(accounts);
+  } catch (e) {
+    res.status(e.status).json(e);
   }
 });
 
