@@ -1,17 +1,15 @@
 /* globals describe, it */
-process.env.NODE_ENV = 'test';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import server from '../server';
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../server');
+process.env.NODE_ENV = 'test';
 
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
 
-function setTokenHeader(token) {
-  return `Bearer ${token}`;
-}
+const setTokenHeader = token => `Bearer ${token}`;
 
 const newAccount = {
   id: 1258608,

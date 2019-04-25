@@ -1,14 +1,9 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express from 'express';
+import user from '../database/controllers/user';
+import account from '../database/controllers/account';
+import Authorization from '../middleware/authorization';
 
-dotenv.config();
-const user = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/user')
-  : require('../database/controllers/user');
-const account = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/account')
-  : require('../database/controllers/account');
-const { isUser, isAdmin } = require('../middleware/authorization');
+const { isUser, isAdmin } = Authorization;
 
 const router = express.Router();
 
@@ -73,4 +68,4 @@ router.delete('/users/:id', isAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

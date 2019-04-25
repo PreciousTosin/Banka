@@ -1,5 +1,7 @@
-const { Pool } = require('pg');
-const dotenv = require('dotenv');
+import NodePostgres from 'pg';
+import dotenv from 'dotenv';
+
+const { Pool } = NodePostgres;
 
 dotenv.config();
 
@@ -17,7 +19,7 @@ const prodConfig = {
 
 const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : prodConfig);
 
-module.exports = {
+export default {
   query(text, params = []) {
     return new Promise((resolve, reject) => {
       pool.query(text, params)

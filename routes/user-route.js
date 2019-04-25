@@ -1,14 +1,7 @@
-const express = require('express');
-const dotenv = require('dotenv');
-
-dotenv.config();
-/* const user = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/user')
-  : require('../database/controllers/user'); */
-const account = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/account')
-  : require('../database/controllers/account');
-// const { isUser, isAdmin } = require('../middleware/authorization');
+import express from 'express';
+// import Authorization from '../middleware/authorization';
+import account from '../database/controllers/account';
+// const { isUser, isAdmin } = Authorization;
 
 const router = express.Router();
 
@@ -21,4 +14,4 @@ router.get('/:email/accounts', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

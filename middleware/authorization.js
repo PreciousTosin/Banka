@@ -1,6 +1,8 @@
-const { verifyToken } = require('../utilities/jwt-token');
+import Token from '../utilities/jwt-token';
 
-function extractToken(req) {
+const { verifyToken } = Token;
+
+const extractToken = (req) => {
   const token = req.headers['x-access-token'] || req.headers.authorization;
   if (token === undefined) {
     return false;
@@ -11,114 +13,111 @@ function extractToken(req) {
     return token.slice(7, token.length);
   }
   return false;
-}
-
-function isUser(req, res, next) {
-  const token = extractToken(req);
-
-  if (token !== false) {
-    verifyToken(token)
-      .then((response) => {
-        req.decoded = response;
-        next();
-      })
-      .catch(error => res.status(401).json({
-        status: 401,
-        error: error.message,
-      }));
-  } else {
-    return res.status(401).json({
-      status: 401,
-      message: 'Auth token is not supplied',
-    });
-  }
-  return 'token error';
-}
-
-function isAdmin(req, res, next) {
-  const token = extractToken(req);
-
-  if (token !== false) {
-    verifyToken(token)
-      .then((response) => {
-        if (response.isAdmin === true) {
-          return next();
-        }
-        return res.status(401).json({
-          status: 401,
-          error: 'User is not an admin',
-        });
-      })
-      .catch(error => res.status(401).json({
-        status: 401,
-        error: error.message,
-      }));
-  } else {
-    return res.status(401).json({
-      status: 401,
-      error: 'Auth token is not supplied',
-    });
-  }
-  return 'token error';
-}
-
-function isStaff(req, res, next) {
-  const token = extractToken(req);
-
-  if (token !== false) {
-    verifyToken(token)
-      .then((response) => {
-        if (response.type === 'staff') {
-          return next();
-        }
-        return res.status(401).json({
-          status: 401,
-          error: 'User is not a staff',
-        });
-      })
-      .catch(error => res.status(401).json({
-        status: 401,
-        error: error.message,
-      }));
-  } else {
-    return res.status(401).json({
-      status: 401,
-      error: 'Auth token is not supplied',
-    });
-  }
-  return 'token error';
-}
-
-function isStaffOrAdmin(req, res, next) {
-  const token = extractToken(req);
-
-  if (token !== false) {
-    verifyToken(token)
-      .then((response) => {
-        if (response.type === 'staff' || response.type === 'admin') {
-          return next();
-        }
-        return res.status(401).json({
-          status: 401,
-          error: 'User is neither a staff nor admin',
-        });
-      })
-      .catch(error => res.status(401).json({
-        status: 401,
-        error: error.message,
-      }));
-  } else {
-    return res.status(401).json({
-      status: 401,
-      error: 'Auth token is not supplied',
-    });
-  }
-  return 'token error';
-}
-
-module.exports = {
-  isUser,
-  isAdmin,
-  isStaff,
-  isStaffOrAdmin,
 };
+
+class Authorization {
+  static isUser(req, res, next) {
+    const token = extractToken(req);
+
+    if (token !== false) {
+      verifyToken(token)
+        .then((response) => {
+          req.decoded = response;
+          next();
+        })
+        .catch(error => res.status(401).json({
+          status: 401,
+          error: error.message,
+        }));
+    } else {
+      return res.status(401).json({
+        status: 401,
+        message: 'Auth token is not supplied',
+      });
+    }
+    return 'token error';
+  }
+
+  static isAdmin(req, res, next) {
+    const token = extractToken(req);
+
+    if (token !== false) {
+      verifyToken(token)
+        .then((response) => {
+          if (response.isAdmin === true) {
+            return next();
+          }
+          return res.status(401).json({
+            status: 401,
+            error: 'User is not an admin',
+          });
+        })
+        .catch(error => res.status(401).json({
+          status: 401,
+          error: error.message,
+        }));
+    } else {
+      return res.status(401).json({
+        status: 401,
+        error: 'Auth token is not supplied',
+      });
+    }
+    return 'token error';
+  }
+
+  static isStaff(req, res, next) {
+    const token = extractToken(req);
+
+    if (token !== false) {
+      verifyToken(token)
+        .then((response) => {
+          if (response.type === 'staff') {
+            return next();
+          }
+          return res.status(401).json({
+            status: 401,
+            error: 'User is not a staff',
+          });
+        })
+        .catch(error => res.status(401).json({
+          status: 401,
+          error: error.message,
+        }));
+    } else {
+      return res.status(401).json({
+        status: 401,
+        error: 'Auth token is not supplied',
+      });
+    }
+    return 'token error';
+  }
+
+  static isStaffOrAdmin(req, res, next) {
+    const token = extractToken(req);
+
+    if (token !== false) {
+      verifyToken(token)
+        .then((response) => {
+          if (response.type === 'staff' || response.type === 'admin') {
+            return next();
+          }
+          return res.status(401).json({
+            status: 401,
+            error: 'User is neither a staff nor admin',
+          });
+        })
+        .catch(error => res.status(401).json({
+          status: 401,
+          error: error.message,
+        }));
+    } else {
+      return res.status(401).json({
+        status: 401,
+        error: 'Auth token is not supplied',
+      });
+    }
+    return 'token error';
+  }
+}
+
+export default Authorization;

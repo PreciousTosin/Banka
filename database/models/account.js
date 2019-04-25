@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-const queryDb = require('../query');
+import queryDb from '../query';
 
 const accountSchema = {
   id: 'number',
@@ -11,27 +11,26 @@ const accountSchema = {
   balance: 'number',
 };
 
-function makeAccountId() {
+const makeAccountId = () => {
   let text = '';
   const possible = '0123456789';
   for (let i = 0; i < 7; i += 1) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return Number(text);
-}
+};
 
-function makeAccountNumber() {
+const makeAccountNumber = () => {
   let text = '';
   const possible = '0123456789';
   for (let i = 0; i < 7; i += 1) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return Number(`28${text}`);
-}
+};
 
-const Account = {
-
-  create(data) {
+class Account {
+  static create(data) {
     const payload = data;
     payload.id = makeAccountId();
     payload.accountNumber = makeAccountNumber();
@@ -52,9 +51,9 @@ const Account = {
           reject(error);
         });
     });
-  },
+  }
 
-  findOneById(id) {
+  static findOneById(id) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT * FROM Accounts WHERE id=${id};`;
       queryDb.query(queryText)
@@ -65,9 +64,9 @@ const Account = {
           reject(err);
         });
     });
-  },
+  }
 
-  findOneByAccountNo(accountNumber) {
+  static findOneByAccountNo(accountNumber) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT
           Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
@@ -83,9 +82,9 @@ const Account = {
           reject(err);
         });
     });
-  },
+  }
 
-  findByStatus(status) {
+  static findByStatus(status) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT
           Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
@@ -102,9 +101,9 @@ const Account = {
           reject(err);
         });
     });
-  },
+  }
 
-  findAll() {
+  static findAll() {
     return new Promise((resolve) => {
       const queryText = `SELECT
           Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
@@ -119,9 +118,9 @@ const Account = {
           console.log('RETURN ALL ACCOUNTS RECORDS ERROR: ', e);
         });
     });
-  },
+  }
 
-  findAllAccountsByEmail(email) {
+  static findAllAccountsByEmail(email) {
     return new Promise((resolve) => {
       // const queryText = 'SELECT * FROM Users;';
       const queryText = `SELECT
@@ -137,9 +136,9 @@ const Account = {
           console.log('RETURN ALL USERS RECORDS ERROR: ', e);
         });
     });
-  },
+  }
 
-  update(accountNumber, payload) {
+  static update(accountNumber, payload) {
     let accountPayload = '';
     const parameter = Object.keys(payload)[0];
     const value = Object.values(payload)[0];
@@ -168,9 +167,9 @@ const Account = {
           reject(e);
         });
     });
-  },
+  }
 
-  delete(accountNumber) {
+  static delete(accountNumber) {
     let accountPayload = '';
     return new Promise((resolve, reject) => {
       const queryText = `DELETE FROM Accounts WHERE accountNumber=${accountNumber};`;
@@ -190,7 +189,7 @@ const Account = {
           reject(e);
         });
     });
-  },
-};
+  }
+}
 
-module.exports = Account;
+export default Account;

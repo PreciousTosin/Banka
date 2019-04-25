@@ -1,22 +1,20 @@
-const Decimal = require('decimal.js');
-const queryDb = require('../query');
-const account = require('../controllers/account');
+import Decimal from 'decimal.js';
+import queryDb from '../query';
+import account from '../controllers/account';
 
-function makeTransactionId() {
+const makeTransactionId = () => {
   let text = '';
   const possible = '0123456789';
   for (let i = 0; i < 6; i += 1) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return Number(text);
-}
+};
 
-function returnCurrentDateTime() {
-  return new Date(Date.now());
-}
+const returnCurrentDateTime = () => new Date(Date.now());
 
-const Transaction = {
-  create(payload, accountInformationRes) {
+class Transaction {
+  static create(payload, accountInformationRes) {
     const accountInformation = accountInformationRes.data[0];
     return new Promise((resolve, reject) => {
       const oldBalance = new Decimal(accountInformation.balance);
@@ -62,9 +60,9 @@ const Transaction = {
         })
         .catch(error => reject(error));
     });
-  },
+  }
 
-  findOneById(id) {
+  static findOneById(id) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT * FROM Transactions WHERE id=${id};`;
       queryDb.query(queryText)
@@ -75,9 +73,9 @@ const Transaction = {
           reject(err);
         });
     });
-  },
+  }
 
-  findAll() {
+  static findAll() {
     return new Promise((resolve) => {
       const queryText = 'SELECT * FROM Transactions;';
       queryDb.query(queryText)
@@ -88,9 +86,9 @@ const Transaction = {
           console.log('RETURN ALL TRANSACTION RECORDS ERROR: ', e);
         });
     });
-  },
+  }
 
-  findAllByAccount(accountNumber) {
+  static findAllByAccount(accountNumber) {
     return new Promise((resolve) => {
       const queryText = `SELECT * FROM Transactions WHERE accountNumber=${accountNumber};`;
       queryDb.query(queryText)
@@ -101,9 +99,9 @@ const Transaction = {
           console.log('RETURN ALL TRANSACTION RECORDS ERROR: ', e);
         });
     });
-  },
+  }
 
-  delete(id) {
+  static delete(id) {
     let transactionPayload = '';
     return new Promise((resolve, reject) => {
       const queryText = `DELETE FROM Transactions WHERE id=${id};`;
@@ -123,7 +121,7 @@ const Transaction = {
           reject(e);
         });
     });
-  },
-};
+  }
+}
 
-module.exports = Transaction;
+export default Transaction;

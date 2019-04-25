@@ -1,11 +1,8 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express from 'express';
+import Authorization from '../middleware/authorization';
+import transaction from '../database/controllers/transaction';
 
-dotenv.config();
-const transaction = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/transaction')
-  : require('../database/controllers/transaction');
-const { isStaff, isStaffOrAdmin } = require('../middleware/authorization');
+const { isStaff, isStaffOrAdmin } = Authorization;
 
 const router = express.Router();
 
@@ -75,4 +72,4 @@ router.delete('/:id', isStaffOrAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

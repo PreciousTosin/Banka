@@ -1,10 +1,11 @@
-const express = require('express');
-const methodOverride = require('method-override');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
+import '@babel/polyfill';
+import express from 'express';
+import methodOverride from 'method-override';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
 
 /* -------- ROUTES ---------------- */
-const appRoutes = require('./routes/index');
+import appRoutes from './routes/index';
 
 dotenv.config();
 const app = express();
@@ -24,4 +25,4 @@ const server = app.listen(process.env.PORT, () => {
   console.log(`Your app is listening on ${address} at port ${port}`);
 });
 
-module.exports = server;
+export default server;

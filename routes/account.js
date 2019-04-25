@@ -1,14 +1,9 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express from 'express';
+import Authorization from '../middleware/authorization';
+import account from '../database/controllers/account';
+import transaction from '../database/controllers/transaction';
 
-dotenv.config();
-const account = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/account')
-  : require('../database/controllers/account');
-const transaction = process.env.DATASOURCE === 'datastructure'
-  ? require('../data-structure/controllers/transaction')
-  : require('../database/controllers/transaction');
-const { isUser, isStaffOrAdmin } = require('../middleware/authorization');
+const { isUser, isStaffOrAdmin } = Authorization;
 
 const router = express.Router();
 
@@ -61,7 +56,8 @@ router.post('/', isUser, async (req, res) => {
     const response = Object.assign({}, { status: 200, data: newAccount });
     res.status(200).json(response);
   } catch (e) {
-    const errorResponse = Object.assign({}, { status: 400, error: e });
+    const errorResponse = e.message ? Object.assign({}, { status: 400, error: e.message })
+      : Object.assign({}, { status: 400, error: e });
     res.status(400).json(errorResponse);
   }
 });
@@ -93,4 +89,4 @@ router.delete('/:accountNumber', isStaffOrAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

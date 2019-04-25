@@ -1,19 +1,17 @@
 /* globals describe, it, before, after */
-process.env.NODE_ENV = 'test';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import server from '../server';
+import transaction from '../database/controllers/transaction';
+import account from '../database/controllers/account';
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../server');
-const transaction = require('../database/controllers/transaction');
-const account = require('../database/controllers/account');
+process.env.NODE_ENV = 'test';
 
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
 
-function setTokenHeader(token) {
-  return `Bearer ${token}`;
-}
+const setTokenHeader = token => `Bearer ${token}`;
 
 const newAccount = {
   id: '',
