@@ -9,6 +9,7 @@ const transactionController = {
 
   getOneTransaction: id => new Promise((resolve, reject) => transaction.findOneById(id)
     .then((data) => {
+      if (data.length === 0) throw new Error('Transaction(s) not found');
       const response = data.map(tx => ({
         transactionId: tx.id,
         createdOn: tx.createdon,
@@ -20,7 +21,30 @@ const transactionController = {
       }));
       resolve(Object.assign({}, { status: 200, data: response }));
     })
-    .catch(error => reject(Object.assign({}, { status: 404, error })))),
+    .catch((error) => {
+      if (error.message) reject(Object.assign({}, { status: 404, error: error.message }));
+      reject(Object.assign({}, { status: 404, error }));
+    })),
+
+  getTransactionByAccount: accountNumber => new Promise((resolve, reject) => transaction
+    .findAllByAccount(accountNumber)
+    .then((data) => {
+      if (data.length === 0) throw new Error('Transaction(s) not found');
+      const response = data.map(tx => ({
+        transactionId: tx.id,
+        createdOn: tx.createdon,
+        type: tx.type,
+        accountNumber: tx.accountnumber,
+        amount: tx.amount,
+        oldBalance: tx.oldbalance,
+        newBalance: tx.newbalance,
+      }));
+      resolve(Object.assign({}, { status: 200, data: response }));
+    })
+    .catch((error) => {
+      if (error.message) reject(Object.assign({}, { status: 404, error: error.message }));
+      reject(Object.assign({}, { status: 404, error }));
+    })),
 
   createTransaction: async (payload) => {
     try {

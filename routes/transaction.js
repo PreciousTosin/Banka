@@ -23,7 +23,7 @@ router.get('/:id', isStaffOrAdmin, async (req, res) => {
     const response = await transaction.getOneTransaction(req.params.id);
     res.status(200).json(response);
   } catch (e) {
-    res.status(400).json(e);
+    res.status(e.status).json(e);
   }
 });
 
@@ -62,6 +62,16 @@ router.post('/:accountNumber/debit', isStaff, async (req, res) => {
     res.status(200).json(response);
   } catch (e) {
     res.status(400).json(Object.assign({}, { status: 400, error: e.message }));
+  }
+});
+
+router.delete('/:id', isStaffOrAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await transaction.deleteTransaction(id);
+    res.status(response.status).json(response);
+  } catch (e) {
+    res.status(400).json(e);
   }
 });
 

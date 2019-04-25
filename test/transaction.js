@@ -66,15 +66,11 @@ describe('/POST and /GET transactions', () => {
         .post(`/v1/transactions/${createdAccount.accountNumber}/credit`)
         .set('Authorization', token)
         .send(payload)
-        .end(async (err, res) => {
-          try {
-            transactionIds.push(res.body.data.transactionId);
-            res.should.have.a.status(200);
-            expect(res.body.data.accountBalance).to.be.equal('1500');
-            done();
-          } catch (e) {
-            done(e);
-          }
+        .end((err, res) => {
+          transactionIds.push(res.body.data.transactionId);
+          res.should.have.a.status(200);
+          expect(res.body.data.accountBalance).to.be.equal('1500');
+          done();
         });
     });
   });
@@ -105,6 +101,43 @@ describe('/POST and /GET transactions', () => {
     });
   });
 
+  describe('/GET transaction error', () => {
+    it('it should return error 404 status when transaction does not exist', (done) => {
+      chai.request(server)
+        .get('/v1/transactions/612864')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(404);
+          done();
+        });
+    });
+  });
+
+  describe('/GET list of transactions on an account', () => {
+    it('it should get a list of transactions on an account and return 200 status', (done) => {
+      chai.request(server)
+        .get('/v1/accounts/286950284/transactions')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(200);
+          expect(res.body.data.length).to.be.above(0);
+          done();
+        });
+    });
+  });
+
+  describe('/GET test for error in getting transaction', () => {
+    it('it should return error 400 status if account is not found', (done) => {
+      chai.request(server)
+        .get('/v1/accounts/28695025/transactions')
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(404);
+          done();
+        });
+    });
+  });
+
   describe('/POST debit transactions', () => {
     it('it should create a new debit transaction', (done) => {
       const payload = {
@@ -116,21 +149,30 @@ describe('/POST and /GET transactions', () => {
         .post(`/v1/transactions/${createdAccount.accountNumber}/debit`)
         .set('Authorization', token)
         .send(payload)
-        .end(async (err, res) => {
-          try {
-            transactionIds.push(res.body.data.transactionId);
-            res.should.have.a.status(200);
-            expect(res.body.data.accountBalance).to.be.equal('900');
-            done();
-          } catch (e) {
-            done(e);
-          }
+        .end((err, res) => {
+          transactionIds.push(res.body.data.transactionId);
+          res.should.have.a.status(200);
+          expect(res.body.data.accountBalance).to.be.equal('900');
+          done();
+        });
+    });
+  });
+
+  describe('/DELETE one transaction', () => {
+    it('it should delete transaction using its id', (done) => {
+      chai.request(server)
+        .delete(`/v1/transactions/${transactionIds[0]}`)
+        .set('Authorization', token)
+        .end((err, res) => {
+          res.should.have.a.status(200);
+          expect(res.body.message).to.be.equal('Transaction successfully deleted');
+          done();
         });
     });
   });
 
   after((done) => {
-    console.log('Action after Tests', transactionIds);
+    console.log('Action after Tests');
     account.deleteBankAccount(createdAccount.accountNumber)
       .then(() => transactionIds.map(id => transaction.deleteTransaction(id)))
       .then((transactionRes) => {
