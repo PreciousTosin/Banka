@@ -35,8 +35,8 @@ class User {
         .then((hash) => {
           payload.id = makeId();
           payload.password = hash;
-          const queryText = `INSERT INTO users(id, email, firstName, lastName, password, type, isAdmin, status)
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8);`;
+          const queryText = `INSERT INTO users(id, email, firstName, lastName, password, type, isAdmin)
+            VALUES($1, $2, $3, $4, $5, $6, $7);`;
           const params = Object.values(payload);
           return queryDb.query(queryText, params);
         })

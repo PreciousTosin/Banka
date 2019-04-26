@@ -5,13 +5,6 @@ import account from '../database/controllers/account';
 
 const router = express.Router();
 
-router.get('/:email/accounts', async (req, res) => {
-  try {
-    const response = await account.getUserAccountsByEmail(req.params.email);
-    res.status(response.status).json(response);
-  } catch (e) {
-    res.status(e.status).json(e);
-  }
-});
+router.get('/:email/accounts', account.getUserAccountsByEmail);
 
 export default router;

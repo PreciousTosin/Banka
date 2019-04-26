@@ -25,7 +25,6 @@ describe('User Tests', () => {
         password: 'precious',
         type: 'client',
         isAdmin: 'false',
-        status: 'inactive',
       };
       chai.request(server)
         .post('/v1/auth/signup')
@@ -48,7 +47,6 @@ describe('User Tests', () => {
         password: 'precious',
         type: 'client',
         isAdmin: false,
-        status: 'inactive',
       };
       chai.request(server)
         .post('/v1/auth/signup')

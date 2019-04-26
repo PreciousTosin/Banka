@@ -39,7 +39,8 @@ class AccountController {
       }));
   }
 
-  static getUserAccountsByEmail(email) {
+  static getUserAccountsByEmail(req, res) {
+    const { email } = req.params;
     return new Promise((resolve, reject) => account.findAllAccountsByEmail(email)
       .then((data) => {
         const output = data.map(accountData => ({
@@ -50,9 +51,9 @@ class AccountController {
           status: accountData.status,
           balance: accountData.balance,
         }));
-        resolve(Object.assign({}, { status: 200, data: output }));
+        resolve(res.status(200).json(Object.assign({}, { status: 200, data: output })));
       })
-      .catch(error => reject(Object.assign({}, { status: 404, error }))));
+      .catch(error => reject(res.status(404).json(Object.assign({}, { status: 404, error })))));
   }
 
   static getAccountsByStatus(status) {
