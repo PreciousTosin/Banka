@@ -22,7 +22,12 @@ class Authorization {
     if (token !== false) {
       verifyToken(token)
         .then((response) => {
-          req.decoded = response;
+          req.authData = {
+            id: response.id,
+            email: response.email,
+            type: response.type,
+            isAdmin: response.isAdmin,
+          };
           next();
         })
         .catch(error => res.status(401).json({
@@ -45,6 +50,12 @@ class Authorization {
       verifyToken(token)
         .then((response) => {
           if (response.isAdmin === true) {
+            req.authData = {
+              id: response.id,
+              email: response.email,
+              type: response.type,
+              isAdmin: response.isAdmin,
+            };
             return next();
           }
           return res.status(401).json({
@@ -72,6 +83,12 @@ class Authorization {
       verifyToken(token)
         .then((response) => {
           if (response.type === 'staff') {
+            req.authData = {
+              id: response.id,
+              email: response.email,
+              type: response.type,
+              isAdmin: response.isAdmin,
+            };
             return next();
           }
           return res.status(401).json({
@@ -99,6 +116,12 @@ class Authorization {
       verifyToken(token)
         .then((response) => {
           if (response.type === 'staff' || response.type === 'admin') {
+            req.authData = {
+              id: response.id,
+              email: response.email,
+              type: response.type,
+              isAdmin: response.isAdmin,
+            };
             return next();
           }
           return res.status(401).json({

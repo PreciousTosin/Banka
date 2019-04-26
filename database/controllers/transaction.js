@@ -1,19 +1,26 @@
 import transaction from '../models/transaction';
-import account from './account';
+import account from '../models/account';
 
 
 class TransactionController {
-  static returnAllTransations() {
+  static returnAllTransations(req, res) {
     return new Promise((resolve, reject) => transaction.findAll()
-      .then(data => resolve(Object.assign({}, { status: 200, data })))
-      .catch(error => reject(Object.assign({}, { status: 404, error }))));
+      .then((data) => {
+        const response = Object.assign({}, { status: 200, data });
+        resolve(res.status(200).json(response));
+      })
+      .catch((error) => {
+        const errResponse = Object.assign({}, { status: 404, error });
+        reject(res.status(400).json(errResponse));
+      }));
   }
 
-  static getOneTransaction(id) {
-    return new Promise((resolve, reject) => transaction.findOneById(id)
+  static getOneTransaction(req, res) {
+    const { id } = req.params;
+    return new Promise(resolve => transaction.findOneById(id)
       .then((data) => {
         if (data.length === 0) throw new Error('Transaction(s) not found');
-        const response = data.map(tx => ({
+        const clientPayload = data.map(tx => ({
           transactionId: tx.id,
           createdOn: tx.createdon,
           type: tx.type,
@@ -22,16 +29,20 @@ class TransactionController {
           oldBalance: tx.oldbalance,
           newBalance: tx.newbalance,
         }));
-        resolve(Object.assign({}, { status: 200, data: response }));
+        resolve();
+        const response = Object.assign({}, { status: 200, data: clientPayload });
+        resolve(res.status(200).json(response));
       })
       .catch((error) => {
-        if (error.message) reject(Object.assign({}, { status: 404, error: error.message }));
-        reject(Object.assign({}, { status: 404, error }));
+        const errResponse = error.message ? Object.assign({}, { status: 404, error: error.message })
+          : Object.assign({}, { status: 404, error });
+        resolve(res.status(errResponse.status).json(errResponse));
       }));
   }
 
-  static getTransactionByAccount(accountNumber) {
-    return new Promise((resolve, reject) => transaction
+  static getTransactionByAccount(req, res) {
+    const { accountNumber } = req.params;
+    return new Promise(resolve => transaction
       .findAllByAccount(accountNumber)
       .then((data) => {
         if (data.length === 0) throw new Error('Transaction(s) not found');
@@ -44,44 +55,73 @@ class TransactionController {
           oldBalance: tx.oldbalance,
           newBalance: tx.newbalance,
         }));
-        resolve(Object.assign({}, { status: 200, data: response }));
+        resolve(res.status(200).json(Object.assign({}, { status: 200, data: response })));
       })
       .catch((error) => {
-        if (error.message) reject(Object.assign({}, { status: 404, error: error.message }));
-        reject(Object.assign({}, { status: 404, error }));
+        if (error.message) {
+          resolve(res.status(404).json(Object.assign({}, { status: 404, error: error.message })));
+          return;
+        }
+        resolve(res.status(404).json(Object.assign({}, { status: 404, error })));
       }));
   }
 
-  static async createTransaction(payload) {
+  static async createTransaction(req, res) {
     try {
-      const accountInformation = await account.getUserAccounts(payload.accountNumber);
+      const { amount } = req.body;
+      const { accountNumber } = req.params;
+      const cashierData = req.authData;
+      // extract type from url
+      const type = req.url.split('/')[2];
+      const payload = {
+        id: '',
+        createdOn: '',
+        type,
+        accountNumber: Number(accountNumber),
+        cashier: Number(cashierData.id),
+        amount: Number(amount),
+        oldBalance: 0,
+        newBalance: 0,
+      };
+      const accountInformation = await account.findOneByAccountNo(payload.accountNumber);
+      // console.log('TRANSACTION ACCOUNT: ', accountInformation);
+      if (accountInformation.length === 0) {
+        return res.status(404).json(Object.assign({}, { status: 404, error: 'Account does not exist' }));
+      }
       const updatedTransaction = await transaction.create(payload, accountInformation);
-      // console.log('TRANSACTION: ', accountInformation, updatedTransaction);
+      // console.log('TRANSACTION: ', updatedTransaction);
       const clientPayload = {
         transactionId: updatedTransaction[0].id,
         accountNumber: String(updatedTransaction[0].accountNumber),
         amount: payload.amount,
         cashier: Number(payload.cashier),
         transactionType: payload.type,
-        accountBalance: String(updatedTransaction[1].balance),
+        accountBalance: String(updatedTransaction[1][0].balance),
       };
-      // console.log('CLIENT PAYLOAD: ', clientPayload);
-      return Object.assign({}, { status: 200, data: clientPayload });
+      const response = Object.assign({}, { status: 200, data: clientPayload });
+      return res.status(200).json(response);
     } catch (e) {
-      if (e.message) throw new Error(e.message);
-      throw new Error(e);
+      const errResponse = e.message ? Object.assign({}, { status: 400, error: e.message })
+        : Object.assign({}, { status: 400, error: e });
+      return res.status(400).json(errResponse);
     }
   }
 
-  static deleteTransaction(id) {
-    return new Promise((resolve, reject) => {
+  static deleteTransaction(req, res) {
+    const { id } = req.params;
+    return new Promise((resolve) => {
       transaction.delete(id).then((deletedTransaction) => {
-        if (deletedTransaction !== '') {
-          resolve(Object.assign({}, { status: 200, message: 'Transaction successfully deleted' }));
+        if (deletedTransaction !== undefined) {
+          const response = Object.assign({}, { status: 200, message: 'Transaction successfully deleted' });
+          resolve(res.status(response.status).json(response));
         } else {
-          reject(Object.assign({}, { status: 400, error: 'Transaction not found' }));
+          const response = Object.assign({}, { status: 400, error: 'Transaction does not exist' });
+          resolve(res.status(response.status).json(response));
         }
-      }).catch(error => error);
+      }).catch((error) => {
+        const errResponse = Object.assign({}, { status: 400, error });
+        resolve(res.status(400).json(errResponse));
+      });
     });
   }
 }

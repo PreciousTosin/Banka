@@ -1,9 +1,10 @@
 import account from '../models/account';
-import user from './user';
+import user from '../models/user';
 
 class AccountController {
-  static returnAllAccounts() {
-    return new Promise((resolve, reject) => account.findAll()
+  static returnAllAccounts(req, res) {
+    const findFunc = req.query.status ? account.findByStatus : account.findAll;
+    return new Promise((resolve, reject) => findFunc(req.query.status)
       .then((data) => {
         const output = data.map(accountData => ({
           createdOn: accountData.createdon,
@@ -13,13 +14,14 @@ class AccountController {
           status: accountData.status,
           balance: accountData.balance,
         }));
-        resolve(Object.assign({}, { status: 200, data: output }));
+        resolve(res.status(200).json(Object.assign({}, { status: 200, data: output })));
       })
-      .catch(error => reject(Object.assign({}, { status: 404, error }))));
+      .catch(error => reject(res.status(400).json(Object.assign({}, { status: 404, error })))));
   }
 
-  static getUserAccounts(accountNumber) {
-    return new Promise((resolve, reject) => account
+  static getUserAccounts(req, res) {
+    const { accountNumber } = req.params;
+    return new Promise(resolve => account
       .findOneByAccountNo(accountNumber)
       .then((data) => {
         if (data.length === 0) throw new Error('Account does not exist');
@@ -31,11 +33,15 @@ class AccountController {
           status: accountData.status,
           balance: accountData.balance,
         }));
-        resolve(Object.assign({}, { status: 200, data: output }));
+        resolve(res.status(200).json(Object.assign({}, { status: 200, data: output })));
       })
       .catch((error) => {
-        if (error.message) reject(Object.assign({}, { status: 404, error: error.message }));
-        reject(Object.assign({}, { status: 404, error }));
+        if (error.message) {
+          const message = Object.assign({}, { status: 404, error: error.message });
+          resolve(res.status(404).json(message));
+          return;
+        }
+        resolve(res.status(404).json(Object.assign({}, { status: 404, error })));
       }));
   }
 
@@ -56,28 +62,15 @@ class AccountController {
       .catch(error => reject(res.status(404).json(Object.assign({}, { status: 404, error })))));
   }
 
-  static getAccountsByStatus(status) {
-    return new Promise((resolve, reject) => account.findByStatus(status)
-      .then((data) => {
-        const output = data.map(accountData => ({
-          createdOn: accountData.createdon,
-          accountNumber: accountData.accountnumber,
-          ownerEmail: accountData.email,
-          type: accountData.type,
-          status: accountData.status,
-          balance: accountData.balance,
-        }));
-        resolve(Object.assign({}, { status: 200, data: output }));
-      })
-      .catch(error => reject(Object.assign({}, { status: 404, error }))));
-  }
-
-  static createBankAccount(payload) {
+  static createBankAccount(req, res) {
+    const userAuthData = req.authData;
+    const { type } = req.body;
+    console.log('BANK ACCOUNT: ', type);
     return new Promise((resolve, reject) => {
       let userAccount = '';
-      user.findUserById(payload.owner)
+      user.findOneById(Number(userAuthData.id))
         .then((userPayload) => {
-          userAccount = userPayload.data;
+          userAccount = userPayload;
           if (userAccount.length === 0) {
             throw Object.assign({}, {}, { status: 400, error: 'You cannot create account for user that does not exist' });
           }
@@ -86,8 +79,8 @@ class AccountController {
             accountNumber: '',
             createdOn: '',
             owner: userAccount[0].id,
-            type: payload.type,
-            status: payload.status,
+            type,
+            status: 'draft',
             balance: 0.00,
           };
           return account.create(updatedPayload);
@@ -103,31 +96,54 @@ class AccountController {
             status: accountPayload.status,
             openingBalance: accountPayload.balance,
           };
-          resolve(clientPayload);
+          const response = Object.assign({}, { status: 200, data: clientPayload });
+          resolve(res.status(200).json(response));
         })
-        .catch(err => reject(err));
+        .catch((err) => {
+          const errorResponse = err.message ? Object.assign({}, { status: 400, error: err.message })
+            : Object.assign({}, { status: 400, error: err });
+          reject(res.status(400).json(errorResponse));
+        });
     });
   }
 
-  static patchBankAccount(payload) {
+  static patchBankAccount(req, res) {
     return new Promise((resolve, reject) => {
-      const { accountNumber } = payload;
+      const { accountNumber } = req.params;
+      const payload = {
+        accountNumber: Number(accountNumber),
+        ...req.body,
+      };
       const updatePayload = payload;
       delete updatePayload.accountNumber;
       account.update(accountNumber, updatePayload).then((patched) => {
-        if (patched.length !== 0) resolve({ accountNumber, ...payload });
-      }).catch(error => reject(error));
+        if (patched.length !== 0) {
+          const response = Object.assign({}, { status: 200, data: { accountNumber, ...payload } });
+          resolve(res.status(response.status).json(response));
+        }
+      }).catch((error) => {
+        const errorResponse = Object.assign({}, { status: 400, error });
+        reject(res.status(400).json(errorResponse));
+      });
     });
   }
 
-  static deleteBankAccount(accountNumber) {
-    return new Promise((resolve, reject) => account.delete(accountNumber).then((deletedAccount) => {
-      if (deletedAccount !== '') {
-        resolve(Object.assign({}, { status: 200, message: 'Account successfully deleted' }));
-      } else {
-        reject(Object.assign({}, { status: 400, error: 'Account not found' }));
-      }
-    }).catch(error => error));
+  static deleteBankAccount(req, res) {
+    const { accountNumber } = req.params;
+    return new Promise(resolve => account.delete(accountNumber)
+      .then((deletedAccount) => {
+        let response = '';
+        if (deletedAccount !== undefined) {
+          response = Object.assign({}, { status: 200, message: 'Account successfully deleted' });
+          resolve(res.status(response.status).json(response));
+        } else {
+          response = Object.assign({}, { status: 400, error: 'Account does not exist' });
+          resolve(res.status(response.status).json(response));
+        }
+      }).catch((error) => {
+        const errorResponse = Object.assign({}, { status: 400, error });
+        resolve(res.status(errorResponse.status).json(errorResponse));
+      }));
   }
 }
 

@@ -2,8 +2,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server';
-import transaction from '../database/controllers/transaction';
-import account from '../database/controllers/account';
+import transaction from '../database/models/transaction';
+import account from '../database/models/account';
 
 process.env.NODE_ENV = 'test';
 
@@ -30,7 +30,7 @@ describe('/POST and /GET transactions', () => {
 
   before((done) => {
     console.log('Action before Tests');
-    account.createBankAccount(newAccount)
+    account.create(newAccount)
       .then((response) => {
         createdAccount = response;
         done();
@@ -114,7 +114,7 @@ describe('/POST and /GET transactions', () => {
   describe('/GET list of transactions on an account', () => {
     it('it should get a list of transactions on an account and return 200 status', (done) => {
       chai.request(server)
-        .get('/v1/accounts/286950284/transactions')
+        .get('/v1/accounts/281640892/transactions')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -171,8 +171,8 @@ describe('/POST and /GET transactions', () => {
 
   after((done) => {
     console.log('Action after Tests');
-    account.deleteBankAccount(createdAccount.accountNumber)
-      .then(() => transactionIds.map(id => transaction.deleteTransaction(id)))
+    account.delete(createdAccount.accountNumber)
+      .then(() => transactionIds.map(id => transaction.delete(id)))
       .then((transactionRes) => {
         Promise.all(transactionRes)
           .then(() => {

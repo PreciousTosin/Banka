@@ -33,8 +33,7 @@ const createUserTable = () => {
         lastName VARCHAR(128) NOT NULL,
         password VARCHAR(128) NOT NULL,
         type VARCHAR(10) NOT NULL,
-        isAdmin BOOLEAN NOT NULL,
-        status VARCHAR(20) NOT NULL
+        isAdmin BOOLEAN NOT NULL
       )`;
 
   pool.connect()
@@ -56,13 +55,13 @@ const createAccountTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS
       Accounts(
         id INTEGER PRIMARY KEY,
-        accountNumber INTEGER NOT NULL,
+        accountNumber INTEGER UNIQUE NOT NULL,
         createdOn TIMESTAMP WITH TIME ZONE NOT NULL,
         owner INTEGER NOT NULL,
         type VARCHAR(20) NOT NULL,
         status VARCHAR(20) NOT NULL,
         balance NUMERIC NOT NULL,
-        FOREIGN KEY (owner) REFERENCES Users (id) ON DELETE CASCADE
+        FOREIGN KEY (owner) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
       )`;
 
   pool.connect()
@@ -90,7 +89,8 @@ const createTransactionTable = () => {
         cashier INTEGER NOT NULL,
         amount NUMERIC NOT NULL,
         oldBalance NUMERIC NOT NULL,
-        newBalance NUMERIC NOT NULL
+        newBalance NUMERIC NOT NULL,
+        FOREIGN KEY (accountNumber) REFERENCES Accounts (accountNumber) ON DELETE CASCADE ON UPDATE CASCADE
       )`;
 
   pool.connect()
@@ -159,18 +159,18 @@ const dropTransactionTable = () => {
 /**
  * Create All Tables
  */
-const createAllTables = () => {
-  createUserTable();
-  createAccountTable();
-  createTransactionTable();
+const createAllTables = async () => {
+  await createUserTable();
+  await createAccountTable();
+  await createTransactionTable();
 };
 /**
  * Drop All Tables
  */
-const dropAllTables = () => {
-  dropUserTable();
-  dropAccountTable();
-  dropTransactionTable();
+const dropAllTables = async () => {
+  await dropUserTable();
+  await dropAccountTable();
+  await dropTransactionTable();
 };
 
 pool.on('remove', () => {

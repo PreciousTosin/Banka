@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import queryDb from '../query';
-import account from '../controllers/account';
+import account from './account';
 
 const makeTransactionId = () => {
   let text = '';
@@ -15,7 +15,7 @@ const returnCurrentDateTime = () => new Date(Date.now());
 
 class Transaction {
   static create(payload, accountInformationRes) {
-    const accountInformation = accountInformationRes.data[0];
+    const accountInformation = accountInformationRes[0];
     return new Promise((resolve, reject) => {
       const oldBalance = new Decimal(accountInformation.balance);
       let newBalance = 0;
@@ -32,7 +32,7 @@ class Transaction {
         id: makeTransactionId(),
         createdOn: returnCurrentDateTime(),
         type: payload.type,
-        accountNumber: accountInformation.accountNumber,
+        accountNumber: accountInformation.accountnumber,
         cashier: payload.cashier,
         amount: Number(payload.amount),
         oldBalance: Number(oldBalance.toFixed(2)),
@@ -44,8 +44,8 @@ class Transaction {
       // create transaction
       const createTransaction = () => queryDb.query(queryText, params);
       // UPDATE ACCOUNT BALANCE
-      const updateAccount = () => account.patchBankAccount({
-        accountNumber: update.accountNumber, balance: newBalance,
+      const updateAccount = () => account.update(update.accountNumber, {
+        balance: newBalance,
       });
       // Perform atomic transaction
       queryDb.transaction(createTransaction, updateAccount)
@@ -55,7 +55,6 @@ class Transaction {
           if (createTxOperation.rowCount !== 1) {
             throw new Error('Transaction failed');
           }
-          // console.log('Transaction Model: ', results);
           resolve([update, updateAccOperation]);
         })
         .catch(error => reject(error));

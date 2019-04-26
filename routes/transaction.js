@@ -6,70 +6,14 @@ const { isStaff, isStaffOrAdmin } = Authorization;
 
 const router = express.Router();
 
-router.get('/', isStaffOrAdmin, async (req, res) => {
-  try {
-    const response = await transaction.returnAllTransations();
-    res.status(200).json(response);
-  } catch (e) {
-    res.status(400).json(e);
-  }
-});
+router.get('/', isStaffOrAdmin, transaction.returnAllTransations);
 
-router.get('/:id', isStaffOrAdmin, async (req, res) => {
-  try {
-    const response = await transaction.getOneTransaction(req.params.id);
-    res.status(200).json(response);
-  } catch (e) {
-    res.status(e.status).json(e);
-  }
-});
+router.get('/:id', isStaffOrAdmin, transaction.getOneTransaction);
 
-router.post('/:accountNumber/credit', isStaff, async (req, res) => {
-  try {
-    const creditPayload = {
-      id: '',
-      createdOn: '',
-      type: req.body.type,
-      accountNumber: Number(req.params.accountNumber),
-      cashier: Number(req.body.cashier),
-      amount: Number(req.body.amount),
-      oldBalance: 0,
-      newBalance: 0,
-    };
-    const response = await transaction.createTransaction(creditPayload);
-    res.status(200).json(response);
-  } catch (e) {
-    res.status(400).json(Object.assign({}, { status: 400, error: e.message }));
-  }
-});
+router.post('/:accountNumber/credit', isStaff, transaction.createTransaction);
 
-router.post('/:accountNumber/debit', isStaff, async (req, res) => {
-  try {
-    const debitPayload = {
-      id: '',
-      createdOn: '',
-      type: req.body.type,
-      accountNumber: Number(req.params.accountNumber),
-      cashier: Number(req.body.cashier),
-      amount: Number(req.body.amount),
-      oldBalance: 0,
-      newBalance: 0,
-    };
-    const response = await transaction.createTransaction(debitPayload);
-    res.status(200).json(response);
-  } catch (e) {
-    res.status(400).json(Object.assign({}, { status: 400, error: e.message }));
-  }
-});
+router.post('/:accountNumber/debit', isStaff, transaction.createTransaction);
 
-router.delete('/:id', isStaffOrAdmin, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const response = await transaction.deleteTransaction(id);
-    res.status(response.status).json(response);
-  } catch (e) {
-    res.status(400).json(e);
-  }
-});
+router.delete('/:id', isStaffOrAdmin, transaction.deleteTransaction);
 
 export default router;
