@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "A lightweight banking support application",
   "main": "app.js",
+  "engines": {
+    "npm": "6.4.0",
+    "node": "8.11.0"
+  },
   "scripts": {
     "start": "node build/server.js",
     "postinstall": "node_modules/.bin/rimraf build && babel -d build --presets @babel/env --ignore node_modules,UI,test",
