@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node build/server.js",
-    "postinstall": "node_modules/.bin/rimraf build && babel -d build --presets @babel/env --ignore node_modules,UI,test  --out-dir build",
+    "postinstall": "node_modules/.bin/rimraf build && babel . -d build --presets @babel/env --ignore node_modules,UI,test",
     "dev": "DEBUG=development nodemon --exec babel-node server.js",
     "lint": "node_modules/.bin/eslint ./",
     "test": "cross-env NODE_ENV=test nyc mocha",
