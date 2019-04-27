@@ -75,27 +75,27 @@ class Transaction {
   }
 
   static findAll() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const queryText = 'SELECT * FROM Transactions;';
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);
         })
         .catch((e) => {
-          console.log('RETURN ALL TRANSACTION RECORDS ERROR: ', e);
+          reject(e);
         });
     });
   }
 
   static findAllByAccount(accountNumber) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const queryText = `SELECT * FROM Transactions WHERE accountNumber=${accountNumber};`;
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);
         })
         .catch((e) => {
-          console.log('RETURN ALL TRANSACTION RECORDS ERROR: ', e);
+          reject(e);
         });
     });
   }
@@ -116,7 +116,6 @@ class Transaction {
           resolve();
         })
         .catch((e) => {
-          console.log('DELETE TRANSACTION RECORD ERROR: ', e);
           reject(e);
         });
     });

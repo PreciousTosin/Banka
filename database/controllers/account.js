@@ -1,8 +1,10 @@
 // import Debug from 'debug';
+import expressValidator from 'express-validator/check';
 import account from '../models/account';
 import user from '../models/user';
 
 // const debug = Debug('development');
+const { validationResult } = expressValidator;
 
 class AccountController {
   static returnAllAccounts(req, res) {
@@ -66,10 +68,17 @@ class AccountController {
   }
 
   static createBankAccount(req, res) {
-    const userAuthData = req.authData;
-    const { type } = req.body;
-    console.log('BANK ACCOUNT: ', type);
     return new Promise((resolve, reject) => {
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = errors.array().map(e => e.msg);
+      if (!errors.isEmpty()) {
+        resolve(res.status(422).json({ status: 422, error: errorList.join(', ') }));
+        return;
+      }
+
+      const userAuthData = req.authData;
+      const { type } = req.body;
       let userAccount = '';
       user.findOneById(Number(userAuthData.id))
         .then((userPayload) => {
@@ -113,6 +122,28 @@ class AccountController {
   static patchBankAccount(req, res) {
     return new Promise((resolve, reject) => {
       const { accountNumber } = req.params;
+      // check for validation errors
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        resolve(res.status(422).json({ status: 422, error: errString.join(', ') }));
+        return;
+      }
+
+      if (Object.keys(req.body).length === 0) {
+        const errorResponse = Object.assign({}, { status: 400, error: 'Invalid request. You supplied no fields' });
+        resolve(res.status(400).json(errorResponse));
+        return;
+      }
+
+      if (Object.keys(req.body).length > 1) {
+        const errorResponse = Object.assign({}, { status: 400, error: 'You can update the account status only' });
+        resolve(res.status(400).json(errorResponse));
+        return;
+      }
       const payload = {
         accountNumber: Number(accountNumber),
         ...req.body,

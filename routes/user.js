@@ -5,9 +5,16 @@ import Authorization from '../middleware/authorization';
 import ValidateUser from '../database/validation/validateUser';
 
 const { isUser, isAdmin } = Authorization;
-const { checkCreateUser, checkLoginUser } = ValidateUser;
+const {
+  checkCreateUser,
+  checkLoginUser,
+  checkUpdateUser,
+  checkCreateAdmin,
+} = ValidateUser;
 const checkSignUp = checkCreateUser();
 const checkLogin = checkLoginUser();
+const checkUserUpdate = checkUpdateUser();
+const checkAdminSignUp = checkCreateAdmin();
 
 const router = express.Router();
 
@@ -18,10 +25,11 @@ router.get('/users/:id', isUser, user.findUserById);
 router.get('/users/:email/accounts', account.getUserAccountsByEmail);
 
 router.post('/signup', checkSignUp, user.createUser);
+router.post('/signup/admin', checkAdminSignUp, user.createUser);
 
 router.post('/signin', checkLogin, user.loginUser);
 
-router.patch('/users/:id', isUser, user.updateUser);
+router.patch('/users/:id', isAdmin, checkUserUpdate, user.updateUser);
 
 router.delete('/users/:id', isAdmin, user.deleteUser);
 

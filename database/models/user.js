@@ -67,27 +67,27 @@ class User {
   }
 
   static findOneByEmail(email) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const queryText = `SELECT * FROM Users WHERE email='${email}';`;
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);
         })
         .catch((e) => {
-          console.log('RETURN ONE USER RECORDS ERROR: ', e);
+          reject(e);
         });
     });
   }
 
   static findAll() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const queryText = 'SELECT * FROM Users;';
       queryDb.query(queryText)
         .then((res) => {
           resolve(res.rows);
         })
         .catch((e) => {
-          console.log('RETURN ALL USERS RECORDS ERROR: ', e);
+          reject(e);
         });
     });
   }
@@ -118,7 +118,6 @@ class User {
           resolve(userPayload);
         })
         .catch((e) => {
-          console.log('UPDATE USER RECORD ERROR: ', e);
           reject(e);
         });
     });
@@ -141,7 +140,6 @@ class User {
           resolve();
         })
         .catch((e) => {
-          console.log('DELETE USER RECORD ERROR: ', e);
           reject(e);
         });
     });

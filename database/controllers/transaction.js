@@ -1,6 +1,8 @@
+import expressValidator from 'express-validator/check';
 import transaction from '../models/transaction';
 import account from '../models/account';
 
+const { validationResult } = expressValidator;
 
 class TransactionController {
   static returnAllTransations(req, res) {
@@ -68,6 +70,16 @@ class TransactionController {
 
   static async createTransaction(req, res) {
     try {
+      // check for validation errors
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        return res.status(422).json({ status: 422, error: errString.join(', ') });
+      }
+
       const { amount } = req.body;
       const { accountNumber } = req.params;
       const cashierData = req.authData;
@@ -84,12 +96,10 @@ class TransactionController {
         newBalance: 0,
       };
       const accountInformation = await account.findOneByAccountNo(payload.accountNumber);
-      // console.log('TRANSACTION ACCOUNT: ', accountInformation);
       if (accountInformation.length === 0) {
         return res.status(404).json(Object.assign({}, { status: 404, error: 'Account does not exist' }));
       }
       const updatedTransaction = await transaction.create(payload, accountInformation);
-      // console.log('TRANSACTION: ', updatedTransaction);
       const clientPayload = {
         transactionId: updatedTransaction[0].id,
         accountNumber: String(updatedTransaction[0].accountNumber),

@@ -7,6 +7,7 @@ import expressValidator from 'express-validator';
 
 /* -------- ROUTES ---------------- */
 import appRoutes from './routes/index';
+import catchAll from './routes/catchall';
 
 dotenv.config();
 const app = express();
@@ -19,7 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(expressValidator());
 
-app.use(`/${process.env.API_VERSION}`, appRoutes);
+app.use(`/api/${process.env.API_VERSION}`, appRoutes);
+app.use('*', catchAll);
 
 
 const server = app.listen(process.env.PORT, () => {

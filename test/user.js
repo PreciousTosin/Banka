@@ -27,7 +27,7 @@ describe('User Tests', () => {
         isAdmin: 'false',
       };
       chai.request(server)
-        .post('/v1/auth/signup')
+        .post('/api/v1/auth/signup')
         .send(user)
         .end((err, res) => {
           createdUser = res.body.data;
@@ -49,7 +49,7 @@ describe('User Tests', () => {
         isAdmin: false,
       };
       chai.request(server)
-        .post('/v1/auth/signup')
+        .post('/api/v1/auth/signup')
         .send(user)
         .end((err, res) => {
           expect(res.body.error).to.be.equal('User exists');
@@ -66,7 +66,7 @@ describe('User Tests', () => {
         password: 'tylerross',
       };
       chai.request(server)
-        .post('/v1/auth/signin')
+        .post('/api/v1/auth/signin')
         .send(user)
         .end((err, res) => {
           token = setTokenHeader(res.body.data.token);
@@ -78,7 +78,7 @@ describe('User Tests', () => {
     describe('/GET Users', () => {
       it('It should return status of 200', (done) => {
         chai.request(server)
-          .get('/v1/auth/users')
+          .get('/api/v1/auth/users')
           .set('Authorization', token)
           .end((err, res) => {
             res.should.have.a.status(200);
@@ -88,7 +88,7 @@ describe('User Tests', () => {
 
       it('It should get all users', (done) => {
         chai.request(server)
-          .get('/v1/auth/users')
+          .get('/api/v1/auth/users')
           .set('Authorization', token)
           .end((err, res) => {
             expect(res.body.data.length).to.be.above(0);
@@ -98,7 +98,7 @@ describe('User Tests', () => {
 
       it('It should be an object(array of object prototype)', (done) => {
         chai.request(server)
-          .get('/v1/auth/users')
+          .get('/api/v1/auth/users')
           .set('Authorization', token)
           .end((err, res) => {
             res.should.be.a('object');
@@ -110,7 +110,7 @@ describe('User Tests', () => {
     describe('/GET User accounts using their email', () => {
       it('It should return status of 200 and list of user accounts', (done) => {
         chai.request(server)
-          .get('/v1/user/jamesdonovan@gmail.com/accounts')
+          .get('/api/v1/user/jamesdonovan@gmail.com/accounts')
           .set('Authorization', token)
           .end((err, res) => {
             res.should.have.a.status(200);
@@ -123,7 +123,7 @@ describe('User Tests', () => {
     describe('PATCH/ User Account', () => {
       it('it should update user admin status and return status of 200', (done) => {
         chai.request(server)
-          .patch(`/v1/auth/users/${createdUser.id}`)
+          .patch(`/api/v1/auth/users/${createdUser.id}`)
           .set('Authorization', token)
           .send({ isAdmin: true })
           .end((err, res) => {
@@ -145,7 +145,7 @@ describe('User Tests', () => {
         password: 'tylerross',
       };
       chai.request(server)
-        .post('/v1/auth/signin')
+        .post('/api/v1/auth/signin')
         .send(user)
         .end((err, res) => {
           token = setTokenHeader(res.body.data.token);
@@ -156,7 +156,7 @@ describe('User Tests', () => {
 
     it('it should delete user account', (done) => {
       chai.request(server)
-        .delete(`/v1/auth/users/${createdUser.id}`)
+        .delete(`/api/v1/auth/users/${createdUser.id}`)
         .set('Authorization', token)
         .end(async (err, res) => {
           try {

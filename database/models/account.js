@@ -47,7 +47,6 @@ class Account {
           resolve();
         })
         .catch((error) => {
-          console.log('CREATE ACCOUNT ERROR: ', error);
           reject(error);
         });
     });
@@ -78,7 +77,6 @@ class Account {
           resolve(res.rows);
         })
         .catch((err) => {
-          console.log('GET ACCOUNT ERROR: ', err);
           reject(err);
         });
     });
@@ -97,14 +95,13 @@ class Account {
           resolve(res.rows);
         })
         .catch((err) => {
-          console.log('GET ACCOUNT ERROR: ', err);
           reject(err);
         });
     });
   }
 
   static findAll() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const queryText = `SELECT
           Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
         FROM Accounts
@@ -115,13 +112,13 @@ class Account {
           resolve(res.rows);
         })
         .catch((e) => {
-          console.log('RETURN ALL ACCOUNTS RECORDS ERROR: ', e);
+          reject(e);
         });
     });
   }
 
   static findAllAccountsByEmail(email) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       // const queryText = 'SELECT * FROM Users;';
       const queryText = `SELECT
           Accounts.id, accountNumber, createdOn, email, Accounts.type, Accounts.status, balance
@@ -133,7 +130,7 @@ class Account {
           resolve(res.rows);
         })
         .catch((e) => {
-          console.log('RETURN ALL USERS RECORDS ERROR: ', e);
+          reject(e);
         });
     });
   }
@@ -163,7 +160,6 @@ class Account {
           resolve(accountPayload);
         })
         .catch((e) => {
-          console.log('UPDATE ACCOUNT RECORD ERROR: ', e);
           reject(e);
         });
     });
@@ -185,7 +181,6 @@ class Account {
           resolve();
         })
         .catch((e) => {
-          console.log('DELETE ACCOUNT RECORD ERROR: ', e);
           reject(e);
         });
     });

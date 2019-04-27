@@ -2,6 +2,11 @@ import express from 'express';
 import Authorization from '../middleware/authorization';
 import account from '../database/controllers/account';
 import transaction from '../database/controllers/transaction';
+import ValidateAccount from '../database/validation/validateAccount';
+
+const { checkCreateAccount, checkUpdateAccount } = ValidateAccount;
+const checkCreate = checkCreateAccount();
+const checkUpdate = checkUpdateAccount();
 
 const { isUser, isStaffOrAdmin } = Authorization;
 
@@ -13,9 +18,9 @@ router.get('/:accountNumber', account.getUserAccounts);
 
 router.get('/:accountNumber/transactions', transaction.getTransactionByAccount);
 
-router.post('/', isUser, account.createBankAccount);
+router.post('/', isUser, checkCreate, account.createBankAccount);
 
-router.patch('/:accountNumber', isStaffOrAdmin, account.patchBankAccount);
+router.patch('/:accountNumber', isStaffOrAdmin, checkUpdate, account.patchBankAccount);
 
 router.delete('/:accountNumber', isStaffOrAdmin, account.deleteBankAccount);
 

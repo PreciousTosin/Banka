@@ -31,7 +31,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
       password: 'tylerross',
     };
     chai.request(server)
-      .post('/v1/auth/signin')
+      .post('/api/v1/auth/signin')
       .send(user)
       .end((err, res) => {
         token = setTokenHeader(res.body.data.token);
@@ -43,7 +43,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/POST accounts', () => {
     it('it should create account and return status of 200', (done) => {
       chai.request(server)
-        .post('/v1/accounts')
+        .post('/api/v1/accounts')
         .set('Authorization', token)
         .send(newAccount)
         .end((err, res) => {
@@ -57,7 +57,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/GET accounts', () => {
     it('it should retrieve all accounts and return status of 200', (done) => {
       chai.request(server)
-        .get('/v1/accounts')
+        .get('/api/v1/accounts')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -70,7 +70,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/GET error in finding a specific account', () => {
     it('it should return error status 404 when account does not exist', (done) => {
       chai.request(server)
-        .get('/v1/accounts/281550892')
+        .get('/api/v1/accounts/281550892')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(404);
@@ -82,7 +82,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/GET a specific account', () => {
     it('it should retrieve a specific account using the accNo and return status of 200', (done) => {
       chai.request(server)
-        .get('/v1/accounts/281640892')
+        .get('/api/v1/accounts/281640892')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -95,7 +95,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/GET Dormant accounts', () => {
     it('it should retrieve all accounts that have dormant status', (done) => {
       chai.request(server)
-        .get('/v1/accounts?status=dormant')
+        .get('/api/v1/accounts?status=dormant')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -109,7 +109,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/GET Active accounts', () => {
     it('it should retrieve all accounts that have an active status', (done) => {
       chai.request(server)
-        .get('/v1/accounts?status=active')
+        .get('/api/v1/accounts?status=active')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -123,7 +123,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/PATCH accounts', () => {
     it('it should patch account and return status of 200', (done) => {
       chai.request(server)
-        .patch(`/v1/accounts/${createdAccount.accountNumber}`)
+        .patch(`/api/v1/accounts/${createdAccount.accountNumber}`)
         .set('Authorization', token)
         .send({ status: 'active' })
         .end((err, res) => {
@@ -139,7 +139,7 @@ describe('/GET, POST and /PATCH acccounts', () => {
   describe('/DELETE accounts', () => {
     it('it should delete account', (done) => {
       chai.request(server)
-        .delete(`/v1/accounts/${createdAccount.accountNumber}`)
+        .delete(`/api/v1/accounts/${createdAccount.accountNumber}`)
         .set('Authorization', token)
         .end((err, res) => {
           expect(res.body.message).to.be.equal('Account successfully deleted');

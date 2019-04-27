@@ -8,14 +8,14 @@ const { asyncComparePassword } = Password;
 const { validationResult } = expressValidator;
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
-const generateUserPrint = userPayload => ({
+const generateUserPrint = (userPayload, admin) => ({
   id: userPayload.id ? userPayload.id : userPayload.id,
   email: userPayload.email,
   firstName: userPayload.firstName ? userPayload.firstName : userPayload.firstname,
   lastName: userPayload.lastName ? userPayload.lastName : userPayload.lastname,
   password: userPayload.password,
-  type: userPayload.type,
-  isAdmin: userPayload.isAdmin ? userPayload.isAdmin : userPayload.isadmin,
+  type: userPayload.type === 'staff' ? userPayload.type : 'client',
+  isAdmin: admin === true ? admin : false,
 });
 
 const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => tokenUtility
@@ -46,6 +46,7 @@ class UserController {
         user.findOneByEmail(id)
           .then(data => resolve(res.status(200).json((Object.assign({}, { status: 200, data })))))
           .catch(() => reject(res.status(404).json((Object.assign({}, { status: 404, error: 'User not found' })))));
+        return;
       }
       user.findOneById(id)
         .then(data => resolve(res.status(200).json((Object.assign({}, { status: 200, data })))))
@@ -62,6 +63,7 @@ class UserController {
   static createUser(req, res) {
     return new Promise((resolve) => {
       const userData = req.body;
+      // check for validation errors
       const errors = validationResult(req);
       // remove duplicate messages
       const errorList = new Set(errors.array().map(e => e.msg));
@@ -69,10 +71,14 @@ class UserController {
         const errString = [];
         errorList.forEach(err => errString.push(err));
         resolve(res.status(422).json({ status: 422, error: errString.join(', ') }));
+        return;
       }
+      // check for admin or user url
+      const urlLength = req.url.split('/').length;
+      const isAdmin = urlLength === 3;
       // check first if email exists, if it does, throw an error
       // if user does not exist, create an account
-      const userPayload = generateUserPrint(userData);
+      const userPayload = generateUserPrint(userData, isAdmin);
       user.findOneByEmail(userPayload.email).then((foundUser) => {
         if (foundUser.length !== 0) throw Object.assign({}, {}, { status: 409, message: 'User exists' });
       })
@@ -116,10 +122,10 @@ class UserController {
       if (userData === undefined) {
         return Object.assign({}, { status: 400, error: 'User does not exist' });
       }
-      // console.log('USER DATA: ', userData, payload);
       const isValidUser = await asyncComparePassword(userPayload.password, userData[0].password);
       if (isValidUser === true) {
-        const tokenPayload = generateUserPrint(userData[0]);
+        // generate user data to tokenize
+        const tokenPayload = generateUserPrint(userData[0], userData[0].isadmin);
         userData[0].token = await tokenUtility.createToken(tokenPayload);
         const tokenizedUser = userData[0];
         delete tokenizedUser.password;
@@ -128,7 +134,6 @@ class UserController {
       }
       return res.status(400).json(Object.assign({}, { status: 400, error: 'Password is incorrect' }));
     } catch (e) {
-      console.log(e);
       return res.status(400).json(Object.assign({}, { status: 400, error: e }));
     }
   }
@@ -143,7 +148,27 @@ class UserController {
   }
 
   static updateUser(req, res) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+      if (Object.keys(req.body).length === 0) {
+        resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Invalid Request, You made an empty request' })));
+        return;
+      }
+
+      if (req.body.password) {
+        const errorResponse = Object.assign({}, { status: 400, error: 'Invalid request. You cannot change user password this way' });
+        resolve(res.status(400).json(errorResponse));
+        return;
+      }
+      // check for validation errors
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        resolve(res.status(422).json({ status: 422, error: errString.join(', ') }));
+        return;
+      }
       const userPayload = {
         id: req.params.id,
         ...req.body,
@@ -154,14 +179,14 @@ class UserController {
       user.findOneById(id)
         .then((userData) => {
           if (userData === undefined) {
-            reject(res.status(200).json(Object.assign({}, { status: 404, error: 'User not found' })));
+            resolve(res.status(404).json(Object.assign({}, { status: 404, error: 'User not found' })));
           }
         })
         .then(() => user.update(id, updatePayload))
         .then((patched) => {
           resolve(res.status(200).json(Object.assign({}, { status: 200, message: 'User updated successfully', data: patched })));
         })
-        .catch(error => reject(res.status(400).json(Object.assign({}, { status: 404, error }))));
+        .catch(error => resolve(res.status(400).json(Object.assign({}, { status: 404, error }))));
     });
   }
 
