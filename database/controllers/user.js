@@ -1,9 +1,11 @@
+import expressValidator from 'express-validator/check';
 import user from '../models/user';
 import Password from '../../utilities/password';
 import tokenUtility from '../../utilities/jwt-token';
 
 
 const { asyncComparePassword } = Password;
+const { validationResult } = expressValidator;
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
 const generateUserPrint = userPayload => ({
@@ -60,6 +62,14 @@ class UserController {
   static createUser(req, res) {
     return new Promise((resolve) => {
       const userData = req.body;
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        resolve(res.status(422).json({ status: 422, error: errString.join(', ') }));
+      }
       // check first if email exists, if it does, throw an error
       // if user does not exist, create an account
       const userPayload = generateUserPrint(userData);
@@ -93,6 +103,15 @@ class UserController {
   static async loginUser(req, res) {
     try {
       const userPayload = req.body;
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        return res.status(422).json({ status: 422, error: errString.join(', ') });
+      }
+      // check if user exists
       const userData = await user.findOneByEmail(userPayload.email);
       if (userData === undefined) {
         return Object.assign({}, { status: 400, error: 'User does not exist' });

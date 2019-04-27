@@ -2,8 +2,12 @@ import express from 'express';
 import user from '../database/controllers/user';
 import account from '../database/controllers/account';
 import Authorization from '../middleware/authorization';
+import ValidateUser from '../database/validation/validateUser';
 
 const { isUser, isAdmin } = Authorization;
+const { checkCreateUser, checkLoginUser } = ValidateUser;
+const checkSignUp = checkCreateUser();
+const checkLogin = checkLoginUser();
 
 const router = express.Router();
 
@@ -13,9 +17,9 @@ router.get('/users/:id', isUser, user.findUserById);
 
 router.get('/users/:email/accounts', account.getUserAccountsByEmail);
 
-router.post('/signup', user.createUser);
+router.post('/signup', checkSignUp, user.createUser);
 
-router.post('/signin', user.loginUser);
+router.post('/signin', checkLogin, user.loginUser);
 
 router.patch('/users/:id', isUser, user.updateUser);
 

@@ -3,6 +3,7 @@ import express from 'express';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import expressValidator from 'express-validator';
 
 /* -------- ROUTES ---------------- */
 import appRoutes from './routes/index';
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(methodOverride());
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(expressValidator());
 
 app.use(`/${process.env.API_VERSION}`, appRoutes);
 

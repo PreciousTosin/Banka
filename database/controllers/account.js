@@ -1,5 +1,8 @@
+// import Debug from 'debug';
 import account from '../models/account';
 import user from '../models/user';
+
+// const debug = Debug('development');
 
 class AccountController {
   static returnAllAccounts(req, res) {
