@@ -1,0 +1,286 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/v1": {
+      "get": {
+        "summary": "/api/v1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/test": {
+      "get": {
+        "summary": "/api/v1/test",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/auth/users": {
+      "get": {
+        "summary": "/api/v1/auth/users",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/auth/users/{id}": {
+      "get": {
+        "summary": "/api/v1/auth/users/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "patch": {
+        "summary": "/api/v1/auth/users/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/auth/users/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/users/{email}/accounts": {
+      "get": {
+        "summary": "/api/v1/auth/users/{email}/accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/signup": {
+      "post": {
+        "summary": "/api/v1/auth/signup",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/auth/signup/admin": {
+      "post": {
+        "summary": "/api/v1/auth/signup/admin",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/auth/signin": {
+      "post": {
+        "summary": "/api/v1/auth/signin",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/user/{email}/accounts": {
+      "get": {
+        "summary": "/api/v1/user/{email}/accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/accounts": {
+      "get": {
+        "summary": "/api/v1/accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      },
+      "post": {
+        "summary": "/api/v1/accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/accounts/{accountNumber}": {
+      "get": {
+        "summary": "/api/v1/accounts/{accountNumber}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "patch": {
+        "summary": "/api/v1/accounts/{accountNumber}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/accounts/{accountNumber}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/accounts/{accountNumber}/transactions": {
+      "get": {
+        "summary": "/api/v1/accounts/{accountNumber}/transactions",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/transactions": {
+      "get": {
+        "summary": "/api/v1/transactions",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/v1/transactions/{id}": {
+      "get": {
+        "summary": "/api/v1/transactions/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ]
+      },
+      "delete": {
+        "summary": "/api/v1/transactions/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/transactions/{accountNumber}/credit": {
+      "post": {
+        "summary": "/api/v1/transactions/{accountNumber}/credit",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/transactions/{accountNumber}/debit": {
+      "post": {
+        "summary": "/api/v1/transactions/{accountNumber}/debit",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v1/api-docs": {
+      "get": {
+        "summary": "/api/v1/api-docs",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": []
+      }
+    }
+  },
+  "info": {
+    "title": "Banka",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "description": "[Specification JSON](/api-spec)\n\nA lightweight banking support application to make banking seamless"
+  }
+}
