@@ -32,7 +32,7 @@ var router = _express["default"].Router();
 
 router.get('/users', isAdmin, _user["default"].returnAllUsers);
 router.get('/users/:id', isUser, _user["default"].findUserById);
-router.get('/users/:email/accounts', _account["default"].getUserAccountsByEmail);
+router.get('/users/:email/accounts', isUser, _account["default"].getUserAccountsByEmail);
 router.post('/signup', checkSignUp, _user["default"].createUser);
 router.post('/signup/admin', checkAdminSignUp, _user["default"].createUser);
 router.post('/signin', checkLogin, _user["default"].loginUser);

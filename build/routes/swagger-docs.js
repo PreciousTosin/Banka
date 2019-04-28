@@ -7,16 +7,16 @@ exports["default"] = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
-var _authorization = _interopRequireDefault(require("../middleware/authorization"));
+var _swaggerUiExpress = _interopRequireDefault(require("swagger-ui-express"));
 
-var _account = _interopRequireDefault(require("../database/controllers/account"));
+var _swagger = _interopRequireDefault(require("../swagger.json"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var isUser = _authorization["default"].isUser;
-
 var router = _express["default"].Router();
 
-router.get('/:email/accounts', isUser, _account["default"].getUserAccountsByEmail);
+router.use('/', _swaggerUiExpress["default"].serve);
+router.get('/', _swaggerUiExpress["default"].setup(_swagger["default"])); // router.get('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 var _default = router;
 exports["default"] = _default;

@@ -17,6 +17,10 @@ var _dotenv = _interopRequireDefault(require("dotenv"));
 
 var _expressValidator = _interopRequireDefault(require("express-validator"));
 
+var _expressOasGenerator = _interopRequireDefault(require("express-oas-generator"));
+
+var _fs = _interopRequireDefault(require("fs"));
+
 var _index = _interopRequireDefault(require("./routes/index"));
 
 var _catchall = _interopRequireDefault(require("./routes/catchall"));
@@ -26,7 +30,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 /* -------- ROUTES ---------------- */
 _dotenv["default"].config();
 
-var app = (0, _express["default"])();
+var app = (0, _express["default"])(); // generate swagger docs when tests are run
+
+var swaggerFile = "".concat(__dirname, "/swagger.json");
+console.log('FILE PATH: ', swaggerFile);
+
+var genFile = function genFile(filePath, data) {
+  _fs["default"].writeFileSync(filePath, JSON.stringify(data, null, 2));
+};
+
+if (process.env.NODE_ENV === 'test') {
+  _expressOasGenerator["default"].init(app, function (spec) {
+    console.log('DOC SPEC: ', spec);
+    genFile(swaggerFile, spec);
+    return spec;
+  }, swaggerFile, 60 * 1000);
+}
 
 if (process.env.NODE_ENV !== 'test') {
   app.use((0, _morgan["default"])('combined'));

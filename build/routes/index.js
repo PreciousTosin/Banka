@@ -17,6 +17,8 @@ var _account = _interopRequireDefault(require("./account"));
 
 var _transaction = _interopRequireDefault(require("./transaction"));
 
+var _swaggerDocs = _interopRequireDefault(require("./swagger-docs"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 /* -------- ROUTES ---------------- */
@@ -27,5 +29,6 @@ router.use('/auth', _user["default"]);
 router.use('/user', _userRoute["default"]);
 router.use('/accounts', _account["default"]);
 router.use('/transactions', _transaction["default"]);
+router.use('/api-docs', _swaggerDocs["default"]);
 var _default = router;
 exports["default"] = _default;

@@ -27,8 +27,8 @@ var isUser = _authorization["default"].isUser,
 var router = _express["default"].Router();
 
 router.get('/', isStaffOrAdmin, _account["default"].returnAllAccounts);
-router.get('/:accountNumber', _account["default"].getUserAccounts);
-router.get('/:accountNumber/transactions', _transaction["default"].getTransactionByAccount);
+router.get('/:accountNumber', isUser, _account["default"].getUserAccounts);
+router.get('/:accountNumber/transactions', isUser, _transaction["default"].getTransactionByAccount);
 router.post('/', isUser, checkCreate, _account["default"].createBankAccount);
 router.patch('/:accountNumber', isStaffOrAdmin, checkUpdate, _account["default"].patchBankAccount);
 router["delete"]('/:accountNumber', isStaffOrAdmin, _account["default"].deleteBankAccount);

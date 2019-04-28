@@ -22,7 +22,7 @@ router.get('/users', isAdmin, user.returnAllUsers);
 
 router.get('/users/:id', isUser, user.findUserById);
 
-router.get('/users/:email/accounts', account.getUserAccountsByEmail);
+router.get('/users/:email/accounts', isUser, account.getUserAccountsByEmail);
 
 router.post('/signup', checkSignUp, user.createUser);
 router.post('/signup/admin', checkAdminSignUp, user.createUser);

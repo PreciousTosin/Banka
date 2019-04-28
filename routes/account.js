@@ -14,9 +14,9 @@ const router = express.Router();
 
 router.get('/', isStaffOrAdmin, account.returnAllAccounts);
 
-router.get('/:accountNumber', account.getUserAccounts);
+router.get('/:accountNumber', isUser, account.getUserAccounts);
 
-router.get('/:accountNumber/transactions', transaction.getTransactionByAccount);
+router.get('/:accountNumber/transactions', isUser, transaction.getTransactionByAccount);
 
 router.post('/', isUser, checkCreate, account.createBankAccount);
 
