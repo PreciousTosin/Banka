@@ -1,18 +1,20 @@
-const express = require('express');
-
-const router = express.Router();
+import express from 'express';
 
 /* -------- ROUTES ---------------- */
-const homeRoute = require('./home');
-const authRoute = require('./user');
-const userRoute = require('./user-route');
-const accountRoute = require('./account');
-const transactionRoute = require('./transaction');
+import homeRoute from './home';
+import authRoute from './user';
+import userRoute from './user-route';
+import accountRoute from './account';
+import transactionRoute from './transaction';
+import docsRoute from './swagger-docs';
+
+const router = express.Router();
 
 router.use('/', homeRoute);
 router.use('/auth', authRoute);
 router.use('/user', userRoute);
 router.use('/accounts', accountRoute);
 router.use('/transactions', transactionRoute);
+router.use('/api-docs', docsRoute);
 
-module.exports = router;
+export default router;

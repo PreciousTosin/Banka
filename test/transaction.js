@@ -1,19 +1,17 @@
 /* globals describe, it, before, after */
-process.env.NODE_ENV = 'test';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import server from '../server';
+import transaction from '../database/models/transaction';
+import account from '../database/models/account';
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../server');
-const transaction = require('../database/controllers/transaction');
-const account = require('../database/controllers/account');
+process.env.NODE_ENV = 'test';
 
 chai.should();
 chai.use(chaiHttp);
 const { expect } = chai;
 
-function setTokenHeader(token) {
-  return `Bearer ${token}`;
-}
+const setTokenHeader = token => `Bearer ${token}`;
 
 const newAccount = {
   id: '',
@@ -32,7 +30,7 @@ describe('/POST and /GET transactions', () => {
 
   before((done) => {
     console.log('Action before Tests');
-    account.createBankAccount(newAccount)
+    account.create(newAccount)
       .then((response) => {
         createdAccount = response;
         done();
@@ -46,7 +44,7 @@ describe('/POST and /GET transactions', () => {
       password: 'johnwayne',
     };
     chai.request(server)
-      .post('/v1/auth/signin')
+      .post('/api/v1/auth/signin')
       .send(user)
       .end((err, res) => {
         token = setTokenHeader(res.body.data.token);
@@ -63,7 +61,7 @@ describe('/POST and /GET transactions', () => {
         amount: 1500,
       };
       chai.request(server)
-        .post(`/v1/transactions/${createdAccount.accountNumber}/credit`)
+        .post(`/api/v1/transactions/${createdAccount.accountNumber}/credit`)
         .set('Authorization', token)
         .send(payload)
         .end((err, res) => {
@@ -78,7 +76,7 @@ describe('/POST and /GET transactions', () => {
   describe('/GET transactions', () => {
     it('it should return all transactions and 200 status', (done) => {
       chai.request(server)
-        .get('/v1/transactions')
+        .get('/api/v1/transactions')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -91,7 +89,7 @@ describe('/POST and /GET transactions', () => {
   describe('/GET transactions', () => {
     it('it should get a specific transaction with an id return and 200 status', (done) => {
       chai.request(server)
-        .get('/v1/transactions/612879')
+        .get('/api/v1/transactions/612879')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -104,7 +102,7 @@ describe('/POST and /GET transactions', () => {
   describe('/GET transaction error', () => {
     it('it should return error 404 status when transaction does not exist', (done) => {
       chai.request(server)
-        .get('/v1/transactions/612864')
+        .get('/api/v1/transactions/612864')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(404);
@@ -116,7 +114,7 @@ describe('/POST and /GET transactions', () => {
   describe('/GET list of transactions on an account', () => {
     it('it should get a list of transactions on an account and return 200 status', (done) => {
       chai.request(server)
-        .get('/v1/accounts/286950284/transactions')
+        .get('/api/v1/accounts/281640892/transactions')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -129,7 +127,7 @@ describe('/POST and /GET transactions', () => {
   describe('/GET test for error in getting transaction', () => {
     it('it should return error 400 status if account is not found', (done) => {
       chai.request(server)
-        .get('/v1/accounts/28695025/transactions')
+        .get('/api/v1/accounts/28695025/transactions')
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(404);
@@ -146,7 +144,7 @@ describe('/POST and /GET transactions', () => {
         amount: 600,
       };
       chai.request(server)
-        .post(`/v1/transactions/${createdAccount.accountNumber}/debit`)
+        .post(`/api/v1/transactions/${createdAccount.accountNumber}/debit`)
         .set('Authorization', token)
         .send(payload)
         .end((err, res) => {
@@ -161,7 +159,7 @@ describe('/POST and /GET transactions', () => {
   describe('/DELETE one transaction', () => {
     it('it should delete transaction using its id', (done) => {
       chai.request(server)
-        .delete(`/v1/transactions/${transactionIds[0]}`)
+        .delete(`/api/v1/transactions/${transactionIds[0]}`)
         .set('Authorization', token)
         .end((err, res) => {
           res.should.have.a.status(200);
@@ -173,8 +171,8 @@ describe('/POST and /GET transactions', () => {
 
   after((done) => {
     console.log('Action after Tests');
-    account.deleteBankAccount(createdAccount.accountNumber)
-      .then(() => transactionIds.map(id => transaction.deleteTransaction(id)))
+    account.delete(createdAccount.accountNumber)
+      .then(() => transactionIds.map(id => transaction.delete(id)))
       .then((transactionRes) => {
         Promise.all(transactionRes)
           .then(() => {
