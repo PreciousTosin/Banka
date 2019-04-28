@@ -4,6 +4,9 @@ import methodOverride from 'method-override';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import expressValidator from 'express-validator';
+import expressOasGenerator from 'express-oas-generator';
+
+import fs from 'fs';
 
 /* -------- ROUTES ---------------- */
 import appRoutes from './routes/index';
@@ -11,6 +14,28 @@ import catchAll from './routes/catchall';
 
 dotenv.config();
 const app = express();
+
+// generate swagger docs when tests are run
+const swaggerFile = `${__dirname}/swagger.json`;
+console.log('FILE PATH: ', swaggerFile);
+
+const genFile = (filePath, data) => {
+  fs.writeFileSync(filePath,
+    JSON.stringify(data, null, 2));
+};
+
+if (process.env.NODE_ENV === 'test') {
+  expressOasGenerator.init(
+    app,
+    (spec) => {
+      console.log('DOC SPEC: ', spec);
+      genFile(swaggerFile, spec);
+      return spec;
+    },
+    swaggerFile,
+    60 * 1000,
+  );
+}
 
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('combined'));
