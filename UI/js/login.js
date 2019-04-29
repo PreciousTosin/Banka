@@ -37,7 +37,7 @@ const authHandler = (e, form) => {
       .then(response => {
         toggleSpinner();
         const items = response;
-        coonsole.log('RESPONSE: ', items);
+        console.log('RESPONSE: ', items);
       })
       .catch(error => {
       	toggleSpinner();
