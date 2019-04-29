@@ -19,6 +19,8 @@ var _expressValidator = _interopRequireDefault(require("express-validator"));
 
 var _expressOasGenerator = _interopRequireDefault(require("express-oas-generator"));
 
+var _cors = _interopRequireDefault(require("cors"));
+
 var _fs = _interopRequireDefault(require("fs"));
 
 var _index = _interopRequireDefault(require("./routes/index"));
@@ -51,6 +53,13 @@ if (process.env.NODE_ENV !== 'test') {
   app.use((0, _morgan["default"])('combined'));
 }
 
+app.use((0, _cors["default"])({
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Access-Control-Allow-Origin'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  credentials: true,
+  origin: ['file:///home/precioustosin/WebstormProjects/andela/Banka/UI/login.html'],
+  optionsSuccessStatus: 200
+}));
 app.use((0, _methodOverride["default"])());
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded());
