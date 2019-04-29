@@ -1,17 +1,30 @@
 function LogIn(payload) {
-	if (payload.password === 'admin') {
+  console.log('PAYLOAD: ', payload);
+  const { type, isadmin, token } = payload;
+	if (type === 'staff' && isadmin === true) {
 		localStorage.setItem('loggedIn', 'true');
 		localStorage.setItem('isAdmin', 'true');
-	} else if (payload.password === 'staff') {
+		localStorage.setItem('token', token);
+	} else if (type === 'staff' && isadmin === false) {
 		localStorage.setItem('loggedIn', 'true');
 		localStorage.setItem('isStaff', 'true');
+    localStorage.setItem('token', token);
 	} else {
 		localStorage.setItem('loggedIn', 'true');
 		localStorage.setItem('isUser', 'true');
+    localStorage.setItem('token', token);
 	}
 	window.location.href = './index.html';
 }
 
+const errDisplay = (error) => {
+  document.querySelector('.alert-danger').classList.toggle('display-alert');
+  document.querySelector('.error-msg').innerHTML = error;
+};
+
+const removeError = () => {
+  document.querySelector('.alert-danger').classList.remove('display-alert');
+};
 
 
 const authHandler = (e, form) => {
@@ -32,40 +45,56 @@ const authHandler = (e, form) => {
   console.log(body);
 
   if (formType === 'login') {
-  	const url ='http://localhost:9000/api/v1/auth/signin';
+  	const loginUrl ='https://bankar.herokuapp.com/api/v1/auth/signin';
     const headers = {
       'Content-Type': 'application/json',
     };
-  	const accUrl = 'https://bankar.herokuapp.com/api/v1/accounts';
-    fetch(url, {
+    fetch(loginUrl, {
       headers: { ...headers },
       method: 'POST',
       body: JSON.stringify(body)
     })
-      .then(function(response) {
-        toggleSpinner();
+      .then((response) => {
         if (response.status === 404 || response.status === 400 || response.status === 409) {
-          response.json().then(function(object) {
-            console.log(object.error)
+          toggleSpinner();
+          response.json().then((object) => {
+            console.log(object.error);
+            errDisplay(object.error);
           })
         } else if (response.status === 200) {
           toggleSpinner();
-          response.json().then(function(object) {
+          response.json().then((object) => {
             console.log('success', object);
+            LogIn(object.data);
           })
         }
       })
-    /* getFetchApi(accUrl)
-      .then(response => {
-        toggleSpinner();
-        const items = response;
-        console.log('RESPONSE: ', items);
+	} else {
+    const signUpUrl ='https://bankar.herokuapp.com/api/v1/auth/signup';
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    fetch(signUpUrl, {
+      headers: { ...headers },
+      method: 'POST',
+      body: JSON.stringify(body)
+    })
+      .then((response) => {
+        if (response.status === 404 || response.status === 400 || response.status === 409) {
+          toggleSpinner();
+          response.json().then((object) => {
+            console.log(object.error);
+            errDisplay(object.error);
+          })
+        } else if (response.status === 200) {
+          toggleSpinner();
+          response.json().then((object) => {
+            console.log('success', object);
+            LogIn(object.data);
+          })
+        }
       })
-      .catch(error => {
-      	toggleSpinner();
-				console.log('ERROR: ', error);
-      }); */
-	}
+  }
 };
 
 const toggleSpinner = () => {
