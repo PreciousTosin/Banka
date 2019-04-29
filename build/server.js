@@ -35,7 +35,6 @@ _dotenv["default"].config();
 var app = (0, _express["default"])(); // generate swagger docs when tests are run
 
 var swaggerFile = "".concat(__dirname, "/swagger.json");
-console.log('FILE PATH: ', swaggerFile);
 
 var genFile = function genFile(filePath, data) {
   _fs["default"].writeFileSync(filePath, JSON.stringify(data, null, 2));
@@ -43,7 +42,6 @@ var genFile = function genFile(filePath, data) {
 
 if (process.env.NODE_ENV === 'test') {
   _expressOasGenerator["default"].init(app, function (spec) {
-    console.log('DOC SPEC: ', spec);
     genFile(swaggerFile, spec);
     return spec;
   }, swaggerFile, 60 * 1000);

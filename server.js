@@ -17,7 +17,6 @@ const app = express();
 
 // generate swagger docs when tests are run
 const swaggerFile = `${__dirname}/swagger.json`;
-console.log('FILE PATH: ', swaggerFile);
 
 const genFile = (filePath, data) => {
   fs.writeFileSync(filePath,
@@ -28,7 +27,6 @@ if (process.env.NODE_ENV === 'test') {
   expressOasGenerator.init(
     app,
     (spec) => {
-      console.log('DOC SPEC: ', spec);
       genFile(swaggerFile, spec);
       return spec;
     },
