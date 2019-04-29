@@ -8,6 +8,7 @@
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="./css/style.css">
       <link rel="stylesheet" href="./css/spinner.css">
+			<link rel="stylesheet" href="./css/alert.css">
 	</head>
 	<body>
 		<header class="main-menu-header">
@@ -19,6 +20,10 @@
 				<img src="./img/login.jpg" alt="sign_up">
 			</div>
 			<div class="auth--form">
+				<div class="alert-danger">
+					<div class="error-msg">Current message</div>
+					<span class="closebtn" onclick="removeError()">&times;</span>
+				</div>
 				<form id="auth-form" class="login">
 					<div class="form--group">
 						<!--<label for="email">Email</label>-->
@@ -35,6 +40,7 @@
 			</div>
 		</div>
 
+		<!--  Spinner -->
     <div class="spinner">
       <div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     </div>
