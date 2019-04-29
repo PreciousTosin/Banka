@@ -53,6 +53,7 @@ app.use(cors({
   credentials: true,
   origin: [
     'file:///home/precioustosin/WebstormProjects/andela/Banka/UI/login.html',
+    'https://precioustosin.github.io',
   ],
   optionsSuccessStatus: 200,
 }));

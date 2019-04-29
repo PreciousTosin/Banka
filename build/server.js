@@ -57,7 +57,7 @@ app.use((0, _cors["default"])({
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Access-Control-Allow-Origin'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
   credentials: true,
-  origin: ['file:///home/precioustosin/WebstormProjects/andela/Banka/UI/login.html'],
+  origin: ['file:///home/precioustosin/WebstormProjects/andela/Banka/UI/login.html', 'https://precioustosin.github.io'],
   optionsSuccessStatus: 200
 }));
 app.use((0, _methodOverride["default"])());
