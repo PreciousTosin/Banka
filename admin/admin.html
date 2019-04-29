@@ -51,10 +51,23 @@
     </footer>
     <!-- END: Footer -->
     <script type="text/javascript" src="../js/navbar.js"></script>
+    <script src="../script.js"></script>
+    <script src="eventDispatcher.js"></script>
+    <script src="AdminView.js"></script>
+    <script src="AdminController.js"></script>
+    <script src="AdminModel.js"></script>
+    <script src="Admin.js"></script>
+    <script src="../table/TableView.js"></script>
+    <script src="../table/TableController.js"></script>
+    <script src="../table/TableModel.js"></script>
+    <script src="../table/Table.js"></script>
+    <script src="../table/tableTemplate.js"></script>
+    <script src="../modal/modal.js"></script>
     <script>
       window.onload = function() {
         // navbar init
         const navbarContainer = document.querySelector(".main-menu-header");
+        console.log('MENU HEADER', navbarContainer);
         navbarContainer.innerHTML = NavBar();
 
         // Code block to toggle navbar visibility
@@ -73,20 +86,12 @@
           siteNavigation.classList.toggle('isActive');
           siteNavigationToggle.classList.toggle('isActive');
         });
+
+        console.log('SETTING UP BANKA APP');
+        const model = new AdminModel(),
+          view = new AdminView(model),
+          controller = new AdminController(model, view);
       };
     </script>
-
-    <script src="script.js"></script>
-    <script src="eventDispatcher.js"></script>
-    <script src="AdminView.js"></script>
-    <script src="AdminController.js"></script>
-    <script src="AdminModel.js"></script>
-    <script src="Admin.js"></script>
-    <script src="../table/TableView.js"></script>
-    <script src="../table/TableController.js"></script>
-    <script src="../table/TableModel.js"></script>
-    <script src="../table/Table.js"></script>
-    <script src="../table/tableTemplate.js"></script>
-     <script src="../modal/modal.js"></script>
   </body>
 </html>
