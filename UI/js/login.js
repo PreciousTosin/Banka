@@ -32,8 +32,30 @@ const authHandler = (e, form) => {
   console.log(body);
 
   if (formType === 'login') {
-  	const url ='https://bankar.herokuapp.com/api/v1/auth/signin';
-    fetchApi('POST', url, body)
+  	const url ='http://localhost:9000/api/v1/auth/signin';
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+  	const accUrl = 'https://bankar.herokuapp.com/api/v1/accounts';
+    fetch(url, {
+      headers: { ...headers },
+      method: 'POST',
+      body: JSON.stringify(body)
+    })
+      .then(function(response) {
+        toggleSpinner();
+        if (response.status === 404 || response.status === 400 || response.status === 409) {
+          response.json().then(function(object) {
+            console.log(object.error)
+          })
+        } else if (response.status === 200) {
+          toggleSpinner();
+          response.json().then(function(object) {
+            console.log('success', object);
+          })
+        }
+      })
+    /* getFetchApi(accUrl)
       .then(response => {
         toggleSpinner();
         const items = response;
@@ -42,7 +64,7 @@ const authHandler = (e, form) => {
       .catch(error => {
       	toggleSpinner();
 				console.log('ERROR: ', error);
-      });
+      }); */
 	}
 };
 
