@@ -2,11 +2,11 @@ function logOut() {
   localStorage.clear();
 	const testRegex = /admin|staff/ig;
 	const regexResult = testRegex.test(window.location.pathname);
-	/* if (regexResult === true) {
+	if (regexResult === true) {
 		window.location.href = '../index.html';
 		return;
 	}
-	window.location.href = './index.html'; */
+	window.location.href = './index.html';
 }
 
 function returnHome() {
