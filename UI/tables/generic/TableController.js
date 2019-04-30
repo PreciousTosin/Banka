@@ -35,7 +35,7 @@ class TableController {
   }
 
   deleteAccount(sender, payload) {
-    console.log('TABLE CONTROLLER: ', payload);
+    // console.log('TABLE CONTROLLER: ', payload);
     this.model.deleteAccount(payload);
   }
 
@@ -43,4 +43,4 @@ class TableController {
     console.log('MODIFY TABLE CONTROLLER: ', payload);
     this.model.modifyAccount(payload);
   }
-};
+}
