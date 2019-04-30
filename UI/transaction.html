@@ -14,10 +14,11 @@
 			
 		</header>
 
-		<div class="transaction--container">
-      <div class="gen--table">
-        <table id="staticTable">
-          <thead>
+    <div class="transaction--super--container">
+      <div class="transaction--container">
+        <div class="gen--table">
+          <table id="staticTable">
+            <thead>
             <tr class="table--row head">
               <th class="table--column column1">Date</th>
               <th class="table--column">Type</th>
@@ -25,8 +26,8 @@
               <th class="table--column">Sender</th>
               <th class="table--column">Recipient</th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <tr class="table--row">
               <td class="table--column column1">2019-03-10</td>
               <td class="table--column">Debit</td>
@@ -54,13 +55,14 @@
               <td class="table--column">200000</td>
               <td class="table--column">4594440081</td>
               <td class="table--column">--</td>
-            </tr>  
-          </tbody>
-        </table>
-      </div>
+            </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div class="dynamic--table">
-        <table id="dynamicTable"></table>
+        <div class="dynamic--table">
+          <table id="dynamicTable"></table>
+        </div>
       </div>
     </div>
 
@@ -68,9 +70,9 @@
 		<footer>
 			<div class="footer-container">
 				<div class="footer--logo">
-					<a to="/">
+					<a href="/">
 						Banka
-					</Link>
+					</a>
 				</div>
 				<div class="">
 					<a href="#">Faq</a>
@@ -88,55 +90,30 @@
 			</div>
 		</footer>
     <!-- END: Footer -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="./js/navbar.js"></script>
 		<script>
       window.onload = function() {
-        $(document).ready( function () {
-          $('#staticTable').DataTable();
-        });
-      }
-		</script>
-		<script>
-				$(document).ready(() => {
-					// navbar init
-					const navbarContainer = document.querySelector(".main-menu-header");
-					navbarContainer.innerHTML = NavBar();
+        // navbar init
+        const navbarContainer = document.querySelector(".main-menu-header");
+        navbarContainer.innerHTML = NavBar();
 
-					$("a.nav-link[data-toggle='dropdown']").click((e) => {
-						$('.dropdown-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					$(document).click((e) => {
-						if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
-							$('.dropdown-menu').fadeOut();
-						}
-					});
-	
-					$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
-						$('.sub-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					/* Code block to toggle navbar visibility */
-					const siteNavigationToggle = document.getElementById('siteNavigationToggle');
-					const siteNavigation = document.getElementById('siteNavigation');
-	
-					siteNavigationToggle.addEventListener('click', () => {
-						if (siteNavigation.classList.contains('isActive')) {
-							siteNavigationToggle.removeAttribute('aria-pressed');
-						} else {
-							siteNavigationToggle.setAttribute('aria-pressed', true);
-						}
-	
-						document.body.classList.toggle('mobile-overflowHidden');
-	
-						siteNavigation.classList.toggle('isActive');
-						siteNavigationToggle.classList.toggle('isActive');
-					});
-				});
-			</script>
+        // Code block to toggle navbar visibility
+        const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+        const siteNavigation = document.getElementById('siteNavigation');
+
+        siteNavigationToggle.addEventListener('click', () => {
+          if (siteNavigation.classList.contains('isActive')) {
+            siteNavigationToggle.removeAttribute('aria-pressed');
+          } else {
+            siteNavigationToggle.setAttribute('aria-pressed', true);
+          }
+
+          document.body.classList.toggle('mobile-overflowHidden');
+
+          siteNavigation.classList.toggle('isActive');
+          siteNavigationToggle.classList.toggle('isActive');
+        });
+      };
+		</script>
 	</body>
 </html>

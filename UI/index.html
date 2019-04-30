@@ -81,9 +81,9 @@
 		<footer>
 			<div class="footer-container">
 				<div class="footer--logo">
-					<a to="/">
+					<a href="/">
 						Banka
-					</Link>
+					</a>
 				</div>
 				<div class="">
 					<a href="#">Faq</a>
@@ -101,70 +101,30 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="./js/navbar.js"></script>
 		<script>
-			function clearItem (item) {
-				localStorage.removeItem(item)
-			}
-			$(document).ready(() => {
-				/* if (localStorage.getItem('isLoggedIn')) {
-					clearItem('isLoggedIn');
-				} else {
-					localStorage.setItem('loggedIn', 'true');
-				}
-				if (localStorage.getItem('isUser')) {
-					clearItem('isUser');
-				} else {
-					localStorage.setItem('isUser', 'true');
-				}
-				if (localStorage.getItem('isAdmin')) {
-					clearItem('isAdmin');
-				} else {
-					localStorage.setItem('isAdmin', 'false');
-				}
-				if (localStorage.getItem('isStaff')) {
-					clearItem('isStaff');
-				} else {
-					localStorage.setItem('isStaff', 'false');
-				} */
-				// navbar init
-				const navbarContainer = document.querySelector(".main-menu-header");
-				navbarContainer.innerHTML = NavBar();
+      window.onload = function() {
+        // navbar init
+        const navbarContainer = document.querySelector(".main-menu-header");
+        navbarContainer.innerHTML = NavBar();
 
-				$("a.nav-link[data-toggle='dropdown']").click((e) => {
-					$('.dropdown-menu').fadeToggle();
-					e.stopPropagation();
-				});
+        // Code block to toggle navbar visibility
+        const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+        const siteNavigation = document.getElementById('siteNavigation');
 
-				$(document).click((e) => {
-					if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
-						$('.dropdown-menu').fadeOut();
-					}
-				});
+        siteNavigationToggle.addEventListener('click', () => {
+          if (siteNavigation.classList.contains('isActive')) {
+            siteNavigationToggle.removeAttribute('aria-pressed');
+          } else {
+            siteNavigationToggle.setAttribute('aria-pressed', true);
+          }
 
-				$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
-					$('.sub-menu').fadeToggle();
-					e.stopPropagation();
-				});
+          document.body.classList.toggle('mobile-overflowHidden');
 
-				/* Code block to toggle navbar visibility */
-				const siteNavigationToggle = document.getElementById('siteNavigationToggle');
-				const siteNavigation = document.getElementById('siteNavigation');
-
-				siteNavigationToggle.addEventListener('click', () => {
-					if (siteNavigation.classList.contains('isActive')) {
-						siteNavigationToggle.removeAttribute('aria-pressed');
-					} else {
-						siteNavigationToggle.setAttribute('aria-pressed', true);
-					}
-
-					document.body.classList.toggle('mobile-overflowHidden');
-
-					siteNavigation.classList.toggle('isActive');
-					siteNavigationToggle.classList.toggle('isActive');
-				});
-			});
+          siteNavigation.classList.toggle('isActive');
+          siteNavigationToggle.classList.toggle('isActive');
+        });
+      };
 		</script>
 	</body>
 </html>

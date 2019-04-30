@@ -1,8 +1,5 @@
 function logOut() {
-	localStorage.setItem('loggedIn', 'false');
-	localStorage.setItem('isStaff', 'false');
-	localStorage.setItem('isAdmin', 'false');
-	localStorage.setItem('isUser', 'false');
+  localStorage.clear();
 	const testRegex = /admin|staff/ig;
 	const regexResult = testRegex.test(window.location.pathname);
 	if (regexResult === true) {

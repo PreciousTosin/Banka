@@ -19,6 +19,8 @@ var _expressValidator = _interopRequireDefault(require("express-validator"));
 
 var _expressOasGenerator = _interopRequireDefault(require("express-oas-generator"));
 
+var _cors = _interopRequireDefault(require("cors"));
+
 var _fs = _interopRequireDefault(require("fs"));
 
 var _index = _interopRequireDefault(require("./routes/index"));
@@ -33,7 +35,6 @@ _dotenv["default"].config();
 var app = (0, _express["default"])(); // generate swagger docs when tests are run
 
 var swaggerFile = "".concat(__dirname, "/swagger.json");
-console.log('FILE PATH: ', swaggerFile);
 
 var genFile = function genFile(filePath, data) {
   _fs["default"].writeFileSync(filePath, JSON.stringify(data, null, 2));
@@ -41,7 +42,6 @@ var genFile = function genFile(filePath, data) {
 
 if (process.env.NODE_ENV === 'test') {
   _expressOasGenerator["default"].init(app, function (spec) {
-    console.log('DOC SPEC: ', spec);
     genFile(swaggerFile, spec);
     return spec;
   }, swaggerFile, 60 * 1000);
@@ -51,6 +51,13 @@ if (process.env.NODE_ENV !== 'test') {
   app.use((0, _morgan["default"])('combined'));
 }
 
+app.use((0, _cors["default"])({
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Access-Control-Allow-Origin'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  credentials: true,
+  origin: ['http://localhost:3000', 'https://precioustosin.github.io'],
+  optionsSuccessStatus: 200
+}));
 app.use((0, _methodOverride["default"])());
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded());

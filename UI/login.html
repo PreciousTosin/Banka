@@ -7,40 +7,53 @@
 			<title>Banka</title>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="./css/style.css">
+      <link rel="stylesheet" href="./css/spinner.css">
+			<link rel="stylesheet" href="./css/alert.css">
 	</head>
 	<body>
 		<header class="main-menu-header">
 			
 		</header>
 
-		<div class="auth-container">
-			<div class="auth--image">
-				<img src="./img/login.jpg" alt="sign_up">
-			</div>
-			<div class="auth--form">
-				<form id="login-form" action="POST">
-					<div class="form--group">
-						<!--<label for="email">Email</label>-->
-						<input type="email" placeholder="Email" class="form--control" name="email" id="email" required>
+		<div class="auth--super--container">
+			<div class="auth-container">
+				<div class="auth--image">
+					<img src="./img/login.jpg" alt="sign_up">
+				</div>
+				<div class="auth--form">
+					<div class="alert-danger">
+						<div class="error-msg">Current message</div>
+						<span class="closebtn" onclick="removeError()">&times;</span>
 					</div>
-					<div class="form--group">
-						<!--<label for="password">Password</label>-->
-						<input type="password" placeholder="Password" class="form--control" name="password" id="password" required>
-					</div>
-					<div class="form--button center">
-						<button class="btn btn--primary" type="submit">Login</button>
-					</div>
-				</form>
+					<form id="auth-form" class="login">
+						<div class="form--group">
+							<!--<label for="email">Email</label>-->
+							<input type="email" placeholder="Email" class="form--control" name="email" id="email" value="tosin@gmail.com" required>
+						</div>
+						<div class="form--group">
+							<!--<label for="password">Password</label>-->
+							<input type="password" placeholder="Password" class="form--control" name="password" id="password" value="blah blah blah" required>
+						</div>
+						<div class="form--button center">
+							<button class="btn btn--primary" type="submit">Login</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
+
+		<!--  Spinner -->
+    <div class="spinner">
+      <div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
 
 		<!-- START: Footer -->
 		<footer>
 			<div class="footer-container">
 				<div class="footer--logo">
-					<a to="/">
+					<a href="./">
 						Banka
-					</Link>
+					</a>
 				</div>
 				<div class="">
 					<a href="#">Faq</a>
@@ -58,48 +71,11 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="./js/navbar.js"></script>
 		<script type="text/javascript" src="./js/login.js"></script>
+    <script type="text/javascript" src="./js/api.js"></script>
 		<script>
-				$(document).ready(() => {
-					// navbar init
-					const navbarContainer = document.querySelector(".main-menu-header");
-					navbarContainer.innerHTML = NavBar();
 
-					$("a.nav-link[data-toggle='dropdown']").click((e) => {
-						$('.dropdown-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					$(document).click((e) => {
-						if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
-							$('.dropdown-menu').fadeOut();
-						}
-					});
-	
-					$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
-						$('.sub-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					/* Code block to toggle navbar visibility */
-					const siteNavigationToggle = document.getElementById('siteNavigationToggle');
-					const siteNavigation = document.getElementById('siteNavigation');
-	
-					siteNavigationToggle.addEventListener('click', () => {
-						if (siteNavigation.classList.contains('isActive')) {
-							siteNavigationToggle.removeAttribute('aria-pressed');
-						} else {
-							siteNavigationToggle.setAttribute('aria-pressed', true);
-						}
-	
-						document.body.classList.toggle('mobile-overflowHidden');
-	
-						siteNavigation.classList.toggle('isActive');
-						siteNavigationToggle.classList.toggle('isActive');
-					});
-				});
-			</script>
+		</script>
 	</body>
 </html>

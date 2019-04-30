@@ -233,15 +233,15 @@ function () {
               case 10:
                 userData = _context.sent;
 
-                if (!(userData === undefined)) {
+                if (!(userData === undefined || userData.length === 0)) {
                   _context.next = 13;
                   break;
                 }
 
-                return _context.abrupt("return", Object.assign({}, {
-                  status: 400,
+                return _context.abrupt("return", res.status(404).json(Object.assign({}, {
+                  status: 404,
                   error: 'User does not exist'
-                }));
+                })));
 
               case 13:
                 _context.next = 15;
@@ -279,12 +279,24 @@ function () {
               case 28:
                 _context.prev = 28;
                 _context.t0 = _context["catch"](0);
+
+                if (!_context.t0.message) {
+                  _context.next = 32;
+                  break;
+                }
+
+                return _context.abrupt("return", res.status(400).json(Object.assign({}, {
+                  status: 400,
+                  error: _context.t0.message
+                })));
+
+              case 32:
                 return _context.abrupt("return", res.status(400).json(Object.assign({}, {
                   status: 400,
                   error: _context.t0
                 })));
 
-              case 31:
+              case 33:
               case "end":
                 return _context.stop();
             }

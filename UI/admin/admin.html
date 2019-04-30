@@ -1,149 +1,96 @@
 <!DOCTYPE html>
-	<html lang="en">
-	<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<meta http-equiv="X-UA-Compatible" content="ie=edge">
-			<title>Banka</title>
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css"/>
-			<!-- Default theme -->
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/default.min.css"/>
-			<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/r-2.2.2/sl-1.3.0/datatables.min.css"/>
-			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
-			<link rel="stylesheet" href="../css/style.css">
-	</head>
-	<body>
-		<header class="main-menu-header">
-			
-		</header>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Banka</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../modal/modal.css" />
+  </head>
+  <body>
+    <header class="main-menu-header">
 
-		<div class="admin--container">
-			<div class="admin--header">
+    </header>
+
+    <div class="admin--container">
+      <div class="admin--header">
 				<ul>
-					<li onclick="initializeDefaultAdmin()" class="admin--header--item active">Manage Bank Accounts</li>
-					<li onclick="initializeManageUsersAdmin()" class="admin--header--item">Manage Users</li>
+					<li id="manage-accounts" class="admin--header--item active">Manage Bank Accounts</li>
+					<li id="manage-users" class="admin--header--item">Manage Users</li>
 				</ul>
 			</div>
-			<div class="admin--body">
-					<!--<div class="gen--table">
-							<table id="recordsTable">
-								<thead>
-									<tr class="table--row head">
-										<th class="table--column column1">Id</th>
-										<th class="table--column">Acc/Name</th>
-										<th class="table--column">Acc/No</th>
-										<th class="table--column">Balance</th>
-										<th class="table--column">Date</th>
-										<th class="table--column">Delete</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr class="table--row">
-										<td class="table--column column1">36956655716265</td>
-										<td class="table--column">John Wayne</td>
-										<td class="table--column">0187925874</td>
-										<td class="table--column">100000</td>
-										<td class="table--column">2019-03-10</td>
-										<td class="table--column"></td>
-									</tr>
-									<tr class="table--row">
-										<td class="table--column column1">65897567145632</td>
-										<td class="table--column">James Donovan</td>
-										<td class="table--column">0151370846</td>
-										<td class="table--column">50000</td>
-										<td class="table--column">2019-03-01</td>
-										<td class="table--column"></td>
-									</tr>
-									<tr class="table--row">
-										<td class="table--column column1">54875558726968</td>
-										<td class="table--column">Tyler Ross</td>
-										<td class="table--column">2147378033</td>
-										<td class="table--column">250000</td>
-										<td class="table--column">2019-02-25</td>
-										<td class="table--column"></td>
-									</tr>
-									<tr class="table--row">
-										<td class="table--column column1">23568974210520</td>
-										<td class="table--column">Micheal Flannigan</td>
-										<td class="table--column">4594440081</td>
-										<td class="table--column">200000</td>
-										<td class="table--column">2019-02-10</td>
-										<td class="table--column"></td>
-									</tr>  
-								</tbody>
-							</table>
-						</div>-->
-			</div>
-		</div>
+      <div class="admin--body">
 
-		<!-- START: Footer -->
-		<footer>
-			<div class="footer-container">
-				<div class="footer--logo">
-					<a to="/">
-						Banka
-					</Link>
-				</div>
-				<div class="">
-					<a href="#">Faq</a>
-					<a href="#">Terms</a>
-					<a href="#">Privacy</a>
-				</div>
-				<div class="">
-					<div class="copyright">
-						<p class="text-center text-white">
-							<span>2019</span>
-							Banka. All Rights Reserved
-						</p>
-					</div>
-				</div>
-			</div>
-		</footer>
-		<!-- END: Footer -->
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/b-1.5.6/r-2.2.2/sl-1.3.0/datatables.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
-		<script type="text/javascript" src="../js/navbar.js"></script>
-		<script type="text/javascript" src="../js/admin.js"></script>
-		<script>
-				$(document).ready(() => {
-					// navbar init
-					const navbarContainer = document.querySelector(".main-menu-header");
-					navbarContainer.innerHTML = NavBar();
+      </div>
+    </div>
 
-					$("a.nav-link[data-toggle='dropdown']").click((e) => {
-						$('.dropdown-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					$(document).click((e) => {
-						if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
-							$('.dropdown-menu').fadeOut();
-						}
-					});
-	
-					$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
-						$('.sub-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					/* Code block to toggle navbar visibility */
-					const siteNavigationToggle = document.getElementById('siteNavigationToggle');
-					const siteNavigation = document.getElementById('siteNavigation');
-	
-					siteNavigationToggle.addEventListener('click', () => {
-						if (siteNavigation.classList.contains('isActive')) {
-							siteNavigationToggle.removeAttribute('aria-pressed');
-						} else {
-							siteNavigationToggle.setAttribute('aria-pressed', true);
-						}
-	
-						document.body.classList.toggle('mobile-overflowHidden');
-	
-						siteNavigation.classList.toggle('isActive');
-						siteNavigationToggle.classList.toggle('isActive');
-					});
-				});
-			</script>
-	</body>
+    <!-- START: Footer -->
+    <footer>
+      <div class="footer-container">
+        <div class="footer--logo">
+          <a href="/">
+            Banka
+          </a>
+        </div>
+        <div class="">
+          <a href="#">Faq</a>
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+        </div>
+        <div class="">
+          <div class="copyright">
+            <p class="text-center text-white">
+              <span>2019</span>
+              Banka. All Rights Reserved
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- END: Footer -->
+    <script type="text/javascript" src="../js/navbar.js"></script>
+    <script src="eventDispatcher.js"></script>
+    <script src="AdminView.js"></script>
+    <script src="AdminController.js"></script>
+    <script src="AdminModel.js"></script>
+    <script src="Admin.js"></script>
+    <script src="../table/TableView.js"></script>
+    <script src="../table/TableController.js"></script>
+    <script src="../table/TableModel.js"></script>
+    <script src="../table/Table.js"></script>
+    <script src="../table/tableTemplate.js"></script>
+    <script src="../modal/modal.js"></script>
+    <script>
+      window.onload = function() {
+        // navbar init
+        const navbarContainer = document.querySelector(".main-menu-header");
+        console.log('MENU HEADER', navbarContainer);
+        navbarContainer.innerHTML = NavBar();
+
+        // Code block to toggle navbar visibility
+        const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+        const siteNavigation = document.getElementById('siteNavigation');
+
+        siteNavigationToggle.addEventListener('click', () => {
+          if (siteNavigation.classList.contains('isActive')) {
+            siteNavigationToggle.removeAttribute('aria-pressed');
+          } else {
+            siteNavigationToggle.setAttribute('aria-pressed', true);
+          }
+
+          document.body.classList.toggle('mobile-overflowHidden');
+
+          siteNavigation.classList.toggle('isActive');
+          siteNavigationToggle.classList.toggle('isActive');
+        });
+
+        console.log('SETTING UP BANKA APP');
+        const model = new AdminModel(),
+          view = new AdminView(model),
+          controller = new AdminController(model, view);
+      };
+    </script>
+  </body>
 </html>

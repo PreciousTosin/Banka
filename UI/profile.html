@@ -14,38 +14,40 @@
 			
 		</header>
 
-		<div class="profile--container">
-			<div class="profile--header"></div>
-			<div class="profile--body">
-				<div class="profile--image">
-					<div class="image--container">
-						<img src="./img/profile-avatar.jpg" alt="profile_image">
+		<div class="profile--super--container">
+			<div class="profile--container">
+				<div class="profile--header"></div>
+				<div class="profile--body">
+					<div class="profile--image">
+						<div class="image--container">
+							<img src="./img/profile-avatar.jpg" alt="profile_image">
+						</div>
 					</div>
-				</div>
-				<div class="profile--details">
-					<div class="profile--identification">
-						<h2>John Tabbot</h2>
-						<p>a Client</p>
-					</div>
-					<hr />
-					<div class="more--details">
-						<ul>
-							<li>
-								<span class="profile--icon"><i class="fas fa-user"></i></span>
-								<div>activated</div>
-							</li>
-							<li>
-								<span class="profile--icon"><i class="fas fa-envelope-open-text"></i></span>
-								<div>johhtabbot@outlook.com</div>
-							</li>
-						</ul>
-					</div>
-					<hr />
-					<div class="additional--details">
-						<p>Date of Joining: 17th March, 2019</p>
-					</div>
-					<div class="account--button">
-						<button type="button" class="btn btn--primary">Create Account</button>
+					<div class="profile--details">
+						<div class="profile--identification">
+							<h2>John Tabbot</h2>
+							<p>a Client</p>
+						</div>
+						<hr />
+						<div class="more--details">
+							<ul>
+								<li>
+									<span class="profile--icon"><i class="fas fa-user"></i></span>
+									<div>activated</div>
+								</li>
+								<li>
+									<span class="profile--icon"><i class="fas fa-envelope-open-text"></i></span>
+									<div>johhtabbot@outlook.com</div>
+								</li>
+							</ul>
+						</div>
+						<hr />
+						<div class="additional--details">
+							<p>Date of Joining: 17th March, 2019</p>
+						</div>
+						<div class="account--button">
+							<button type="button" class="btn btn--primary">Create Account</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -55,9 +57,9 @@
 		<footer>
 			<div class="footer-container">
 				<div class="footer--logo">
-					<a to="/">
+					<a href="/">
 						Banka
-					</Link>
+					</a>
 				</div>
 				<div class="">
 					<a href="#">Faq</a>
@@ -75,47 +77,30 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="./js/navbar.js"></script>
 		<script>
-				// navbar init
-				const navbarContainer = document.querySelector(".main-menu-header");
-				navbarContainer.innerHTML = NavBar();
+      window.onload = function() {
+        // navbar init
+        const navbarContainer = document.querySelector(".main-menu-header");
+        navbarContainer.innerHTML = NavBar();
 
-				$(document).ready(() => {
-					$("a.nav-link[data-toggle='dropdown']").click((e) => {
-						$('.dropdown-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					$(document).click((e) => {
-						if (!$(e.target).is("a.nav-link[data-toggle='dropdown'], .dropdown-menu *")) {
-							$('.dropdown-menu').fadeOut();
-						}
-					});
-	
-					$(".nav-item.mobile-menu a.nav-link[href='javascript:void(0)']").click((e) => {
-						$('.sub-menu').fadeToggle();
-						e.stopPropagation();
-					});
-	
-					/* Code block to toggle navbar visibility */
-					const siteNavigationToggle = document.getElementById('siteNavigationToggle');
-					const siteNavigation = document.getElementById('siteNavigation');
-	
-					siteNavigationToggle.addEventListener('click', () => {
-						if (siteNavigation.classList.contains('isActive')) {
-							siteNavigationToggle.removeAttribute('aria-pressed');
-						} else {
-							siteNavigationToggle.setAttribute('aria-pressed', true);
-						}
-	
-						document.body.classList.toggle('mobile-overflowHidden');
-	
-						siteNavigation.classList.toggle('isActive');
-						siteNavigationToggle.classList.toggle('isActive');
-					});
-				});
+        // Code block to toggle navbar visibility
+        const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+        const siteNavigation = document.getElementById('siteNavigation');
+
+        siteNavigationToggle.addEventListener('click', () => {
+          if (siteNavigation.classList.contains('isActive')) {
+            siteNavigationToggle.removeAttribute('aria-pressed');
+          } else {
+            siteNavigationToggle.setAttribute('aria-pressed', true);
+          }
+
+          document.body.classList.toggle('mobile-overflowHidden');
+
+          siteNavigation.classList.toggle('isActive');
+          siteNavigationToggle.classList.toggle('isActive');
+        });
+      };
 			</script>
 	</body>
 </html>

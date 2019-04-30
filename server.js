@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import expressValidator from 'express-validator';
 import expressOasGenerator from 'express-oas-generator';
-
+import cors from 'cors';
 import fs from 'fs';
 
 /* -------- ROUTES ---------------- */
@@ -17,7 +17,6 @@ const app = express();
 
 // generate swagger docs when tests are run
 const swaggerFile = `${__dirname}/swagger.json`;
-console.log('FILE PATH: ', swaggerFile);
 
 const genFile = (filePath, data) => {
   fs.writeFileSync(filePath,
@@ -28,7 +27,6 @@ if (process.env.NODE_ENV === 'test') {
   expressOasGenerator.init(
     app,
     (spec) => {
-      console.log('DOC SPEC: ', spec);
       genFile(swaggerFile, spec);
       return spec;
     },
@@ -40,6 +38,24 @@ if (process.env.NODE_ENV === 'test') {
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('combined'));
 }
+
+app.use(cors({
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'Accept',
+    'X-Requested-With',
+    'Access-Control-Allow-Origin',
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  credentials: true,
+  origin: [
+    'http://localhost:3000',
+    'https://precioustosin.github.io',
+  ],
+  optionsSuccessStatus: 200,
+}));
+
 app.use(methodOverride());
 app.use(express.json());
 app.use(express.urlencoded());

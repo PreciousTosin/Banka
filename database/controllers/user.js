@@ -119,8 +119,8 @@ class UserController {
       }
       // check if user exists
       const userData = await user.findOneByEmail(userPayload.email);
-      if (userData === undefined) {
-        return Object.assign({}, { status: 400, error: 'User does not exist' });
+      if (userData === undefined || userData.length === 0) {
+        return res.status(404).json(Object.assign({}, { status: 404, error: 'User does not exist' }));
       }
       const isValidUser = await asyncComparePassword(userPayload.password, userData[0].password);
       if (isValidUser === true) {
@@ -134,6 +134,9 @@ class UserController {
       }
       return res.status(400).json(Object.assign({}, { status: 400, error: 'Password is incorrect' }));
     } catch (e) {
+      if (e.message) {
+        return res.status(400).json(Object.assign({}, { status: 400, error: e.message }));
+      }
       return res.status(400).json(Object.assign({}, { status: 400, error: e }));
     }
   }
