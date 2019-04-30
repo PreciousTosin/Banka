@@ -1,5 +1,4 @@
 function LogIn(payload) {
-  console.log('PAYLOAD: ', payload);
   const { type, isadmin, token } = payload;
 	if (type === 'staff' && isadmin === true) {
 		localStorage.setItem('loggedIn', 'true');
@@ -31,18 +30,14 @@ const authHandler = (e, form) => {
   e.preventDefault();
   // start spinner
   toggleSpinner();
-  console.log('SIGNUP FORM TARGET', e.target.classList[0]);
   const formType = e.target.classList[0];
   const fd = new FormData(form);
   const body = {};
   [...fd.entries()].forEach(entry => body[entry[0]] = entry[1]);
-  console.log(body);
   /* const body = new URLSearchParams();
   for (const pair of new FormData(form)) {
     body.append(pair[0], pair[1]);
   } */
-
-  console.log(body);
 
   if (formType === 'login') {
   	const loginUrl ='https://bankar.herokuapp.com/api/v1/auth/signin';
@@ -58,13 +53,13 @@ const authHandler = (e, form) => {
         if (response.status === 404 || response.status === 400 || response.status === 409) {
           toggleSpinner();
           response.json().then((object) => {
-            console.log(object.error);
+            // console.log(object.error);
             errDisplay(object.error);
           })
         } else if (response.status === 200) {
           toggleSpinner();
           response.json().then((object) => {
-            console.log('success', object);
+            // console.log('success', object);
             LogIn(object.data);
           })
         }

@@ -56,11 +56,11 @@
     <script src="AdminController.js"></script>
     <script src="AdminModel.js"></script>
     <script src="Admin.js"></script>
-    <script src="../table/TableView.js"></script>
-    <script src="../table/TableController.js"></script>
-    <script src="../table/TableModel.js"></script>
-    <script src="../table/Table.js"></script>
-    <script src="../table/tableTemplate.js"></script>
+    <script src="../tables/generic/TableView.js"></script>
+    <script src="../tables/generic/TableController.js"></script>
+    <script src="../tables/generic/TableModel.js"></script>
+    <script src="../tables/generic/Table.js"></script>
+    <script src="../tables/generic/tableTemplate.js"></script>
     <script src="../modal/modal.js"></script>
     <script>
       window.onload = function() {
@@ -85,8 +85,7 @@
           siteNavigation.classList.toggle('isActive');
           siteNavigationToggle.classList.toggle('isActive');
         });
-
-        console.log('SETTING UP BANKA APP');
+        // Initialize admin
         const model = new AdminModel(),
           view = new AdminView(model),
           controller = new AdminController(model, view);

@@ -484,9 +484,7 @@ footer a {
   line-height: 20px !important;
 }
 
-.copyright {
-  margin-top: 4%;
-}
+.copyright {}
 
 @media screen and (min-width: 700px) {
   .main-menu-header {

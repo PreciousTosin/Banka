@@ -347,7 +347,7 @@ function initializeTable() {
 		],
 		initComplete() {
 			/* recordTable.buttons().container()
-				.appendTo($('.col-md-6:eq(0)', recordTable.table().container())); */
+				.appendTo($('.col-md-6:eq(0)', recordTable.tables().container())); */
 		},
 	});
 
@@ -404,7 +404,7 @@ function initializeUserManagementTable() {
 		],
 		initComplete() {
 			/* recordTable.buttons().container()
-				.appendTo($('.col-md-6:eq(0)', recordTable.table().container())); */
+				.appendTo($('.col-md-6:eq(0)', recordTable.tables().container())); */
 		},
 	});
 

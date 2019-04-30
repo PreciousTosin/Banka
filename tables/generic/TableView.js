@@ -1,8 +1,6 @@
 class TableView {
   constructor(model) {
     this.model = model;
-    this.addTaskEvent = new Event(this);
-    this.toggleAdminPanelEvent = new Event(this);
     this.deleteAccountEvent = new Event(this);
     this.modifyAccountEvent = new Event(this);
     this.init(this.model.tableType);
@@ -28,7 +26,6 @@ class TableView {
     } else {
       this.createTableToActivateAccounts();
     }
-    console.log();
     return this;
   }
 
@@ -57,10 +54,10 @@ class TableView {
     if (tableType === 'manage-accounts') {
       this.enableDeleteBtn();
     } else if (tableType === 'manage-users') {
-      enableModifyBtn();
+      this.enableModifyBtn();
     }
     /**
-     * Event Dispatcher
+     * Event Dispatcher for models
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
     this.model.deleteAccountEvent.attach(this.refreshHandler);
@@ -187,7 +184,7 @@ class TableView {
 
   }
 
-  createRowButton(classAttr, text, type) {
+  createRowButton(classAttr, text) {
     return `<button type="button" class="${classAttr}">${text}</button>`;
   }
 
@@ -223,18 +220,18 @@ class TableView {
           th.setAttribute('class', 'hide--column');
       } else if (config.columns[h] !== null) {
         // console.log('SPECIAL CONFIG: ', h, config.columns[h], typeof config.columns[h]); 
-        th.setAttribute('class', 'table--column'); 
+        th.setAttribute('class', 'table--column');
         th.innerHTML = config.columns[h].name;
       } else {
           // TABLE HEADER.  
-          if (h === 0) th.setAttribute('class', 'table--column column1') 
+          if (h === 0) th.setAttribute('class', 'table--column column1')
           else  th.setAttribute('class', 'table--column');
           th.innerHTML = config.header[h];
       } 
       tr.appendChild(th);
     }
 
-    // return table header only when there is no data;
+    // return tables header only when there is no data;
     if (config.data.length === 0) {
       tableContainer.appendChild(table);
       return tableContainer;
@@ -266,10 +263,6 @@ class TableView {
           td.innerHTML = arrValue[c][j];   // ADD VALUES TO EACH CELL.
         }
       }
-      // let cell = tr.insertCell(-1);
-      // cell.setAttribute('class', 'table--column');
-      // cell.innerHTML = rowBtn;
-      // console.log('APPENDED BUTTON!: ', rowBtn);
     }
 
     tableContainer.appendChild(table);
@@ -278,10 +271,6 @@ class TableView {
 
   /* -------------------- Handlers From Event Dispatcher ----------------- */
 
-  toggleAdminPanel(sender, panel) {
-    this.display(panel);
-  }
-
   loadTable(sender, table) {
     console.log('RELOADING TABLE: ', table);
     this.display(table);
@@ -289,7 +278,7 @@ class TableView {
 
   refreshTable (sender, payload) {
     console.log('MODEL PAYLOAD: ', payload, payload.row);
-    // remove row from table; 
+    // remove row from table;
     if (Number(payload.row) !== 0) {
       document.querySelector('#recordsTable').deleteRow(payload.row);
       return;

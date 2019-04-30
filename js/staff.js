@@ -152,7 +152,7 @@ function initializeConsumateTable() {
 		],
 		initComplete() {
 			/* recordTable.buttons().container()
-				.appendTo($('.col-md-6:eq(0)', recordTable.table().container())); */
+				.appendTo($('.col-md-6:eq(0)', recordTable.tables().container())); */
 		},
 	});
 
