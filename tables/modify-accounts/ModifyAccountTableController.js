@@ -2,8 +2,9 @@ class ModifyTableController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-
+    console.log('ABOUT TO INITIALISE MODAL');
     this.init();
+    this.modal = new ModifyModal();
   }
 
   init() {
@@ -30,7 +31,8 @@ class ModifyTableController {
 
 
   modifyAccount(sender, payload) {
-    console.log('MODIFY TABLE CONTROLLER: ', payload);
+    console.log('MODIFY TABLE CONTROLLER: ', payload)
+    this.modal.toggleModal();
     this.model.modifyAccount(payload);
   }
 }

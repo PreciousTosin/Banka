@@ -29,6 +29,7 @@ class ModifyTableView extends TableView {
     this.table = document.querySelector('#recordsTable');
     this.tableBody = document.querySelectorAll('#recordsTable tbody');
     console.log('TABLE BODY: ', this.tableBody);
+    // this.btns = document.querySelectorAll('.modal--opener');
     return this;
   }
 
