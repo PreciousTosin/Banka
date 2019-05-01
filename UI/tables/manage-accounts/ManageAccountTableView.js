@@ -28,12 +28,14 @@ class ManageTableView extends TableView {
   createTableChildren() {
     this.table = document.querySelector('#recordsTable');
     this.tableBody = document.querySelectorAll('#recordsTable tbody');
+    this.viewButton = document.querySelector('.view--btn');
     console.log('TABLE BODY: ', this.tableBody);
     return this;
   }
 
   setupHandlers() {
     this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
+    this.viewAccountHandler = this.viewAccountButton.bind(this);
     /**
     Handlers from Event Dispatcher
     */
@@ -46,6 +48,7 @@ class ManageTableView extends TableView {
     /**
      * Set up event for click handlers
      * */
+    this.viewButton.addEventListener('click', this.viewAccountHandler, false);
     this.tableBody
       .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
 
@@ -59,7 +62,18 @@ class ManageTableView extends TableView {
   // notify model of delete operation
   deleteAccountButton(sender) {
     const rowData = this.getTableRow(sender);
-    this.deleteAccountEvent.notify(rowData);
+    if (sender.target.type === 'button') {
+      this.deleteAccountEvent.notify(rowData);
+    }
+  }
+
+  viewAccountButton(sender) {
+    if (this.highlighted === '') {
+      window.alert('Select a Table Row');
+      return;
+    }
+    const tr = this.table.rows[this.highlighted];
+    console.log('SELECTED TABLE ROW IS: ', tr);
   }
 
   display(panel) {
@@ -71,6 +85,7 @@ class ManageTableView extends TableView {
     this.createTableToDeleteAccounts();
     this.tableBody = document.querySelectorAll('#recordsTable tbody');
     this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
+    this.viewButton.addEventListener('click', this.viewAccountHandler, false);
     this.tableBody
       .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
   }
@@ -98,7 +113,7 @@ class ManageTableView extends TableView {
           content: btn,
          }
       ],
-      buttons: 1,
+      buttons: ['view'],
       header,
       data, 
       hide: [0, 2, 3]

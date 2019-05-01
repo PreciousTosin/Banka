@@ -1,6 +1,7 @@
 class TableView {
   constructor(model) {
     this.model = model;
+    this.highlighted = '';
     /* this.deleteAccountEvent = new Event(this);
     this.modifyAccountEvent = new Event(this); */
     // this.init(this.model.tableType);
@@ -48,6 +49,20 @@ class TableView {
   }
 
   getTableRow(sender) {
+    // console.log('SENDER: ', sender.target.nodeName);
+    if (sender.target.nodeName === 'TD') {
+      const tr = sender.target.closest('tr'); // get the table row
+      if (this.highlighted !== '') {
+        // remove highlight from former highlighted row
+        this.table.rows[this.highlighted].style.backgroundColor = '';
+      }
+      // set highlight(background color of clicked row)
+      tr.style.backgroundColor = '#CE8ECE';
+      this.highlighted = tr.rowIndex; // store current highlighted or selected row
+      this.selectRow(sender);
+      return;
+    }
+
     if (sender.target.type === 'button') {
       const td = sender.target.closest("td");
       const tr = td.closest('tr');
@@ -59,6 +74,10 @@ class TableView {
       console.log('TABLE ROW INDEX AND DATA', dataRowIndex, rowData[0]);
       return {data: rowData[0], index: tableRowIndex };
     }
+  }
+
+  selectRow(sender) {
+    console.log('SELECTING ROW: ', sender.target);
   }
 
   display(panel) {
@@ -80,6 +99,16 @@ class TableView {
     return `<button type="button" class="${classAttr}">${text}</button>`;
   }
 
+  static createHorizontalButton(classAttr, text) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.classList.add('btn');
+    btn.classList.add('btn--primary');
+    btn.classList.add(classAttr);
+    btn.innerHTML = text;
+    return btn;
+  }
+
   createDomTable(tableContainer) {
     this.removeNode(this.adminBody);
     this.adminBody.appendChild(tableContainer);
@@ -89,6 +118,14 @@ class TableView {
     // console.log('SPECIAL CONFIGURATION: ', config);
     const tableContainer = document.createElement('div');
     tableContainer.setAttribute('class', 'gen--table');
+
+    // if config contains setup for horizontal  buttons
+    if (config.buttons.length > 0) {
+      const btsContainer = document.createElement('div');
+      btsContainer.classList.add('horizontal--btns');
+      config.buttons.forEach((btn) => btsContainer.appendChild(TableView.createHorizontalButton(`${btn}--btn`, btn)));
+      tableContainer.appendChild(btsContainer);
+    }
     // NOW CREATE AN INPUT BOX TYPE BUTTON USING createElement() METHOD.
     // CREATE DYNAMIC TABLE.
     const table = document.createElement('table');

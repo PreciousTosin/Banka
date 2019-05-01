@@ -59,3 +59,21 @@
 .modal .close_modal:hover {
   opacity: 0.9;
 }
+
+.modal .top--bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal .close--modal {
+  cursor: pointer;
+}
+
+.modal .modal--title {
+  text-align: center;
+}
+
+.modal .modify--form {
+  text-align: center;
+  padding: 1rem 2rem;
+}

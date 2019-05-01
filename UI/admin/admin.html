@@ -7,7 +7,7 @@
     <title>Banka</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../modal/modal.css" />
+    <link rel="stylesheet" href="../modal/generic/modal.css" />
   </head>
   <body>
     <header class="main-menu-header">
@@ -23,6 +23,23 @@
 			</div>
       <div class="admin--body">
 
+      </div>
+    </div>
+
+    <!-- Modal Component -->
+    <!-- Clicking this button will open the modal -->
+    <!--<button id="modal_opener">Click Me! I Don't Bite... 😛</button>-->
+
+    <div class="modal" style="display: none">
+      <div class="overlay"></div>
+      <div class="modal_content">
+        <div class="top--bar">
+          <span class="close--modal">Close</span>
+        </div>
+        <!--  Dynamic Section -->
+        <h3 class="modal--title">Told Ya!</h3>
+        <div class="modal--body"></div>
+         <!-- End of Dynamic Section -->
       </div>
     </div>
 
@@ -66,7 +83,8 @@
     <script src="../tables/modify-accounts/ModifyAccountTableView.js"></script>
     <script src="../tables/modify-accounts/ModifyAccountTableController.js"></script>
     <script src="../tables/modify-accounts/ModifyAccountTable.js"></script>
-    <script src="../modal/modal.js"></script>
+    <script src="../modal/generic/modal.js"></script>
+    <script src="../modal/modify-account/modify-modal.js"></script>
     <script>
       window.onload = function() {
         // navbar init
