@@ -6,12 +6,12 @@ class TableView {
     // this.init(this.model.tableType);
   }
 
-  init(tableType) {
+  init() {
     this.createChildren()
-      .createDefaultTable(tableType)
+      .createDefaultTable()
       .createTableChildren()
-      .setupHandlers(tableType)
-      .enable(tableType);
+      .setupHandlers()
+      .enable();
   }
 
   createChildren() {
@@ -20,12 +20,7 @@ class TableView {
     return this;
   }
 
-  createDefaultTable(tableType) {
-    if (tableType === 'manage-accounts') {
-      this.createTableToDeleteAccounts();
-    } else {
-      this.createTableToActivateAccounts();
-    }
+  createDefaultTable() {
     return this;
   }
 
@@ -36,38 +31,20 @@ class TableView {
     return this;
   }
 
-  setupHandlers(tableType) {
-    if (tableType === 'manage-accounts') {
-      this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
-    } else if (tableType === 'manage-users') {
-      this.modifyAccountButtonHandler = this.modifyAccountButton.bind(this);
-    }
+  setupHandlers() {
     /**
     Handlers from Event Dispatcher
     */
     this.loadTableHandler = this.loadTable.bind(this);
-    this.refreshHandler = this.refreshTable.bind(this);
     return this;
   }
 
-  enable(tableType) {
-    if (tableType === 'manage-accounts') {
-      this.enableDeleteBtn();
-    } else if (tableType === 'manage-users') {
-      this.enableModifyBtn();
-    }
+  enable() {
     /**
      * Event Dispatcher for models
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
-    // this.model.deleteAccountEvent.attach(this.refreshHandler);
-    this.model.modifyAccountEvent.attach(this.loadTableHandler);
     return this;
-  }
-
-  enableModifyBtn() {
-    this.tableBody
-      .forEach(item => item.addEventListener('click', this.modifyButtonHandler));
   }
 
   getTableRow(sender) {
@@ -84,32 +61,12 @@ class TableView {
     }
   }
 
-  modifyAccountButton(sender) {
-    const rowData = this.getTableRow(sender);
-    this.modifyAccountEvent.notify(rowData);
-  }
-
   display(panel) {
     this.buildTable(panel);
   }
 
   buildTable(panel) {
-    console.log('TABLE TO BE CREATED: ', panel);
-    if (panel === 'manage-accounts') {
-      // this.adminBody.innerHTML = this.createTable();
-      this.createTableToDeleteAccounts();
-      this.tableBody = document.querySelectorAll('#recordsTable tbody');
-      this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
-      this.tableBody
-      .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
-    } else {
-      // this.adminBody.innerHTML = this.createTable();
-      this.createTableToActivateAccounts();
-      this.tableBody = document.querySelectorAll('#recordsTable tbody');
-      this.modifyAccountButtonHandler = this.modifyAccountButton.bind(this);
-      this.tableBody
-      .forEach(item => item.addEventListener('click', this.modifyAccountButtonHandler));
-    }
+
   }
 
   static removeNode(nodeToRemove) {
@@ -126,51 +83,6 @@ class TableView {
   createDomTable(tableContainer) {
     this.removeNode(this.adminBody);
     this.adminBody.appendChild(tableContainer);
-  }
-
-  createTableToDeleteAccounts() {
-    const btnClass = 'delete--btn btn btn--danger';
-    const btnText = 'Delete';
-    const btn = this.createRowButton(btnClass, btnText);
-    const data = this.model.tableData;
-    const header = this.model.tableHeader;
-    const config = {
-      columns: [
-        null, null, null, null, null, null, null, { 
-          name: 'Delete',
-          content: btn,
-         }
-      ],
-      buttons: 1,
-      header,
-      data, 
-      hide: [0, 2, 3]
-    };
-    const table = this.createTable(config);
-    this.createDomTable(table);
-  }
-
-  createTableToActivateAccounts() {
-    const btnClass = 'modify--btn btn btn--success';
-    const btnText = 'Modify';
-    const btn = this.createRowButton(btnClass, btnText);
-    const header = this.model.tableHeader;
-    const data = this.model.tableData;
-    const config = {
-      columns: [
-        null, null, null, null, null, null, null, { 
-          name: 'Change Status',
-          content: btn,
-         }
-      ],
-      buttons: 1,
-      header,
-      data,
-      hide: [0, 2, 3], 
-    };
-    const table = this.createTable(config);
-    this.createDomTable(table);
-    
   }
 
   createTable(config = {}) {

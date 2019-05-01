@@ -30,11 +30,11 @@ class AdminController {
   }
 
   changeTable(panel) {
-    /* if (panel === 'manage-accounts') {
-      this.table = initDeleteTable();
+     if (panel === 'manage-accounts') {
+      this.table = initManageTable();
     } else {
-
-    } */
+      this.table = initModifyTable();
+    }
   }
 
   toggleAdminPanel(sender, panel) {

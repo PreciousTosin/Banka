@@ -3,7 +3,6 @@ class ManageTableView extends TableView {
     super(model);
     this.model = model;
     this.deleteAccountEvent = new Event(this);
-    this.modifyAccountEvent = new Event(this);
     this.init(this.model.tableType);
   }
 
