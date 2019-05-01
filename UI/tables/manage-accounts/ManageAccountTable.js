@@ -1,7 +1,7 @@
-function initDeleteTable() {
+function initManageTable() {
   console.log('SETTING UP ADMIN TABLE');
-     const model = new DeleteTableModel(),
-         view = new DeleteTableView(model),
-         controller = new DeleteTableController(model, view);
+     const model = new ManageTableModel(),
+         view = new ManageTableView(model),
+         controller = new ManageTableController(model, view);
   return controller;
  }

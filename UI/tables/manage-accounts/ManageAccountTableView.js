@@ -1,4 +1,4 @@
-class DeleteTableView extends TableView {
+class ManageTableView extends TableView {
   constructor(model) {
     super(model);
     this.model = model;

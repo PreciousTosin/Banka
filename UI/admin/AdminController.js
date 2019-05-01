@@ -5,7 +5,7 @@ class AdminController {
 
     this.init();
     console.log('SETTING UP TABLE FROM CONTROLLER');
-    this.table = initDeleteTable(this.model.activePanel);
+    this.table = initManageTable(this.model.activePanel);
   }
 
   init() {
