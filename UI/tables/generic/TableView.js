@@ -1,9 +1,9 @@
 class TableView {
   constructor(model) {
     this.model = model;
-    this.deleteAccountEvent = new Event(this);
-    this.modifyAccountEvent = new Event(this);
-    this.init(this.model.tableType);
+    /* this.deleteAccountEvent = new Event(this);
+    this.modifyAccountEvent = new Event(this); */
+    // this.init(this.model.tableType);
   }
 
   init(tableType) {
@@ -60,14 +60,9 @@ class TableView {
      * Event Dispatcher for models
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
-    this.model.deleteAccountEvent.attach(this.refreshHandler);
+    // this.model.deleteAccountEvent.attach(this.refreshHandler);
     this.model.modifyAccountEvent.attach(this.loadTableHandler);
     return this;
-  }
-
-  enableDeleteBtn() {
-    this.tableBody
-      .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
   }
 
   enableModifyBtn() {
@@ -88,11 +83,6 @@ class TableView {
       return {data: rowData[0], index: tableRowIndex };
     }
   }
-  // notify model of delete operation
-  deleteAccountButton(sender) {
-    const rowData = this.getTableRow(sender);
-    this.deleteAccountEvent.notify(rowData);
-  } 
 
   modifyAccountButton(sender) {
     const rowData = this.getTableRow(sender);
@@ -122,14 +112,20 @@ class TableView {
     }
   }
 
+  static removeNode(nodeToRemove) {
+    while (nodeToRemove.firstChild) {
+      nodeToRemove.removeChild(nodeToRemove.firstChild);
+    }
+
+  }
+
+  static createRowButton(classAttr, text) {
+    return `<button type="button" class="${classAttr}">${text}</button>`;
+  }
+
   createDomTable(tableContainer) {
     this.removeNode(this.adminBody);
     this.adminBody.appendChild(tableContainer);
-  }
-
-  deleteRow(btn) {
-    const row = btn.parentNode.parentNode;
-    row.parentNode.removeChild(row);
   }
 
   createTableToDeleteAccounts() {
@@ -175,17 +171,6 @@ class TableView {
     const table = this.createTable(config);
     this.createDomTable(table);
     
-  }
-
-  removeNode(nodeToRemove) {
-    while (nodeToRemove.firstChild) {
-      nodeToRemove.removeChild(nodeToRemove.firstChild);
-    }
-
-  }
-
-  createRowButton(classAttr, text) {
-    return `<button type="button" class="${classAttr}">${text}</button>`;
   }
 
   createTable(config = {}) {
@@ -274,16 +259,6 @@ class TableView {
   loadTable(sender, table) {
     console.log('RELOADING TABLE: ', table);
     this.display(table);
-  }
-
-  refreshTable (sender, payload) {
-    console.log('MODEL PAYLOAD: ', payload, payload.row);
-    // remove row from table;
-    if (Number(payload.row) !== 0) {
-      document.querySelector('#recordsTable').deleteRow(payload.row);
-      return;
-    }
-    return;
   }
 
   /* -------------------- End Handlers From Event Dispatcher ----------------- */

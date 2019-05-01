@@ -4,7 +4,8 @@ class AdminController {
     this.view = view;
 
     this.init();
-    this.table = initTable(this.model.activePanel);
+    console.log('SETTING UP TABLE FROM CONTROLLER');
+    this.table = initDeleteTable(this.model.activePanel);
   }
 
   init() {
@@ -28,8 +29,16 @@ class AdminController {
     this.model.addTask(args.task);
   }
 
-  toggleAdminPanel(sender, panel) {
-    this.model.setSelectedPanel(panel)
-    this.table.changeTable(panel);
+  changeTable(panel) {
+    /* if (panel === 'manage-accounts') {
+      this.table = initDeleteTable();
+    } else {
+
+    } */
   }
-};
+
+  toggleAdminPanel(sender, panel) {
+    this.model.setSelectedPanel(panel);
+    this.changeTable(panel);
+  }
+}
