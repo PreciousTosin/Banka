@@ -1,4 +1,4 @@
-class DeleteTableModel extends TableModel {
+class ManageTableModel extends TableModel {
   static dateTime(offset) {
     return new Date(Date.now() + offset);
   }
@@ -9,7 +9,7 @@ class DeleteTableModel extends TableModel {
       {
         id: 58769874154475111,
         accountNumber: 2816408925,
-        createdOn: DeleteTableModel.dateTime(0),
+        createdOn: ManageTableModel.dateTime(0),
         owner: 23568974210520,
         type: 'savings',
         status: 'active',
@@ -17,7 +17,7 @@ class DeleteTableModel extends TableModel {
       }, {
         id: 37091127128041553,
         accountNumber: 2869502843,
-        createdOn: DeleteTableModel.dateTime(24 * 60 * 60 * 1000),
+        createdOn: ManageTableModel.dateTime(24 * 60 * 60 * 1000),
         owner: 65897567145632,
         type: 'current',
         status: 'draft',
