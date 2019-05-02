@@ -35,8 +35,13 @@ class GenericModal {
   }
 
   createModalContent(content) {
-    GenericModal.removeNode(this.modalBody);
-    this.modalBody.appendChild(content);
+    console.log('INSTAMCE: ', content instanceof Node);
+    if (content instanceof Node) {
+      GenericModal.removeNode(this.modalBody);
+      this.modalBody.appendChild(content);
+      return;
+    }
+    this.modalBody.innerHTML = content;
   }
 
   attachModalListeners(modalElm) {
@@ -50,14 +55,16 @@ class GenericModal {
   }
 
   toggleModal() {
-    const currentState = this.modal.style.display;
+    // const currentState = this.modal.style.display;
+    const currentState = this.modal.classList;
+    const modalRegex = /modal-show/ig;
 
-    // If modal is visible, hide it. Else, display it.
-    if (currentState === 'none') {
-      this.modal.style.display = 'block';
+    // If modal is invisible, show it. Else, hide it.
+    if (modalRegex.test(currentState) === false) {
+      this.modal.classList.toggle('modal-show');
       this.attachModalListeners(this.modal);
     } else {
-      this.modal.style.display = 'none';
+      this.modal.classList.toggle('modal-show');
       this.detachModalListeners(this.modal);
     }
   }

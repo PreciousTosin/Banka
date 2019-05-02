@@ -61,10 +61,11 @@ class ManageUserTableModel extends TableModel {
   }
 
   createUser(payload) {
-    const { data, index } = payload;
-    const newData = this.tableData.push(data);
-    this.tableData = newData;
-    this.addUserEvent.notify({ msg: 'account-created', row: index, table: this.tableType });
+    // const { data, index } = payload;
+    // const newData = this.tableData.push(data);
+   //  this.tableData = newData;
+    // this.addUserEvent.notify({ msg: 'account-created', row: index, table: this.tableType });
+    this.addUserEvent.notify({});
   }
 
   modifyUser(payload) {

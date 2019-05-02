@@ -69,13 +69,8 @@ class ManageUserTableView extends TableView {
   }
 
   createUserButton(sender) {
-    if (this.highlighted === '') {
-      window.alert('Select a Table Row');
-      return;
-    }
-    const tr = this.table.rows[this.highlighted];
-    console.log('SELECTED TABLE ROW IS: ', tr);
-    this.addUserEvent.notify(tr);
+    console.log('CREATING USERS: ');
+    this.addUserEvent.notify();
   }
 
   display(panel) {
@@ -134,10 +129,10 @@ class ManageUserTableView extends TableView {
   addTableRow (sender, payload) {
     console.log('MODEL PAYLOAD: ', payload, payload.row);
     // remove row from table;
-    if (Number(payload.row) !== 0) {
+    /* if (Number(payload.row) !== 0) {
       document.querySelector('#recordsTable').deleteRow(payload.row);
       return;
-    }
+    } */
     return;
   }
 
