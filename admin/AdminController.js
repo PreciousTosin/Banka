@@ -32,9 +32,11 @@ class AdminController {
   changeTable(panel) {
      if (panel === 'manage-accounts') {
       this.table = initManageTable();
-    } else {
+    } else if (panel === 'modify-accounts')  {
       this.table = initModifyTable();
-    }
+    } else {
+       this.table = initManageUserTable();
+     }
   }
 
   toggleAdminPanel(sender, panel) {
