@@ -3,6 +3,7 @@ class ManageUserTableController {
     this.model = model;
     this.view = view;
     this.modal = new ModifyModal();
+    this.createModal = new ManageUserModal();
     this.init();
   }
 
@@ -14,11 +15,13 @@ class ManageUserTableController {
   setupHandlers() {
     // this.loadTableHandler = this.loadTable.bind(this);
     this.modifyHandler = this.modifyUser.bind(this);
+    this.createUserHandler = this.createUser.bind(this);
     return this;
   }
 
   enable() {
     this.view.modifyUserEvent.attach(this.modifyHandler);
+    this.view.addUserEvent.attach(this.createUserHandler);
     return this;
   }
 
@@ -35,6 +38,7 @@ class ManageUserTableController {
 
   createUser(sender, payload) {
     // console.log('TABLE CONTROLLER: ', payload);
+    this.createModal.toggleModal();
     this.model.createUser(payload);
   }
 }
