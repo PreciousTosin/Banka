@@ -98,3 +98,7 @@
 .modal .charge--form {
   padding: 1rem 2rem;
 }
+
+.modal .btn--group {
+  text-align: center;
+}

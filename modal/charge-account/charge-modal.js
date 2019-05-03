@@ -24,6 +24,7 @@ class ChargeModal extends GenericModal {
     const inputAmount = document.createElement('input');
     inputAmount.id = 'charge-amount';
     inputAmount.name = 'chargeAmount';
+    inputAmount.type = 'number';
     inputAmount.classList.add('form--control');
     inputFormGroup.appendChild(inputAmount);
 
@@ -48,11 +49,14 @@ class ChargeModal extends GenericModal {
     });
 
     const formButton = document.createElement('button');
+    const btnformGroup = document.createElement('div');
+    btnformGroup.classList.add('btn--group');
     formButton.classList.add('btn');
     formButton.classList.add('btn--primary');
     formButton.type = 'button';
     formButton.innerHTML = 'Charge';
-    chargeForm.appendChild(formButton);
+    btnformGroup.appendChild(formButton);
+    chargeForm.appendChild(btnformGroup);
 
     this.createModalHeader('Create Transaction');
     this.createModalContent(chargeForm);
