@@ -2,8 +2,8 @@ class ManageUserTableController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-    this.modal = new ModifyModal();
-    this.createModal = new ManageUserModal();
+    this.modal = '';
+    this.createModal = '';
     this.init();
   }
 
@@ -32,13 +32,15 @@ class ManageUserTableController {
 
   modifyUser(sender, payload) {
     console.log('MODIFY TABLE CONTROLLER: ', payload);
-    this.modal.toggleModal();
+    this.modal = new ModifyModal(); // create new modal instance
+    this.modal.toggleModal(); // toggle modal visibility
     this.model.modifyUser(payload);
   }
 
   createUser(sender, payload) {
     // console.log('TABLE CONTROLLER: ', payload);
-    this.createModal.toggleModal();
+    this.createModal = new ManageUserModal(); // create new modal instance
+    this.createModal.toggleModal(); // toggle modal visibility
     this.model.createUser(payload);
   }
 }
