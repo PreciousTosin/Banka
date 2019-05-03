@@ -7,6 +7,7 @@
 			<title>Banka</title>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../modal/generic/modal.css" />
 	</head>
 	<body>
 		<header class="main-menu-header">
@@ -74,6 +75,20 @@
 					</table>
 				</div>
 			</div>
+		</div>
+
+		<!-- Modal Component -->
+
+		<div class="modal">
+			<div class="overlay"></div>
+			<div class="modal_content">
+				<div class="top--bar">
+					<span class="close--modal">Close</span>
+				</div>
+				<!--  Dynamic Section -->
+				<h3 class="modal--title">Told Ya!</h3>
+				<div class="modal--body"></div>
+				<!-- End of Dynamic Section -->
 			</div>
 		</div>
 
@@ -101,8 +116,19 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
+		<script src="../event-management/eventDispatcher.js"></script>
 		<script type="text/javascript" src="../js/navbar.js"></script>
 		<script type="text/javascript" src="../js/staff.js"></script>
+		<script src="../tables/generic/TableView.js"></script>
+		<script src="../tables/generic/TableController.js"></script>
+		<script src="../tables/generic/TableModel.js"></script>
+		<script src="../tables/generic/Table.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTableModel.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTableView.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTableController.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTable.js"></script>
+		<script src="../modal/generic/modal.js"></script>
+    <script src="../modal/charge-account/charge-modal.js"></script>
 		<script>
       window.onload = function() {
         // navbar init
@@ -125,6 +151,9 @@
           siteNavigation.classList.toggle('isActive');
           siteNavigationToggle.classList.toggle('isActive');
         });
+
+        // initialize table to list and charge account
+        initChargeTable();
       };
 			</script>
 	</body>
