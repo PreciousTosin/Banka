@@ -4,7 +4,7 @@ class TransactionTableController {
     this.view = view;
     console.log('ABOUT TO INITIALISE MODAL');
     this.init();
-    this.modal = new TransactionModal();
+    this.modal = '';
   }
 
   init() {
@@ -32,7 +32,8 @@ class TransactionTableController {
 
   viewTransaction(sender, payload) {
     console.log('TRANSACTION TABLE CONTROLLER: ', payload);
+    this.modal = new TransactionModal(payload.data);
     this.modal.toggleModal();
-    this.model.viewTransaction(payload);
+    // this.model.viewTransaction(payload);
   }
 }

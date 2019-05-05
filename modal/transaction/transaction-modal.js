@@ -1,16 +1,12 @@
 class TransactionModal extends GenericModal {
-  constructor() {
+  constructor(data) {
     super();
-    this.init();
+    this.init(data);
   }
 
-  init() {
-    this.createDisplay();
+  init(data) {
+    const transactionView = viewTransaction(data);
+    this.createModalHeader('Transaction Details');
+    this.createModalContent(transactionView);
   }
-
-  createDisplay() {
-
-  }
-
-
 }
