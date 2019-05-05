@@ -4,26 +4,26 @@ class TransactionTableModel extends TableModel {
   }
   constructor() {
     super();
-    this.tableHeader = [ 'id', 'accountNumber', 'createdOn', 'owner', 'type', 'status', 'balance' ];
+    this.tableHeader = [ 'id', 'createdon', 'type', 'accountnumber', 'cashier', 'amount', 'oldbalance', 'newbalance' ];
     this.tableData = [
       {
         id: 612879,
-        createdOn: TransactionTableModel.dateTime(0),
+        createdon: TransactionTableModel.dateTime(0),
         type: 'credit',
-        accountNumber: 281640892,
+        accountnumber: 281640892,
         cashier: 36956,
         amount: '150',
-        oldBalance: '350',
-        newBalance: '500',
+        oldbalance: '350',
+        newbalance: '500',
       }, {
         id: 706845,
-        createdOn: TransactionTableModel.dateTime(12 * 60 * 60 * 1000),
+        createdon: TransactionTableModel.dateTime(12 * 60 * 60 * 1000),
         type: 'credit',
-        accountNumber: 280872904,
+        accountnumber: 280872904,
         cashier: 36956655,
         amount: '900',
-        oldBalance: '0',
-        newBalance: '900',
+        oldbalance: '0',
+        newbalance: '900',
       },
     ];
     this.tableType = 'transactions';

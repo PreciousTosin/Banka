@@ -44,6 +44,10 @@ hr {
   display: block;
 }
 
+.highlight {
+  color: #302840;
+}
+
 /* ------------------------- box shadow effect -------------------------- */
 .shadow-effect {
   -webkit-box-shadow: 3px 3px 3px 2px #ccc;

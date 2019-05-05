@@ -85,22 +85,22 @@ class TransactionTableView extends TableView {
 
 
   createTableToViewTransactions() {
-    const btnClass = 'modify--btn btn btn--success';
-    const btnText = 'Modify';
+    const btnClass = 'view--btn btn btn--primary';
+    const btnText = 'View';
     const btn = TableView.createRowButton(btnClass, btnText);
     const header = this.model.tableHeader;
     const data = this.model.tableData;
     const config = {
       columns: [
-        null, null, null, null, null, null, null, { 
-          name: 'Change Status',
+        null, null, null, null, null, null, null, null, {
+          name: 'View',
           content: btn,
          }
       ],
       buttons: 1,
       header,
       data,
-      hide: [0, 2, 3], 
+      hide: [0, 1],
     };
     const table = this.createTable(config);
     this.createDomTable(table);
