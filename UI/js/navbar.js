@@ -62,8 +62,8 @@ function loggedOut(isLoggedIn, showAdmin, showUser) {
 							<a class="main-menu-mainNavigation__title" href="./admin/admin.html">Admin</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${isLoggedIn === "true" && 'hidden'}">
-							<a class="main-menu-mainNavigation__title" href="${baseUrl}login.html">Login</a>
-							<a class="main-menu-mainNavigation__title" href="${baseUrl}signup.html">Sign Up</a>
+							<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
+							<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
 						</li>
 					</ul>
 				</div>
