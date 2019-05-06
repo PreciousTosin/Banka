@@ -109,7 +109,7 @@ function loggedIn(isLoggedIn, showAdmin, showUser, showStaff) {
 				<div class="main-menu-mainNavigation__container container">
 					<ul class="main-menu-mainNavigation__menu">
 						<li class="main-menu-mainNavigation__menuItem ${isLoggedIn === false && 'hidden' }">
-							<a class="main-menu-mainNavigation__title" href="${baseUrl}profile/profile.html">Profile</a>
+							<a class="main-menu-mainNavigation__title" href="./profile/profile.html">Profile</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${showUser === false && 'hidden' }">
 							<a class="main-menu-mainNavigation__title" href="${baseUrl}transaction.html">Transaction</a>
