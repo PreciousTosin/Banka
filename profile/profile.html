@@ -6,8 +6,9 @@
 			<meta http-equiv="X-UA-Compatible" content="ie=edge">
 			<title>Banka</title>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
-			<link rel="stylesheet" href="./css/style.css">
-			<script defer src="./vendors/fontawesome/js/all.js"></script>
+			<link rel="stylesheet" href="../css/style.css">
+			<link rel="stylesheet" href="../modal/generic/modal.css" />
+			<script defer src="../vendors/fontawesome/js/all.js"></script>
 	</head>
 	<body>
 		<header class="main-menu-header">
@@ -20,7 +21,7 @@
 				<div class="profile--body">
 					<div class="profile--image">
 						<div class="image--container">
-							<img src="./img/profile-avatar.jpg" alt="profile_image">
+							<img src="../img/profile-avatar.jpg" alt="profile_image">
 						</div>
 					</div>
 					<div class="profile--details">
@@ -42,14 +43,42 @@
 							</ul>
 						</div>
 						<hr />
+						<div class="accounts--container">
+							<div class="accounts">
+								<div class="panel panel-default card-input">
+									<div class="panel-heading">Account</div>
+									<div class="panel-body">
+										Account No -
+										<br />
+										Balance -
+									</div>
+								</div>
+							</div>
+							<div class="account--button">
+								<button type="button" class="btn btn--primary">Create Account</button>
+							</div>
+						</div>
+						<hr />
 						<div class="additional--details">
 							<p>Date of Joining: 17th March, 2019</p>
 						</div>
-						<div class="account--button">
-							<button type="button" class="btn btn--primary">Create Account</button>
-						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<!-- Modal Component -->
+
+		<div class="modal">
+			<div class="overlay"></div>
+			<div class="modal_content">
+				<div class="top--bar">
+					<span class="close--modal">Close</span>
+				</div>
+				<!--  Dynamic Section -->
+				<h3 class="modal--title">Told Ya!</h3>
+				<div class="modal--body"></div>
+				<!-- End of Dynamic Section -->
 			</div>
 		</div>
 
@@ -77,7 +106,10 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
-		<script type="text/javascript" src="./js/navbar.js"></script>
+		<script src="../modal/generic/modal.js"></script>
+		<script src="../modal/profile/create-account-modal.js"></script>
+		<script type="text/javascript" src="../js/navbar.js"></script>
+		<script type="text/javascript" src="../js/profile.js"></script>
 		<script>
       window.onload = function() {
         // navbar init
@@ -100,6 +132,9 @@
           siteNavigation.classList.toggle('isActive');
           siteNavigationToggle.classList.toggle('isActive');
         });
+
+        // setup profile
+        initializeProfile();
       };
 			</script>
 	</body>
