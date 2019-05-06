@@ -13,7 +13,7 @@ function LogIn(payload) {
 		localStorage.setItem('isUser', 'true');
     localStorage.setItem('token', token);
 	}
-	window.location.href = './index.html';
+	window.location.href = './profile/profile.html';
 }
 
 const errDisplay = (error) => {
@@ -38,6 +38,8 @@ const authHandler = (e, form) => {
   for (const pair of new FormData(form)) {
     body.append(pair[0], pair[1]);
   } */
+
+  // LogIn({ type: 'client', isadmin: false, token: 'eyxifufkgggm' });
 
   if (formType === 'login') {
   	const loginUrl ='https://bankar.herokuapp.com/api/v1/auth/signin';
