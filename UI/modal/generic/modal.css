@@ -101,13 +101,25 @@
 
 .modal .btn--group {
   text-align: center;
+  margin-top: 20px;
 }
 
 .modal .transaction--details {
   list-style: none;
   text-align: center;
+  padding: 10px 0;
+  border: 1px solid #302840;
+  border-radius: 5px;
 }
 
 .modal .transaction--details .title {
   font-weight: 700;
+}
+
+.modal .transaction--details li {
+  margin-bottom: 10px;
+}
+
+.modal .create--account--form {
+  padding: 1rem 2rem;
 }
