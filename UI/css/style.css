@@ -899,6 +899,14 @@ footer a {
   padding: 10px;
 }
 
+.profile--body .panel-body div {
+  margin-bottom: 6px;
+}
+
+.profile--body .panel-body div:last-child {
+  margin-bottom: 0;
+}
+
 @media screen and (min-width: 500px) {
   .profile--container {
     width: 450px;
@@ -913,7 +921,7 @@ footer a {
     width: 33.33333333333333%;
   }
   
-  .profile--details {
+  .profile--information {
     width: 66.66666666666666%;
   }
 }
@@ -926,7 +934,7 @@ footer a {
 
 @media screen and (min-width: 1000px) {
   .profile--container {
-    width: 750px;
+    width: 950px;
   }
 }
 

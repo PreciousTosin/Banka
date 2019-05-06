@@ -1,6 +1,6 @@
 function logOut() {
   localStorage.clear();
-	const testRegex = /admin|staff/ig;
+	const testRegex = /admin|staff|profile/ig;
 	const regexResult = testRegex.test(window.location.pathname);
 	if (regexResult === true) {
 		window.location.href = '../index.html';
@@ -10,7 +10,7 @@ function logOut() {
 }
 
 function returnHome() {
-	const testRegex = /admin|staff/ig;
+	const testRegex = /admin|staff|profile/ig;
 	const regexResult = testRegex.test(window.location.pathname);
 	if (regexResult === true) {
 		window.location.href = '../index.html';
@@ -20,6 +20,8 @@ function returnHome() {
 }
 
 function loggedOut(isLoggedIn, showAdmin, showUser) {
+  const isIndex = window.location.pathname.split('/').slice(-1).join('') === 'index.html';
+  const baseUrl = isIndex === true ? './' : '../';
 	return `
 	<div class="main-menu-header__container container">
 		<a class="main-menu-header__branding" onclick="returnHome()">
@@ -60,8 +62,8 @@ function loggedOut(isLoggedIn, showAdmin, showUser) {
 							<a class="main-menu-mainNavigation__title" href="./admin/admin.html">Admin</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${isLoggedIn === "true" && 'hidden'}">
-							<a class="main-menu-mainNavigation__title" href="./login.html">Login</a>
-							<a class="main-menu-mainNavigation__title" href="./signup.html">Sign Up</a>
+							<a class="main-menu-mainNavigation__title" href="${baseUrl}login.html">Login</a>
+							<a class="main-menu-mainNavigation__title" href="${baseUrl}signup.html">Sign Up</a>
 						</li>
 					</ul>
 				</div>
@@ -106,7 +108,7 @@ function loggedIn(isLoggedIn, showAdmin, showUser, showStaff) {
 			<nav class="main-menu-mainNavigation">
 				<div class="main-menu-mainNavigation__container container">
 					<ul class="main-menu-mainNavigation__menu">
-						<li class="main-menu-mainNavigation__menuItem ${showUser === false && 'hidden' }">
+						<li class="main-menu-mainNavigation__menuItem ${isLoggedIn === false && 'hidden' }">
 							<a class="main-menu-mainNavigation__title" href="${baseUrl}profile/profile.html">Profile</a>
 						</li>
 						<li class="main-menu-mainNavigation__menuItem ${showUser === false && 'hidden' }">
