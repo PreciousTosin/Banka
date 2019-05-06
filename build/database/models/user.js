@@ -65,7 +65,7 @@ function () {
         hashPassword(data).then(function (hash) {
           payload.id = makeId();
           payload.password = hash;
-          var queryText = "INSERT INTO users(id, email, firstName, lastName, password, type, isAdmin)\n            VALUES($1, $2, $3, $4, $5, $6, $7);";
+          var queryText = "INSERT INTO users(id, email, firstName, lastName, password, type, isAdmin, status)\n            VALUES($1, $2, $3, $4, $5, $6, $7, $8);";
           var params = Object.values(payload);
           return _query["default"].query(queryText, params);
         }).then(function (results) {

@@ -29,7 +29,7 @@ pool.on('connect', function () {
 
 var createUserTable = function createUserTable() {
   console.log('ABOUT TO CREATE USER TABLE');
-  var queryText = "CREATE TABLE IF NOT EXISTS\n      Users(\n        id INTEGER PRIMARY KEY,\n        email VARCHAR(128) UNIQUE NOT NULL,\n        firstName VARCHAR(128) NOT NULL,\n        lastName VARCHAR(128) NOT NULL,\n        password VARCHAR(128) NOT NULL,\n        type VARCHAR(10) NOT NULL,\n        isAdmin BOOLEAN NOT NULL\n      )";
+  var queryText = "CREATE TABLE IF NOT EXISTS\n      Users(\n        id INTEGER PRIMARY KEY,\n        email VARCHAR(128) UNIQUE NOT NULL,\n        firstName VARCHAR(128) NOT NULL,\n        lastName VARCHAR(128) NOT NULL,\n        password VARCHAR(128) NOT NULL,\n        type VARCHAR(10) NOT NULL,\n        isAdmin BOOLEAN NOT NULL,\n        status VARCHAR(10) NOT NULL\n      )";
   pool.connect().then(function (client) {
     return client.query(queryText).then(function (res) {
       client.release();

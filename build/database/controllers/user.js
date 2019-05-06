@@ -41,7 +41,8 @@ var generateUserPrint = function generateUserPrint(userPayload, admin) {
     lastName: userPayload.lastName ? userPayload.lastName : userPayload.lastname,
     password: userPayload.password,
     type: userPayload.type === 'staff' ? userPayload.type : 'client',
-    isAdmin: admin === true ? admin : false
+    isAdmin: admin === true ? admin : false,
+    status: 'active'
   };
 };
 
@@ -199,7 +200,7 @@ function () {
       var _loginUser = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(req, res) {
-        var userPayload, errors, errorList, errString, userData, isValidUser, tokenPayload, tokenizedUser, response;
+        var userPayload, errors, errorList, errString, userData, errorResponse, isValidUser, tokenPayload, tokenizedUser, response;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -244,23 +245,35 @@ function () {
                 })));
 
               case 13:
-                _context.next = 15;
+                if (!(userData[0].status === 'inactive')) {
+                  _context.next = 16;
+                  break;
+                }
+
+                errorResponse = Object.assign({}, {
+                  status: 400,
+                  error: 'Your account has been suspended.'
+                });
+                return _context.abrupt("return", res.status(400).json(errorResponse));
+
+              case 16:
+                _context.next = 18;
                 return asyncComparePassword(userPayload.password, userData[0].password);
 
-              case 15:
+              case 18:
                 isValidUser = _context.sent;
 
                 if (!(isValidUser === true)) {
-                  _context.next = 25;
+                  _context.next = 28;
                   break;
                 }
 
                 // generate user data to tokenize
                 tokenPayload = generateUserPrint(userData[0], userData[0].isadmin);
-                _context.next = 20;
+                _context.next = 23;
                 return _jwtToken["default"].createToken(tokenPayload);
 
-              case 20:
+              case 23:
                 userData[0].token = _context.sent;
                 tokenizedUser = userData[0];
                 delete tokenizedUser.password;
@@ -270,18 +283,18 @@ function () {
                 });
                 return _context.abrupt("return", res.status(response.status).json(response));
 
-              case 25:
+              case 28:
                 return _context.abrupt("return", res.status(400).json(Object.assign({}, {
                   status: 400,
                   error: 'Password is incorrect'
                 })));
 
-              case 28:
-                _context.prev = 28;
+              case 31:
+                _context.prev = 31;
                 _context.t0 = _context["catch"](0);
 
                 if (!_context.t0.message) {
-                  _context.next = 32;
+                  _context.next = 35;
                   break;
                 }
 
@@ -290,18 +303,18 @@ function () {
                   error: _context.t0.message
                 })));
 
-              case 32:
+              case 35:
                 return _context.abrupt("return", res.status(400).json(Object.assign({}, {
                   status: 400,
                   error: _context.t0
                 })));
 
-              case 33:
+              case 36:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 28]]);
+        }, _callee, null, [[0, 31]]);
       }));
 
       function loginUser(_x, _x2) {
