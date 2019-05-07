@@ -6,11 +6,11 @@ import ValidateTransaction from '../database/validation/validateTransaction';
 const { checkCreateTransaction } = ValidateTransaction;
 const checkCreate = checkCreateTransaction();
 
-const { isStaff, isStaffOrAdmin } = Authorization;
+const { isStaff, isStaffOrAdmin, isUser } = Authorization;
 
 const router = express.Router();
 
-router.get('/', isStaffOrAdmin, transaction.returnAllTransations);
+router.get('/', isUser, transaction.returnAllTransations);
 
 router.get('/:id', isStaffOrAdmin, transaction.getOneTransaction);
 

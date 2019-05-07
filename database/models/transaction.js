@@ -87,6 +87,32 @@ class Transaction {
     });
   }
 
+  static findAllByEmail(email) {
+    return new Promise((resolve, reject) => {
+      const txPromise = [];
+      account.findAllAccountsByEmail(email).then((res) => {
+        res.forEach((bankAccount) => {
+          const queryText = `SELECT * FROM Transactions WHERE accountNumber=${bankAccount.accountnumber};`;
+          txPromise.push(queryDb.query(queryText));
+        });
+        return Promise.all(txPromise);
+      })
+        .then((res) => {
+          const txArr = [];
+          res.forEach((accountRes) => {
+            txArr.push(...accountRes.rows);
+          });
+          return txArr;
+        })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  }
+
   static findAllByAccount(accountNumber) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT * FROM Transactions WHERE accountNumber=${accountNumber};`;

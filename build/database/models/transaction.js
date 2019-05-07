@@ -13,6 +13,14 @@ var _account = _interopRequireDefault(require("./account"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -118,6 +126,31 @@ function () {
 
         _query["default"].query(queryText).then(function (res) {
           resolve(res.rows);
+        })["catch"](function (e) {
+          reject(e);
+        });
+      });
+    }
+  }, {
+    key: "findAllByEmail",
+    value: function findAllByEmail(email) {
+      return new Promise(function (resolve, reject) {
+        var txPromise = [];
+
+        _account["default"].findAllAccountsByEmail(email).then(function (res) {
+          res.forEach(function (bankAccount) {
+            var queryText = "SELECT * FROM Transactions WHERE accountNumber=".concat(bankAccount.accountnumber, ";");
+            txPromise.push(_query["default"].query(queryText));
+          });
+          return Promise.all(txPromise);
+        }).then(function (res) {
+          var txArr = [];
+          res.forEach(function (accountRes) {
+            txArr.push.apply(txArr, _toConsumableArray(accountRes.rows));
+          });
+          return txArr;
+        }).then(function (res) {
+          resolve(res);
         })["catch"](function (e) {
           reject(e);
         });
