@@ -7,6 +7,7 @@
       <title>Banka</title>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="./css/style.css">
+      <link rel="stylesheet" href="../css/spinner.css">
       <link rel="stylesheet" href="./modal/generic/modal.css" />
 	</head>
 	<body>
@@ -20,42 +21,17 @@
           <table id="staticTable">
             <thead>
             <tr class="table--row head">
-              <th class="table--column column1">Date</th>
               <th class="table--column">Type</th>
+              <th class="table--column">AccountNumber</th>
+              <th class="table--column">Cashier</th>
               <th class="table--column">Amount</th>
-              <th class="table--column">Sender</th>
-              <th class="table--column">Recipient</th>
+              <th class="table--column">OldBalance</th>
+              <th class="table--column">NewBalance</th>
+              <th class="table--column">View</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="table--row">
-              <td class="table--column column1">2019-03-10</td>
-              <td class="table--column">Debit</td>
-              <td class="table--column">100000</td>
-              <td class="table--column">--</td>
-              <td class="table--column">0187925874</td>
-            </tr>
-            <tr class="table--row">
-              <td class="table--column column1">2019-03-01</td>
-              <td class="table--column">Debit</td>
-              <td class="table--column">50000</td>
-              <td class="table--column">--</td>
-              <td class="table--column">0151370846</td>
-            </tr>
-            <tr class="table--row">
-              <td class="table--column column1">2019-02-25</td>
-              <td class="table--column">Credit</td>
-              <td class="table--column">250000</td>
-              <td class="table--column">2147378033</td>
-              <td class="table--column">--</td>
-            </tr>
-            <tr class="table--row">
-              <td class="table--column column1">2019-02-10</td>
-              <td class="table--column">Credit</td>
-              <td class="table--column">200000</td>
-              <td class="table--column">4594440081</td>
-              <td class="table--column">--</td>
-            </tr>
+
             </tbody>
           </table>
         </div>
@@ -78,6 +54,13 @@
         <h3 class="modal--title">Told Ya!</h3>
         <div class="modal--body"></div>
         <!-- End of Dynamic Section -->
+      </div>
+    </div>
+
+    <!--  Spinner -->
+    <div class="spinner">
+      <div class="spinner--overlay">
+        <div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
       </div>
     </div>
 
@@ -105,6 +88,7 @@
 			</div>
 		</footer>
     <!-- END: Footer -->
+    <script type="text/javascript" src="./vendors/jwt-decode/build/jwt-decode.min.js"></script>
 		<script type="text/javascript" src="./js/navbar.js"></script>
     <script src="./event-management/eventDispatcher.js"></script>
     <script src="./tables/generic/TableView.js"></script>
@@ -119,6 +103,18 @@
     <script src="./modal/transaction/viewTransaction.js"></script>
     <script src="./modal/transaction/transaction-modal.js"></script>
 		<script>
+      const toggleSpinner = () => {
+        const spinner = document.querySelector('.spinner--element');
+        const overlay = document.querySelector('.spinner--overlay');
+        if (spinner.classList.contains('lds-spinner')) {
+          spinner.classList.toggle('lds-spinner');
+          overlay.classList.toggle('show-overlay');
+        } else {
+          spinner.classList.toggle('lds-spinner');
+          overlay.classList.toggle('show-overlay');
+        }
+      };
+
       window.onload = function() {
         // navbar init
         const navbarContainer = document.querySelector(".main-menu-header");
@@ -141,8 +137,40 @@
           siteNavigationToggle.classList.toggle('isActive');
         });
 
-        // initialize transaction table
-        initTransactionTable()
+        // toggle spinner
+        toggleSpinner();
+        // setup request parameters
+        const token = localStorage.getItem('token');
+        const txUrl = 'https://bankar.herokuapp.com/api/v1/transactions';
+        const bearer = 'Bearer ' + token;
+        const headers = {
+          'Authorization': bearer,
+          'Content-Type': 'application/json',
+        };
+
+        // make GET request using fetch for all transactions done by user
+        fetch(txUrl, {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: { ...headers },
+        })
+          .then((response) => {
+            if (response.status === 404 || response.status === 400 || response.status === 409 || response.status === 401) {
+              toggleSpinner();
+              response.json().then((object) => {
+                // console.log(object.error);
+              })
+            } else if (response.status === 200) {
+              toggleSpinner();
+              response.json().then((object) => {
+                // console.log('success', object);
+                // initialize transaction table
+                initTransactionTable(object.data);
+              })
+            }
+          });
+
       };
 		</script>
 	</body>
