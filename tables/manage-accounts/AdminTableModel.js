@@ -8,16 +8,16 @@ class AdminTableModel extends TableModel {
     this.tableData = [
       {
         id: 58769874154475111,
-        accountNumber: 2816408925,
-        createdOn: AdminTableModel.dateTime(0),
+        accountnumber: 2816408925,
+        createdon: AdminTableModel.dateTime(0),
         owner: 23568974210520,
         type: 'savings',
         status: 'active',
         balance: 500.00,
       }, {
         id: 37091127128041553,
-        accountNumber: 2869502843,
-        createdOn: AdminTableModel.dateTime(24 * 60 * 60 * 1000),
+        accountnumber: 2869502843,
+        createdon: AdminTableModel.dateTime(24 * 60 * 60 * 1000),
         owner: 65897567145632,
         type: 'current',
         status: 'draft',
@@ -28,6 +28,7 @@ class AdminTableModel extends TableModel {
     this.loadTableEvent = new Event(this);
     this.deleteAccountEvent = new Event(this);
     this.modifyAccountEvent = new Event(this);
+    this.toggleSpinnerEvent = new Event(this);
   }
 
   getTableData() {
@@ -46,9 +47,11 @@ class AdminTableModel extends TableModel {
 
   deleteAccount(payload) {
     const { data, index } = payload;
-    const newData = this.tableData.filter(account => account.accountNumber !== data.accountNumber);
-    this.tableData = newData;
-    this.deleteAccountEvent.notify({ msg: 'account-deleted', row: index, table: this.tableType });
+    setTimeout(() => {
+      const newData = this.tableData.filter(account => account.accountNumber !== data.accountNumber);
+      this.tableData = newData;
+      this.deleteAccountEvent.notify({ msg: 'account-deleted', row: index, table: this.tableType });
+    }, 2000);
   }
 
   modifyAccount(payload) {

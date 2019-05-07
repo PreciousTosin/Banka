@@ -3,6 +3,7 @@ class ManageTableView extends TableView {
     super(model);
     this.model = model;
     this.deleteAccountEvent = new Event(this);
+    this.viewAccountEvent = new Event(this);
     this.init(this.model.tableType);
   }
 
@@ -59,6 +60,18 @@ class ManageTableView extends TableView {
     this.model.deleteAccountEvent.attach(this.removeTableRowHandler);
   }
 
+  static toggleSpinner() {
+    const spinner = document.querySelector('.spinner--element');
+    const overlay = document.querySelector('.spinner--overlay');
+    if (spinner.classList.contains('lds-spinner')) {
+      spinner.classList.toggle('lds-spinner');
+      overlay.classList.toggle('show-overlay');
+    } else {
+      spinner.classList.toggle('lds-spinner');
+      overlay.classList.toggle('show-overlay');
+    }
+  }
+
   // notify model of delete operation
   deleteAccountButton(sender) {
     const rowData = this.getTableRow(sender);
@@ -73,7 +86,9 @@ class ManageTableView extends TableView {
       return;
     }
     const tr = this.table.rows[this.highlighted];
-    console.log('SELECTED TABLE ROW IS: ', tr);
+    const dataIndex = tr.getAttribute('index');
+    this.viewAccountEvent.notify({ dataIndex });
+    // console.log('SELECTED TABLE ROW IS: ', tr.getAttribute('index'));
   }
 
   display(panel) {
@@ -132,6 +147,7 @@ class ManageTableView extends TableView {
   removeTableRow (sender, payload) {
     console.log('MODEL PAYLOAD: ', payload, payload.row);
     // remove row from table;
+    ManageTableView.toggleSpinner(); // stop spinner
     if (Number(payload.row) !== 0) {
       document.querySelector('#recordsTable').deleteRow(payload.row);
       return;
