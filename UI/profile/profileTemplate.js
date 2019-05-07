@@ -32,17 +32,12 @@ function generateProfile(user) {
 					</div>`;
 }
 
-function generateAccounts() {
-  const accounts = [
-    {
-      accountNumber: 28975468,
-      balance: 50000,
-    }, {
-      accountNumber: 28573214,
-      balance: 10000,
-    },
-  ];
+function generateAccounts(accounts) {
   const accountContainer = document.querySelector('.accounts');
+  if (accounts.length === 0) {
+    accountContainer.append('No Bank Accounts');
+    return;
+  }
   accounts.forEach((account) => {
     const akant = bankAccount(account);
     accountContainer.appendChild(akant);
@@ -58,12 +53,20 @@ function bankAccount(account) {
   const panelBody = document.createElement('div');
   panelHeader.classList.add('panel-heading');
   panelBody.classList.add('panel-body');
+
   const accountDiv = document.createElement('div');
   accountDiv.innerHTML = 'Account No - ';
   const accountSpan = document.createElement('span');
   accountSpan.append(account.accountNumber);
   accountDiv.appendChild(accountSpan);
   panelBody.appendChild(accountDiv);
+
+  const typeDiv = document.createElement('div');
+  typeDiv.innerHTML = 'Account Type - ';
+  const typeSpan = document.createElement('span');
+  typeSpan.append(account.type);
+  typeDiv.appendChild(typeSpan);
+  panelBody.appendChild(typeDiv);
 
   const balanceDiv = document.createElement('div');
   balanceDiv.innerHTML = 'Balance - ';
