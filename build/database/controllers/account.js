@@ -41,6 +41,7 @@ function () {
         return findFunc(req.query.status).then(function (data) {
           var output = data.map(function (accountData) {
             return {
+              id: accountData.id,
               createdOn: accountData.createdon,
               accountNumber: accountData.accountnumber,
               ownerEmail: accountData.email,
