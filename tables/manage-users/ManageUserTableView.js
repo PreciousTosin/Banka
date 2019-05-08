@@ -13,6 +13,7 @@ class ManageUserTableView extends TableView {
       .createTableChildren()
       .setupHandlers()
       .enable();
+    this.model.getTableData();
   }
 
   createChildren() {
@@ -42,6 +43,7 @@ class ManageUserTableView extends TableView {
     */
     this.loadTableHandler = this.loadTable.bind(this);
     this.addTableRowHandler = this.addTableRow.bind(this);
+    this.toggleSpinnerHandler = this.toggleSpinnerFromModal.bind(this);
     return this;
   }
 
@@ -58,6 +60,7 @@ class ManageUserTableView extends TableView {
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
     this.model.addUserEvent.attach(this.addTableRowHandler);
+    this.model.toggleSpinnerEvent.attach(this.toggleSpinnerHandler);
   }
 
   // notify model of delete operation
@@ -80,9 +83,10 @@ class ManageUserTableView extends TableView {
   buildTable(panel) {
     console.log('TABLE TO BE CREATED: ', panel);
     this.createTableToManageUsers();
+    this.table = document.querySelector('#recordsTable');
     this.tableBody = document.querySelectorAll('#recordsTable tbody');
     this.modifyUserButtonHandler = this.modifyUserButton.bind(this);
-    this.createButton.addEventListener('click', this.createUserHandler, false);
+    document.querySelector('.create--btn').addEventListener('click', this.createUserHandler, false);
     this.tableBody
       .forEach(item => item.addEventListener('click', this.modifyUserButtonHandler));
   }
@@ -113,7 +117,7 @@ class ManageUserTableView extends TableView {
       buttons: ['create'],
       header,
       data, 
-      hide: [0, 6]
+      hide: [0]
     };
     const table = this.createTable(config);
     this.createDomTable(table);
@@ -122,8 +126,13 @@ class ManageUserTableView extends TableView {
   /* -------------------- Handlers From Event Dispatcher from Model ----------------- */
 
   loadTable(sender, table) {
-    console.log('RELOADING TABLE: ', table);
+    console.log('RELOADING MANAGE USERS TABLE: ', table);
     this.display(table);
+  }
+
+  toggleSpinnerFromModal() {
+    console.log('TOGGLE NOTIFIED');
+    TableView.toggleSpinner();
   }
 
   addTableRow (sender, payload) {
