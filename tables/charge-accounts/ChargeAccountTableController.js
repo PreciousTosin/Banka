@@ -4,7 +4,7 @@ class ChargeTableController {
     this.view = view;
     console.log('ABOUT TO INITIALISE MODAL');
     this.init();
-    this.modal = new ChargeModal();
+    this.modal = '';
   }
 
   init() {
@@ -30,9 +30,11 @@ class ChargeTableController {
   }
 
 
-  chargeAccount(sender, payload) {
-    console.log('CHARGE TABLE CONTROLLER: ', payload);
+  chargeAccount(sender, tableData) {
+    console.log('CHARGE TABLE CONTROLLER: ', tableData);
+    const chargeFunc = (body) => this.model.chargeAccount(tableData, body);
+    this.modal = new ChargeModal(chargeFunc);
     this.modal.toggleModal();
-    this.model.chargeAccount(payload);
+    // this.model.chargeAccount(payload);
   }
 }

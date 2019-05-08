@@ -7,12 +7,20 @@
 			<title>Banka</title>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="../css/style.css">
+			<link rel="stylesheet" href="../css/spinner.css">
+			<link rel="stylesheet" href="../css/alert.css">
 		<link rel="stylesheet" href="../modal/generic/modal.css" />
 	</head>
 	<body>
 		<header class="main-menu-header">
 			
 		</header>
+		<div class="error--banner">
+			<div class="alert-danger">
+				<div class="error-msg">Current message</div>
+				<span class="closebtn" onclick="removeError()">&times;</span>
+			</div>
+		</div>
 
 		<div class="admin--container">
 			<h2 class="admin--header">
@@ -91,6 +99,13 @@
 			</div>
 		</div>
 
+		<!--  Spinner -->
+		<div class="spinner">
+			<div class="spinner--overlay">
+				<div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+			</div>
+		</div>
+
 		<!-- START: Footer -->
 		<footer>
 			<div class="footer-container">
@@ -115,6 +130,12 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
+		<script>
+      const removeError = () => {
+        document.querySelector('.alert-danger').classList.remove('display-alert');
+      };
+		</script>
+		<script type="text/javascript" src="../vendors/jwt-decode/build/jwt-decode.min.js"></script>
 		<script src="../event-management/eventDispatcher.js"></script>
 		<script type="text/javascript" src="../js/navbar.js"></script>
 		<script type="text/javascript" src="../js/staff.js"></script>
@@ -153,6 +174,7 @@
 
         // initialize table to list and charge account
         initChargeTable();
+
       };
 			</script>
 	</body>
