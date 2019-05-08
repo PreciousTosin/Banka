@@ -4,15 +4,16 @@ class ManageTableView extends TableView {
     this.model = model;
     this.deleteAccountEvent = new Event(this);
     this.viewAccountEvent = new Event(this);
-    this.init(this.model.tableType);
+    this.init();
   }
 
-  init(tableType) {
+  init() {
     this.createChildren()
-      .createDefaultTable(tableType)
+      .createDefaultTable()
       .createTableChildren()
-      .setupHandlers(tableType)
-      .enable(tableType);
+      .setupHandlers()
+      .enable();
+    this.model.getTableData();
   }
 
   createChildren() {
@@ -42,6 +43,7 @@ class ManageTableView extends TableView {
     */
     this.loadTableHandler = this.loadTable.bind(this);
     this.removeTableRowHandler = this.removeTableRow.bind(this);
+    this.toggleSpinnerHandler = this.toggleSpinnerFromModal.bind(this);
     return this;
   }
 
@@ -58,18 +60,7 @@ class ManageTableView extends TableView {
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
     this.model.deleteAccountEvent.attach(this.removeTableRowHandler);
-  }
-
-  static toggleSpinner() {
-    const spinner = document.querySelector('.spinner--element');
-    const overlay = document.querySelector('.spinner--overlay');
-    if (spinner.classList.contains('lds-spinner')) {
-      spinner.classList.toggle('lds-spinner');
-      overlay.classList.toggle('show-overlay');
-    } else {
-      spinner.classList.toggle('lds-spinner');
-      overlay.classList.toggle('show-overlay');
-    }
+    this.model.toggleSpinnerEvent.attach(this.toggleSpinnerHandler);
   }
 
   // notify model of delete operation
@@ -88,19 +79,21 @@ class ManageTableView extends TableView {
     const tr = this.table.rows[this.highlighted];
     const dataIndex = tr.getAttribute('index');
     this.viewAccountEvent.notify({ dataIndex });
-    // console.log('SELECTED TABLE ROW IS: ', tr.getAttribute('index'));
+    console.log('SELECTED TABLE ROW IS: ', tr.getAttribute('index'));
   }
 
-  display(panel) {
-    this.buildTable(panel);
+  display() {
+    this.buildTable();
   }
 
-  buildTable(panel) {
-    console.log('TABLE TO BE CREATED: ', panel);
+  buildTable() {
+    console.log('MANAGE ACCOUNT TABLE TO BE CREATED');
     this.createTableToDeleteAccounts();
+    this.table = document.querySelector('#recordsTable');
     this.tableBody = document.querySelectorAll('#recordsTable tbody');
     this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
-    this.viewButton.addEventListener('click', this.viewAccountHandler, false);
+    this.viewAccountHandler = this.viewAccountButton.bind(this);
+    document.querySelector('.view--btn').addEventListener('click', this.viewAccountHandler);
     this.tableBody
       .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
   }
@@ -131,7 +124,7 @@ class ManageTableView extends TableView {
       buttons: ['view'],
       header,
       data, 
-      hide: [0, 2, 3]
+      hide: [0, 1, 3]
     };
     const table = this.createTable(config);
     this.createDomTable(table);
@@ -139,15 +132,20 @@ class ManageTableView extends TableView {
 
   /* -------------------- Handlers From Event Dispatcher from Model ----------------- */
 
-  loadTable(sender, table) {
-    console.log('RELOADING TABLE: ', table);
-    this.display(table);
+  loadTable(sender) {
+    console.log('RELOADING MANAGE ACCOUNT TABLE');
+    this.display();
+  }
+
+  toggleSpinnerFromModal() {
+    console.log('TOGGLE NOTIFIED');
+    TableView.toggleSpinner();
   }
 
   removeTableRow (sender, payload) {
     console.log('MODEL PAYLOAD: ', payload, payload.row);
     // remove row from table;
-    ManageTableView.toggleSpinner(); // stop spinner
+    // ManageTableView.toggleSpinner(); // stop spinner
     if (Number(payload.row) !== 0) {
       document.querySelector('#recordsTable').deleteRow(payload.row);
       return;

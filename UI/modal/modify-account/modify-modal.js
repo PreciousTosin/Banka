@@ -1,17 +1,19 @@
 class ModifyModal extends GenericModal {
-  constructor() {
+  constructor(modifyFunc) {
     super();
     this.init();
+    this.modifyFunc = modifyFunc;
   }
 
   init() {
     this.createForm();
+    this.enableEvent();
   }
 
   createForm() {
     const modifyForm = document.createElement('FORM');
     modifyForm.name = 'modifyForm';
-    modifyForm.classList.add('modify--form');
+    modifyForm.classList.add('modify--account--form');
     modifyForm.method = 'POST';
 
     const formGroup = document.createElement('div');
@@ -19,11 +21,11 @@ class ModifyModal extends GenericModal {
     modifyForm.appendChild(formGroup);
     const selectLabel = document.createElement('label');
     selectLabel.for = 'select-activate';
-    const optionsList = ['activate', 'deactivate'];
+    const optionsList = ['active', 'dormant'];
     const selectActivate = document.createElement('select');
     selectActivate.id = 'select-activate';
     selectActivate.classList.add('form--control');
-    selectActivate.name = 'selectActivate';
+    selectActivate.name = 'status';
     formGroup.appendChild(selectActivate);
 
     optionsList.forEach((item) => {
@@ -34,9 +36,8 @@ class ModifyModal extends GenericModal {
     });
 
     const formButton = document.createElement('button');
-    formButton.classList.add('btn');
-    formButton.classList.add('btn--primary');
-    formButton.type = 'button';
+    formButton.classList.add('btn', 'btn--primary', 'modify--account--btn');
+    formButton.type = 'submit';
     formButton.innerHTML = 'Modify';
     modifyForm.appendChild(formButton);
 
@@ -44,5 +45,18 @@ class ModifyModal extends GenericModal {
     this.createModalContent(modifyForm);
   }
 
+  enableEvent() {
+    const form = document.querySelector('.modify--account--form');
+    this.modifyHandler = this.callModifyAccount.bind(this);
+    form.addEventListener('submit', (e) => this.modifyHandler(e, form));
+  }
 
+  callModifyAccount(sender, form) {
+    sender.preventDefault();
+    const fd = new FormData(form);
+    const body = {};
+    [...fd.entries()].forEach(entry => body[entry[0]] = entry[1]);
+    this.toggleModal(); // close modal
+    this.modifyFunc(body);
+  }
 }

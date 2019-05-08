@@ -68,6 +68,18 @@ class GenericModal {
       this.detachModalListeners(this.modal);
     }
   }
+
+  static toggleSpinner() {
+    const spinner = document.querySelector('.spinner--element');
+    const overlay = document.querySelector('.spinner--overlay');
+    if (spinner.classList.contains('lds-spinner')) {
+      spinner.classList.toggle('lds-spinner');
+      overlay.classList.toggle('show-overlay');
+    } else {
+      spinner.classList.toggle('lds-spinner');
+      overlay.classList.toggle('show-overlay');
+    }
+  }
 }
 
 /* const btn = document.getElementById('modal_opener');

@@ -39,9 +39,9 @@ class ManageTableController {
 
   viewAccount(sender, payload) {
     const account = this.model.tableData.filter((acc) => acc.id === Number(payload.dataIndex));
+    console.log('TABLE CONTROLLER: ', payload, ...account);
     this.modal = new ViewAccountModal(...account);
     this.modal.toggleModal();
-    console.log('TABLE CONTROLLER: ', payload, ...account);
     // this.model.deleteAccount(payload);
   }
 }

@@ -4,7 +4,7 @@ class ModifyTableController {
     this.view = view;
     console.log('ABOUT TO INITIALISE MODAL');
     this.init();
-    this.modal = new ModifyModal();
+    this.modal = '';
   }
 
   init() {
@@ -30,9 +30,10 @@ class ModifyTableController {
   }
 
 
-  modifyAccount(sender, payload) {
-    console.log('MODIFY TABLE CONTROLLER: ', payload);
+  modifyAccount(sender, tableData) {
+    console.log('MODIFY TABLE CONTROLLER: ', tableData);
+    const modifyFunc = (body) => this.model.modifyAccount(tableData, body);
+    this.modal = new ModifyModal(modifyFunc);
     this.modal.toggleModal();
-    this.model.modifyAccount(payload);
   }
 }
