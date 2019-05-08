@@ -33,6 +33,15 @@ class UserController {
   static returnAllUsers(req, res) {
     return new Promise((resolve, reject) => {
       user.findAll()
+        .then(data => data.map(userData => ({
+          id: userData.id,
+          email: userData.email,
+          firstName: userData.firstname,
+          lastName: userData.lastname,
+          type: userData.type,
+          IsAdmin: userData.isadmin,
+          status: userData.status,
+        })))
         .then(data => resolve(res.status(200).json(Object.assign({}, { status: 200, data }))))
         .catch(() => reject(res.status(404).json((Object.assign({}, { status: 404, error: 'User not found' })))));
     });

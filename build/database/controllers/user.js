@@ -70,6 +70,18 @@ function () {
     value: function returnAllUsers(req, res) {
       return new Promise(function (resolve, reject) {
         _user["default"].findAll().then(function (data) {
+          return data.map(function (userData) {
+            return {
+              id: userData.id,
+              email: userData.email,
+              firstName: userData.firstname,
+              lastName: userData.lastname,
+              type: userData.type,
+              IsAdmin: userData.isadmin,
+              status: userData.status
+            };
+          });
+        }).then(function (data) {
           return resolve(res.status(200).json(Object.assign({}, {
             status: 200,
             data: data
