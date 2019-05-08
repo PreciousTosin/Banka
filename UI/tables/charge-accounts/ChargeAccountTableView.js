@@ -12,6 +12,7 @@ class ChargeTableView extends TableView {
       .createTableChildren()
       .setupHandlers()
       .enable();
+    this.model.getTableData();
   }
 
   createChildren() {
@@ -39,6 +40,8 @@ class ChargeTableView extends TableView {
     Handlers from Event Dispatcher
     */
     this.loadTableHandler = this.loadTable.bind(this);
+    this.toggleSpinnerHandler = this.toggleSpinnerFromModal.bind(this);
+    this.errorHandler = this.displayError.bind(this);
     return this;
   }
 
@@ -50,6 +53,8 @@ class ChargeTableView extends TableView {
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
     this.model.chargeAccountEvent.attach(this.loadTableHandler);
+    this.model.toggleSpinnerEvent.attach(this.toggleSpinnerHandler);
+    this.model.toggleErrorEvent.attach(this.errorHandler);
     return this;
   }
 
@@ -99,11 +104,16 @@ class ChargeTableView extends TableView {
       buttons: 1,
       header,
       data,
-      hide: [0, 2, 3], 
+      hide: [0, 1, 3],
     };
     const table = this.createTable(config);
     this.createDomTable(table);
     
+  }
+
+  errDisplay(error) {
+    document.querySelector('.alert-danger').classList.toggle('display-alert');
+    document.querySelector('.error-msg').innerHTML = error;
   }
 
   /* -------------------- Handlers From Event Dispatcher ----------------- */
@@ -111,6 +121,16 @@ class ChargeTableView extends TableView {
   loadTable(sender, table) {
     console.log('RELOADING TABLE: ', table);
     this.display(table);
+  }
+
+  toggleSpinnerFromModal() {
+    console.log('TOGGLE NOTIFIED');
+    TableView.toggleSpinner();
+  }
+
+  displayError(sender, error) {
+    console.log('ERROR DISPLAYED');
+    this.errDisplay(error);
   }
 
   /* -------------------- End Handlers From Event Dispatcher ----------------- */

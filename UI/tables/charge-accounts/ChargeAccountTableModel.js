@@ -4,20 +4,20 @@ class ChargeTableModel extends TableModel {
   }
   constructor() {
     super();
-    this.tableHeader = [ 'id', 'accountNumber', 'createdOn', 'owner', 'type', 'status', 'balance' ];
+    this.tableHeader = [ 'id', 'createdOn', 'accountNumber', 'owner', 'type', 'status', 'balance' ];
     this.tableData = [
       {
         id: 58769874154475111,
-        accountNumber: 2816408925,
         createdOn: ChargeTableModel.dateTime(0),
+        accountNumber: 2816408925,
         owner: 23568974210520,
         type: 'savings',
         status: 'active',
         balance: 500.00,
       }, {
         id: 37091127128041553,
-        accountNumber: 2869502843,
         createdOn: ChargeTableModel.dateTime(24 * 60 * 60 * 1000),
+        accountNumber: 2869502843,
         owner: 65897567145632,
         type: 'current',
         status: 'draft',
@@ -27,28 +27,98 @@ class ChargeTableModel extends TableModel {
     this.tableType = 'charge-accounts';
     this.loadTableEvent = new Event(this);
     this.chargeAccountEvent = new Event(this);
+    this.toggleSpinnerEvent = new Event(this);
+    this.toggleErrorEvent = new Event(this);
   }
 
   getTableData() {
-    return this.tableData;
+    const token = localStorage.getItem('token');
+    const accountsUrl ='https://bankar.herokuapp.com/api/v1/accounts';
+    const bearer = 'Bearer ' + token;
+    const headers = {
+      'Authorization': bearer,
+      'Content-Type': 'application/json',
+    };
+
+    this.toggleSpinnerEvent.notify();
+
+    fetch(accountsUrl, {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: { ...headers },
+    })
+      .then((response) => {
+        if (response.status === 404 || response.status === 400 || response.status === 409 || response.status === 401) {
+          response.json().then((object) => {
+            console.log(object.error);
+            this.toggleSpinnerEvent.notify();
+            this.toggleErrorEvent.notify(object.error);
+          })
+        } else if (response.status === 200) {
+          response.json().then((object) => {
+            console.log('success', object);
+            this.toggleSpinnerEvent.notify();
+            this.loadTable(object.data);
+          })
+        }
+      })
+    // return this.tableData;
   }
 
-  setTableType(table) {
-    this.tableType = table;
+  setTableData(data) {
+    this.tableData = data;
   }
 
-  loadTable(table) {
-    console.log('TABLE TO BE SET: ', table);
-    this.setTableType(table);
-    this.loadTableEvent.notify(this.tableType);
+  loadTable(data) {
+    console.log('TABLE TO BE SET: ', data);
+    this.setTableData(data);
+    this.loadTableEvent.notify();
   }
 
-  chargeAccount(payload) {
-    console.log('CHARGED ACCOUNT: ', payload);
+  chargeAccount(tableData, payload) {
+    // console.log('CHARGED ACCOUNT: ', payload);
     // const { data, index } = payload;
-    // const newData = this.tableData.filter(account => account.accountNumber !== data.accountNumber);
-    // this.tableData = newData;
-    // this.chargeAccountEvent.notify({ msg: 'account-deleted', row: index, table: this.tableType });
-    this.chargeAccountEvent.notify();
+    console.log('CHARGING ACCOUNT: ', payload, tableData);
+    const { data } = tableData;
+    const token = localStorage.getItem('token');
+    const txUrl = payload.type === 'credit'
+      ? `https://bankar.herokuapp.com/api/v1/transactions/${data.accountNumber}/credit`
+      : `https://bankar.herokuapp.com/api/v1/transactions/${data.accountNumber}/debit`;
+    const bearer = 'Bearer ' + token;
+    const headers = {
+      'Authorization': bearer,
+      'Content-Type': 'application/json',
+    };
+    const body = {
+      amount: payload.amount
+    };
+
+    this.toggleSpinnerEvent.notify();
+
+    fetch(txUrl, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: { ...headers },
+      body: JSON.stringify(body)
+    })
+      .then((response) => {
+        if (response.status === 404 || response.status === 400 || response.status === 409 || response.status === 401) {
+          response.json().then((object) => {
+            console.log(object.error);
+            this.toggleSpinnerEvent.notify();
+            this.toggleErrorEvent.notify(object.error);
+          })
+        } else if (response.status === 200) {
+          response.json().then((object) => {
+            console.log('success', object);
+            this.toggleSpinnerEvent.notify();
+            // reload table
+            this.getTableData();
+          })
+        }
+      });
+    // this.chargeAccountEvent.notify();
   }
 }
