@@ -25,7 +25,7 @@ router.get('/users/:id', isUser, user.findUserById);
 router.get('/users/:email/accounts', isUser, account.getUserAccountsByEmail);
 
 router.post('/signup', checkSignUp, user.createUser);
-router.post('/signup/admin', checkAdminSignUp, user.createUser);
+router.post('/signup/admin', isAdmin, checkAdminSignUp, user.createUser);
 
 router.post('/signin', checkLogin, user.loginUser);
 
