@@ -6,15 +6,15 @@ function viewBankAccount(data) {
       </li>
       <li>
         <div class="highlight title">Date Created</div>
-        <div>${data.createdon}</div>
+        <div>${data.createdOn}</div>
       </li>
       <li>
         <div class="highlight title">Account Number</div>
-        <div>${data.accountnumber}</div>
+        <div>${data.accountNumber}</div>
       </li>
       <li>
         <div class="highlight title">Owner</div>
-        <div>${data.owner}</div>
+        <div>${data.ownerEmail}</div>
       </li>
       <li>
         <div class="highlight title">Type</div>

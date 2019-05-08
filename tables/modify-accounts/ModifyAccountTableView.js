@@ -12,6 +12,7 @@ class ModifyTableView extends TableView {
       .createTableChildren()
       .setupHandlers()
       .enable();
+    this.model.getTableData();
   }
 
   createChildren() {
@@ -39,6 +40,7 @@ class ModifyTableView extends TableView {
     Handlers from Event Dispatcher
     */
     this.loadTableHandler = this.loadTable.bind(this);
+    this.toggleSpinnerHandler = this.toggleSpinnerFromModal.bind(this);
     return this;
   }
 
@@ -51,6 +53,7 @@ class ModifyTableView extends TableView {
     this.model.loadTableEvent.attach(this.loadTableHandler);
     // this.model.deleteAccountEvent.attach(this.refreshHandler);
     this.model.modifyAccountEvent.attach(this.loadTableHandler);
+    this.model.toggleSpinnerEvent.attach(this.toggleSpinnerHandler);
     return this;
   }
 
@@ -69,8 +72,9 @@ class ModifyTableView extends TableView {
   }
 
   buildTable(panel) {
-    console.log('TABLE TO BE CREATED: ', panel);
+    console.log('MODIFY ACCOUNT TABLE TO BE CREATED: ');
     this.createTableToActivateAccounts();
+    this.table = document.querySelector('#recordsTable');
     this.tableBody = document.querySelectorAll('#recordsTable tbody');
     this.modifyAccountButtonHandler = this.modifyAccountButton.bind(this);
     this.tableBody
@@ -100,7 +104,7 @@ class ModifyTableView extends TableView {
       buttons: 1,
       header,
       data,
-      hide: [0, 2, 3], 
+      hide: [0, 1, 3],
     };
     const table = this.createTable(config);
     this.createDomTable(table);
@@ -110,8 +114,13 @@ class ModifyTableView extends TableView {
   /* -------------------- Handlers From Event Dispatcher ----------------- */
 
   loadTable(sender, table) {
-    console.log('RELOADING TABLE: ', table);
+    console.log('RELOADING MODIFY TABLE');
     this.display(table);
+  }
+
+  toggleSpinnerFromModal() {
+    console.log('TOGGLE NOTIFIED');
+    TableView.toggleSpinner();
   }
 
   /* -------------------- End Handlers From Event Dispatcher ----------------- */

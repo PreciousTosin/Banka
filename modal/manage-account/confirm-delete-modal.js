@@ -49,20 +49,8 @@ class ConfirmDeleteModal extends GenericModal {
       .addEventListener('click', () => this.toggleModal(), false);
   }
 
-  static toggleSpinner() {
-    const spinner = document.querySelector('.spinner--element');
-    const overlay = document.querySelector('.spinner--overlay');
-    if (spinner.classList.contains('lds-spinner')) {
-      spinner.classList.toggle('lds-spinner');
-      overlay.classList.toggle('show-overlay');
-    } else {
-      spinner.classList.toggle('lds-spinner');
-      overlay.classList.toggle('show-overlay');
-    }
-  }
-
   callDeleteAccount(sender) {
-    ConfirmDeleteModal.toggleSpinner(); //start spinner
+    // GenericModal.toggleSpinner(); //start spinner
     this.toggleModal(); // close modal
     console.log('OK button clicked');
     this.deleteFunc();
