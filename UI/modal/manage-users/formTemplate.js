@@ -4,7 +4,7 @@ function createStaffUserForm() {
 		<div class="form--header">
 			<h4>Create Staff Account</h4>
 		</div>
-		<form id="createStaffUserForm" action="" method="POST" name="createStaffUserForm">
+		<form id="createStaffUserForm" class="create-staff-user-form" action="" method="POST" name="createStaffUserForm">
 			<div class="super--form--group">
 				<div class="form--group">
 					<label for="firstName">First Name</label>

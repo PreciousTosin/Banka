@@ -30,17 +30,19 @@ class ManageUserTableController {
     this.model.loadTable(table);
   }
 
-  modifyUser(sender, payload) {
-    console.log('MODIFY TABLE CONTROLLER: ', payload);
-    this.modal = new ModifyModal(); // create new modal instance
+  modifyUser(sender, tableData) {
+    console.log('MODIFY TABLE CONTROLLER: ', tableData);
+    const modifyFunc = (body) => this.model.modifyUser(tableData, body);
+    this.modal = new ModifyUserModal(modifyFunc); // create new modal instance
     this.modal.toggleModal(); // toggle modal visibility
-    this.model.modifyUser(payload);
+    // this.model.modifyUser(payload);
   }
 
-  createUser(sender, payload) {
-    // console.log('TABLE CONTROLLER: ', payload);
-    this.createModal = new ManageUserModal(); // create new modal instance
+  createUser(sender) {
+    console.log('CREATE USER TABLE CONTROLLER');
+    const createFunc = (body) => this.model.createUser(body);
+    this.createModal = new CreateUserModal(createFunc); // create new modal instance
     this.createModal.toggleModal(); // toggle modal visibility
-    this.model.createUser(payload);
+    // this.model.createUser(payload);
   }
 }
