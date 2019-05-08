@@ -47,7 +47,7 @@ app.use(cors({
     'X-Requested-With',
     'Access-Control-Allow-Origin',
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
   credentials: true,
   origin: [
     'http://localhost:3000',
