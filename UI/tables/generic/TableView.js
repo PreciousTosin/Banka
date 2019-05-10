@@ -1,19 +1,18 @@
 class TableView {
   constructor(model) {
     this.model = model;
-    this.addTaskEvent = new Event(this);
-    this.toggleAdminPanelEvent = new Event(this);
-    this.deleteAccountEvent = new Event(this);
-    this.modifyAccountEvent = new Event(this);
-    this.init(this.model.tableType);
+    this.highlighted = '';
+    /* this.deleteAccountEvent = new Event(this);
+    this.modifyAccountEvent = new Event(this); */
+    // this.init(this.model.tableType);
   }
 
-  init(tableType) {
+  init() {
     this.createChildren()
-      .createDefaultTable(tableType)
+      .createDefaultTable()
       .createTableChildren()
-      .setupHandlers(tableType)
-      .enable(tableType);
+      .setupHandlers()
+      .enable();
   }
 
   createChildren() {
@@ -22,13 +21,7 @@ class TableView {
     return this;
   }
 
-  createDefaultTable(tableType) {
-    if (tableType === 'manage-accounts') {
-      this.createTableToDeleteAccounts();
-    } else {
-      this.createTableToActivateAccounts();
-    }
-    console.log();
+  createDefaultTable() {
     return this;
   }
 
@@ -39,46 +32,49 @@ class TableView {
     return this;
   }
 
-  setupHandlers(tableType) {
-    if (tableType === 'manage-accounts') {
-      this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
-    } else if (tableType === 'manage-users') {
-      this.modifyAccountButtonHandler = this.modifyAccountButton.bind(this);
-    }
+  setupHandlers() {
     /**
     Handlers from Event Dispatcher
     */
     this.loadTableHandler = this.loadTable.bind(this);
-    this.refreshHandler = this.refreshTable.bind(this);
     return this;
   }
 
-  enable(tableType) {
-    if (tableType === 'manage-accounts') {
-      this.enableDeleteBtn();
-    } else if (tableType === 'manage-users') {
-      enableModifyBtn();
-    }
+  enable() {
     /**
-     * Event Dispatcher
+     * Event Dispatcher for models
     */
     this.model.loadTableEvent.attach(this.loadTableHandler);
-    this.model.deleteAccountEvent.attach(this.refreshHandler);
-    this.model.modifyAccountEvent.attach(this.loadTableHandler);
     return this;
   }
 
-  enableDeleteBtn() {
-    this.tableBody
-      .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
-  }
-
-  enableModifyBtn() {
-    this.tableBody
-      .forEach(item => item.addEventListener('click', this.modifyButtonHandler));
+  static toggleSpinner() {
+    const spinner = document.querySelector('.spinner--element');
+    const overlay = document.querySelector('.spinner--overlay');
+    if (spinner.classList.contains('lds-spinner')) {
+      spinner.classList.toggle('lds-spinner');
+      overlay.classList.toggle('show-overlay');
+    } else {
+      spinner.classList.toggle('lds-spinner');
+      overlay.classList.toggle('show-overlay');
+    }
   }
 
   getTableRow(sender) {
+    // console.log('SENDER: ', sender.target.nodeName);
+    if (sender.target.nodeName === 'TD') {
+      const tr = sender.target.closest('tr'); // get the table row
+      if (this.highlighted !== '') {
+        // remove highlight from former highlighted row
+        this.table.rows[this.highlighted].style.backgroundColor = '';
+      }
+      // set highlight(background color of clicked row)
+      tr.style.backgroundColor = '#CE8ECE';
+      this.highlighted = tr.rowIndex; // store current highlighted or selected row
+      this.selectRow(sender);
+      return;
+    }
+
     if (sender.target.type === 'button') {
       const td = sender.target.closest("td");
       const tr = td.closest('tr');
@@ -91,15 +87,9 @@ class TableView {
       return {data: rowData[0], index: tableRowIndex };
     }
   }
-  // notify model of delete operation
-  deleteAccountButton(sender) {
-    const rowData = this.getTableRow(sender);
-    this.deleteAccountEvent.notify(rowData);
-  } 
 
-  modifyAccountButton(sender) {
-    const rowData = this.getTableRow(sender);
-    this.modifyAccountEvent.notify(rowData);
+  selectRow(sender) {
+    console.log('SELECTING ROW: ', sender.target);
   }
 
   display(panel) {
@@ -107,22 +97,28 @@ class TableView {
   }
 
   buildTable(panel) {
-    console.log('TABLE TO BE CREATED: ', panel);
-    if (panel === 'manage-accounts') {
-      // this.adminBody.innerHTML = this.createTable();
-      this.createTableToDeleteAccounts();
-      this.tableBody = document.querySelectorAll('#recordsTable tbody');
-      this.deleteAccountButtonHandler = this.deleteAccountButton.bind(this);
-      this.tableBody
-      .forEach(item => item.addEventListener('click', this.deleteAccountButtonHandler));
-    } else {
-      // this.adminBody.innerHTML = this.createTable();
-      this.createTableToActivateAccounts();
-      this.tableBody = document.querySelectorAll('#recordsTable tbody');
-      this.modifyAccountButtonHandler = this.modifyAccountButton.bind(this);
-      this.tableBody
-      .forEach(item => item.addEventListener('click', this.modifyAccountButtonHandler));
+
+  }
+
+  static removeNode(nodeToRemove) {
+    while (nodeToRemove.firstChild) {
+      nodeToRemove.removeChild(nodeToRemove.firstChild);
     }
+
+  }
+
+  static createRowButton(classAttr, text) {
+    return `<button type="button" class="${classAttr}">${text}</button>`;
+  }
+
+  static createHorizontalButton(classAttr, text) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.classList.add('btn');
+    btn.classList.add('btn--primary');
+    btn.classList.add(classAttr);
+    btn.innerHTML = text;
+    return btn;
   }
 
   createDomTable(tableContainer) {
@@ -130,71 +126,18 @@ class TableView {
     this.adminBody.appendChild(tableContainer);
   }
 
-  deleteRow(btn) {
-    const row = btn.parentNode.parentNode;
-    row.parentNode.removeChild(row);
-  }
-
-  createTableToDeleteAccounts() {
-    const btnClass = 'delete--btn btn btn--danger';
-    const btnText = 'Delete';
-    const btn = this.createRowButton(btnClass, btnText);
-    const data = this.model.tableData;
-    const header = this.model.tableHeader;
-    const config = {
-      columns: [
-        null, null, null, null, null, null, null, { 
-          name: 'Delete',
-          content: btn,
-         }
-      ],
-      buttons: 1,
-      header,
-      data, 
-      hide: [0, 2, 3]
-    };
-    const table = this.createTable(config);
-    this.createDomTable(table);
-  }
-
-  createTableToActivateAccounts() {
-    const btnClass = 'modify--btn btn btn--success';
-    const btnText = 'Modify';
-    const btn = this.createRowButton(btnClass, btnText);
-    const header = this.model.tableHeader;
-    const data = this.model.tableData;
-    const config = {
-      columns: [
-        null, null, null, null, null, null, null, { 
-          name: 'Change Status',
-          content: btn,
-         }
-      ],
-      buttons: 1,
-      header,
-      data,
-      hide: [0, 2, 3], 
-    };
-    const table = this.createTable(config);
-    this.createDomTable(table);
-    
-  }
-
-  removeNode(nodeToRemove) {
-    while (nodeToRemove.firstChild) {
-      nodeToRemove.removeChild(nodeToRemove.firstChild);
-    }
-
-  }
-
-  createRowButton(classAttr, text, type) {
-    return `<button type="button" class="${classAttr}">${text}</button>`;
-  }
-
   createTable(config = {}) {
     // console.log('SPECIAL CONFIGURATION: ', config);
     const tableContainer = document.createElement('div');
     tableContainer.setAttribute('class', 'gen--table');
+
+    // if config contains setup for horizontal  buttons
+    if (config.buttons.length > 0) {
+      const btsContainer = document.createElement('div');
+      btsContainer.classList.add('horizontal--btns');
+      config.buttons.forEach((btn) => btsContainer.appendChild(TableView.createHorizontalButton(`${btn}--btn`, btn)));
+      tableContainer.appendChild(btsContainer);
+    }
     // NOW CREATE AN INPUT BOX TYPE BUTTON USING createElement() METHOD.
     // CREATE DYNAMIC TABLE.
     const table = document.createElement('table');
@@ -223,18 +166,18 @@ class TableView {
           th.setAttribute('class', 'hide--column');
       } else if (config.columns[h] !== null) {
         // console.log('SPECIAL CONFIG: ', h, config.columns[h], typeof config.columns[h]); 
-        th.setAttribute('class', 'table--column'); 
+        th.setAttribute('class', 'table--column');
         th.innerHTML = config.columns[h].name;
       } else {
           // TABLE HEADER.  
-          if (h === 0) th.setAttribute('class', 'table--column column1') 
+          if (h === 0) th.setAttribute('class', 'table--column column1')
           else  th.setAttribute('class', 'table--column');
           th.innerHTML = config.header[h];
       } 
       tr.appendChild(th);
     }
 
-    // return table header only when there is no data;
+    // return tables header only when there is no data;
     if (config.data.length === 0) {
       tableContainer.appendChild(table);
       return tableContainer;
@@ -266,10 +209,6 @@ class TableView {
           td.innerHTML = arrValue[c][j];   // ADD VALUES TO EACH CELL.
         }
       }
-      // let cell = tr.insertCell(-1);
-      // cell.setAttribute('class', 'table--column');
-      // cell.innerHTML = rowBtn;
-      // console.log('APPENDED BUTTON!: ', rowBtn);
     }
 
     tableContainer.appendChild(table);
@@ -278,23 +217,9 @@ class TableView {
 
   /* -------------------- Handlers From Event Dispatcher ----------------- */
 
-  toggleAdminPanel(sender, panel) {
-    this.display(panel);
-  }
-
   loadTable(sender, table) {
     console.log('RELOADING TABLE: ', table);
     this.display(table);
-  }
-
-  refreshTable (sender, payload) {
-    console.log('MODEL PAYLOAD: ', payload, payload.row);
-    // remove row from table; 
-    if (Number(payload.row) !== 0) {
-      document.querySelector('#recordsTable').deleteRow(payload.row);
-      return;
-    }
-    return;
   }
 
   /* -------------------- End Handlers From Event Dispatcher ----------------- */

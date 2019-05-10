@@ -2,6 +2,24 @@
   position: relative;
 }
 
+.spinner--overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 995;
+  background: rgba(0,0,0,0.45);
+  opacity: 0;
+  transition: all 0.3s;
+  visibility: hidden;
+}
+
+.show-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
 .lds-spinner {
   color: #E1CEE8;
   display: inline-block;

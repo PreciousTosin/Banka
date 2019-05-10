@@ -7,7 +7,8 @@
     <title>Banka</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../modal/modal.css" />
+    <link rel="stylesheet" href="../css/spinner.css">
+    <link rel="stylesheet" href="../modal/generic/modal.css" />
   </head>
   <body>
     <header class="main-menu-header">
@@ -18,11 +19,34 @@
       <div class="admin--header">
 				<ul>
 					<li id="manage-accounts" class="admin--header--item active">Manage Bank Accounts</li>
-					<li id="manage-users" class="admin--header--item">Manage Users</li>
+					<li id="modify-accounts" class="admin--header--item">Modify Accounts</li>
+          <li id="manage-users" class="admin--header--item">Manage Users</li>
 				</ul>
 			</div>
       <div class="admin--body">
 
+      </div>
+    </div>
+
+    <!-- Modal Component -->
+
+    <div class="modal">
+      <div class="overlay"></div>
+      <div class="modal_content">
+        <div class="top--bar">
+          <span class="close--modal">Close</span>
+        </div>
+        <!--  Dynamic Section -->
+        <h3 class="modal--title">Told Ya!</h3>
+        <div class="modal--body"></div>
+         <!-- End of Dynamic Section -->
+      </div>
+    </div>
+
+    <!--  Spinner -->
+    <div class="spinner">
+      <div class="spinner--overlay">
+        <div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
       </div>
     </div>
 
@@ -39,29 +63,46 @@
           <a href="#">Terms</a>
           <a href="#">Privacy</a>
         </div>
-        <div class="">
-          <div class="copyright">
-            <p class="text-center text-white">
-              <span>2019</span>
-              Banka. All Rights Reserved
-            </p>
-          </div>
+        <div class="copyright">
+          <p class="text-center text-white">
+            <span>2019</span>
+            Banka. All Rights Reserved
+          </p>
         </div>
       </div>
     </footer>
     <!-- END: Footer -->
+    <script type="text/javascript" src="../vendors/jwt-decode/build/jwt-decode.min.js"></script>
     <script type="text/javascript" src="../js/navbar.js"></script>
-    <script src="eventDispatcher.js"></script>
+    <script src="../event-management/eventDispatcher.js"></script>
     <script src="AdminView.js"></script>
     <script src="AdminController.js"></script>
     <script src="AdminModel.js"></script>
     <script src="Admin.js"></script>
-    <script src="../table/TableView.js"></script>
-    <script src="../table/TableController.js"></script>
-    <script src="../table/TableModel.js"></script>
-    <script src="../table/Table.js"></script>
-    <script src="../table/tableTemplate.js"></script>
-    <script src="../modal/modal.js"></script>
+    <script src="../tables/generic/TableView.js"></script>
+    <script src="../tables/generic/TableController.js"></script>
+    <script src="../tables/generic/TableModel.js"></script>
+    <script src="../tables/generic/Table.js"></script>
+    <script src="../tables/generic/tableTemplate.js"></script>
+    <script src="../tables/manage-accounts/ManageAccountTableView.js"></script>
+    <script src="../tables/manage-accounts/ManageAccountTableController.js"></script>
+    <script src="../tables/manage-accounts/AdminTableModel.js"></script>
+    <script src="../tables/manage-accounts/ManageAccountTable.js"></script>
+    <script src="../tables/modify-accounts/ModifyAccountTableView.js"></script>
+    <script src="../tables/modify-accounts/ModifyAccountTableController.js"></script>
+    <script src="../tables/modify-accounts/ModifyAccountTable.js"></script>
+    <script src="../tables/manage-users/ManageUserTableView.js"></script>
+    <script src="../tables/manage-users/ManageUserTableController.js"></script>
+    <script src="../tables/manage-users/ManageUserTableModel.js"></script>
+    <script src="../tables/manage-users/ManageUserTable.js"></script>
+    <script src="../modal/generic/modal.js"></script>
+    <script src="../modal/modify-account/modify-modal.js"></script>
+    <script src="../modal/manage-users/formTemplate.js"></script>
+    <script src="../modal/manage-users/create-user-modal.js"></script>
+    <script src="../modal/manage-users/modify-user-modal.js"></script>
+    <script src="../modal/manage-account/viewAccount.js"></script>
+    <script src="../modal/manage-account/view-account-modal.js"></script>
+    <script src="../modal/manage-account/confirm-delete-modal.js"></script>
     <script>
       window.onload = function() {
         // navbar init
@@ -85,8 +126,7 @@
           siteNavigation.classList.toggle('isActive');
           siteNavigationToggle.classList.toggle('isActive');
         });
-
-        console.log('SETTING UP BANKA APP');
+        // Initialize admin
         const model = new AdminModel(),
           view = new AdminView(model),
           controller = new AdminController(model, view);

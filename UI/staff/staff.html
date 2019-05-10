@@ -7,13 +7,26 @@
 			<title>Banka</title>
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
 			<link rel="stylesheet" href="../css/style.css">
+			<link rel="stylesheet" href="../css/spinner.css">
+			<link rel="stylesheet" href="../css/alert.css">
+		<link rel="stylesheet" href="../modal/generic/modal.css" />
 	</head>
 	<body>
 		<header class="main-menu-header">
 			
 		</header>
+		<div class="error--banner">
+			<div class="alert-danger">
+				<div class="error-msg">Current message</div>
+				<span class="closebtn" onclick="removeError()">&times;</span>
+			</div>
+		</div>
 
 		<div class="admin--container">
+			<h2 class="admin--header">
+				Charge Accounts
+			</h2>
+
 			<div class="staff--body">
 				<div class="gen--table">
 					<table id="consumateRecordsTable">
@@ -25,8 +38,7 @@
 							<th class="table--column">Status</th>
 							<th class="table--column">Balance</th>
 							<th class="table--column">Date</th>
-							<th class="table--column">Credit</th>
-							<th class="table--column">Debit</th>
+							<th class="table--column">Transaction</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -37,8 +49,7 @@
 							<td class="table--column">draft</td>
 							<td class="table--column">100000</td>
 							<td class="table--column">2019-03-10</td>
-							<td class="table--column"><button class="credit--btn btn btn--primary">Credit</button></td>
-							<td class="table--column"><button class="debit--btn btn btn--danger">Debit</button></td>
+							<td class="table--column"><button class="credit--btn btn btn--primary">Charge</button></td>
 						</tr>
 						<tr class="table--row">
 							<td class="table--column column1">65897567145632</td>
@@ -47,8 +58,7 @@
 							<td class="table--column">active</td>
 							<td class="table--column">50000</td>
 							<td class="table--column">2019-03-01</td>
-							<td class="table--column"><button class="credit--btn btn btn--primary">Credit</button></td>
-							<td class="table--column"><button class="debit--btn btn btn--danger">Debit</button></td></td>
+							<td class="table--column"><button class="credit--btn btn btn--primary">Charge</button></td>
 						</tr>
 						<tr class="table--row">
 							<td class="table--column column1">54875558726968</td>
@@ -57,8 +67,7 @@
 							<td class="table--column">draft</td>
 							<td class="table--column">250000</td>
 							<td class="table--column">2019-02-25</td>
-							<td class="table--column"><button class="credit--btn btn btn--primary">Credit</button></td>
-							<td class="table--column"><button class="debit--btn btn btn--danger">Debit</button></td></td>
+							<td class="table--column"><button class="credit--btn btn btn--primary">Charge</button></td>
 						</tr>
 						<tr class="table--row">
 							<td class="table--column column1">23568974210520</td>
@@ -67,13 +76,33 @@
 							<td class="table--column">draft</td>
 							<td class="table--column">200000</td>
 							<td class="table--column">2019-02-10</td>
-							<td class="table--column"><button class="credit--btn btn btn--primary">Credit</button></td>
-							<td class="table--column"><button class="debit--btn btn btn--danger">Debit</button></td></td>
+							<td class="table--column"><button class="credit--btn btn btn--primary">Charge</button></td>
 						</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
+		</div>
+
+		<!-- Modal Component -->
+
+		<div class="modal">
+			<div class="overlay"></div>
+			<div class="modal_content">
+				<div class="top--bar">
+					<span class="close--modal">Close</span>
+				</div>
+				<!--  Dynamic Section -->
+				<h3 class="modal--title">Told Ya!</h3>
+				<div class="modal--body"></div>
+				<!-- End of Dynamic Section -->
+			</div>
+		</div>
+
+		<!--  Spinner -->
+		<div class="spinner">
+			<div class="spinner--overlay">
+				<div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 			</div>
 		</div>
 
@@ -101,8 +130,25 @@
 			</div>
 		</footer>
 		<!-- END: Footer -->
+		<script>
+      const removeError = () => {
+        document.querySelector('.alert-danger').classList.remove('display-alert');
+      };
+		</script>
+		<script type="text/javascript" src="../vendors/jwt-decode/build/jwt-decode.min.js"></script>
+		<script src="../event-management/eventDispatcher.js"></script>
 		<script type="text/javascript" src="../js/navbar.js"></script>
 		<script type="text/javascript" src="../js/staff.js"></script>
+		<script src="../tables/generic/TableView.js"></script>
+		<script src="../tables/generic/TableController.js"></script>
+		<script src="../tables/generic/TableModel.js"></script>
+		<script src="../tables/generic/Table.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTableModel.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTableView.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTableController.js"></script>
+		<script src="../tables/charge-accounts/ChargeAccountTable.js"></script>
+		<script src="../modal/generic/modal.js"></script>
+    <script src="../modal/charge-account/charge-modal.js"></script>
 		<script>
       window.onload = function() {
         // navbar init
@@ -125,6 +171,10 @@
           siteNavigation.classList.toggle('isActive');
           siteNavigationToggle.classList.toggle('isActive');
         });
+
+        // initialize table to list and charge account
+        initChargeTable();
+
       };
 			</script>
 	</body>

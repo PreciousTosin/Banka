@@ -2,7 +2,7 @@ class TableModel {
   static dateTime(offset) {
     return new Date(Date.now() + offset);
   }
-  constructor(activeTable) {
+  constructor() {
     this.tableHeader = [ 'id', 'accountNumber', 'createdOn', 'owner', 'type', 'status', 'balance' ],
     this.tableData = [
       {
@@ -23,10 +23,10 @@ class TableModel {
         balance: 1000.00,
       },
     ];
-    this.tableType = activeTable;
-    this.loadTableEvent = new Event(this);
-    this.deleteAccountEvent = new Event(this);
-    this.modifyAccountEvent = new Event(this);
+    this.tableType = '';
+    // this.loadTableEvent = new Event(this);
+    // this.deleteAccountEvent = new Event(this);
+    // this.modifyAccountEvent = new Event(this);
   }
 
   getTableData() {
@@ -43,15 +43,15 @@ class TableModel {
     this.loadTableEvent.notify(this.tableType);
   }
 
-  deleteAccount(payload) {
+  /* deleteAccount(payload) {
     const { data, index } = payload;
     const newData = this.tableData.filter(account => account.accountNumber !== data.accountNumber);
     this.tableData = newData;
     this.deleteAccountEvent.notify({ msg: 'account-deleted', row: index, table: this.tableType });
-  }
+  } */
 
-  modifyAccount(payload) {
+  /* modifyAccount(payload) {
     console.log('ACTIVATE OR DEACTIVATE: ', payload);
     this.modifyAccountEvent.notify(payload);
-  }
-};
+  } */
+}

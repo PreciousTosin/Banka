@@ -1,12 +1,29 @@
 import expressValidator from 'express-validator/check';
+import jwt from 'jsonwebtoken';
 import transaction from '../models/transaction';
 import account from '../models/account';
 
 const { validationResult } = expressValidator;
 
+const extractToken = (req) => {
+  const token = req.headers['x-access-token'] || req.headers.authorization;
+  if (token === undefined) {
+    return false;
+  }
+
+  if (token.startsWith('Bearer ')) {
+    // Remove Bearer from string
+    return token.slice(7, token.length);
+  }
+  return false;
+};
+
 class TransactionController {
   static returnAllTransations(req, res) {
-    return new Promise((resolve, reject) => transaction.findAll()
+    const token = extractToken(req);
+    const decoded = jwt.decode(token);
+    const funcToCall = decoded.type === 'staff' ? transaction.findAll : transaction.findAllByEmail;
+    return new Promise((resolve, reject) => funcToCall(decoded.email)
       .then((data) => {
         const response = Object.assign({}, { status: 200, data });
         resolve(res.status(200).json(response));

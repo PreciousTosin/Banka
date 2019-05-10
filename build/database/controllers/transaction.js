@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _check = _interopRequireDefault(require("express-validator/check"));
 
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+
 var _transaction = _interopRequireDefault(require("../models/transaction"));
 
 var _account = _interopRequireDefault(require("../models/account"));
@@ -25,6 +27,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var validationResult = _check["default"].validationResult;
 
+var extractToken = function extractToken(req) {
+  var token = req.headers['x-access-token'] || req.headers.authorization;
+
+  if (token === undefined) {
+    return false;
+  }
+
+  if (token.startsWith('Bearer ')) {
+    // Remove Bearer from string
+    return token.slice(7, token.length);
+  }
+
+  return false;
+};
+
 var TransactionController =
 /*#__PURE__*/
 function () {
@@ -35,8 +52,13 @@ function () {
   _createClass(TransactionController, null, [{
     key: "returnAllTransations",
     value: function returnAllTransations(req, res) {
+      var token = extractToken(req);
+
+      var decoded = _jsonwebtoken["default"].decode(token);
+
+      var funcToCall = decoded.type === 'staff' ? _transaction["default"].findAll : _transaction["default"].findAllByEmail;
       return new Promise(function (resolve, reject) {
-        return _transaction["default"].findAll().then(function (data) {
+        return funcToCall(decoded.email).then(function (data) {
           var response = Object.assign({}, {
             status: 200,
             data: data

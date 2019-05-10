@@ -33,7 +33,8 @@ const createUserTable = () => {
         lastName VARCHAR(128) NOT NULL,
         password VARCHAR(128) NOT NULL,
         type VARCHAR(10) NOT NULL,
-        isAdmin BOOLEAN NOT NULL
+        isAdmin BOOLEAN NOT NULL,
+        status VARCHAR(10) NOT NULL
       )`;
 
   pool.connect()

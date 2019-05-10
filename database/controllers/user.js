@@ -16,6 +16,7 @@ const generateUserPrint = (userPayload, admin) => ({
   password: userPayload.password,
   type: userPayload.type === 'staff' ? userPayload.type : 'client',
   isAdmin: admin === true ? admin : false,
+  status: 'active',
 });
 
 const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => tokenUtility
@@ -32,6 +33,15 @@ class UserController {
   static returnAllUsers(req, res) {
     return new Promise((resolve, reject) => {
       user.findAll()
+        .then(data => data.map(userData => ({
+          id: userData.id,
+          email: userData.email,
+          firstName: userData.firstname,
+          lastName: userData.lastname,
+          type: userData.type,
+          IsAdmin: userData.isadmin,
+          status: userData.status,
+        })))
         .then(data => resolve(res.status(200).json(Object.assign({}, { status: 200, data }))))
         .catch(() => reject(res.status(404).json((Object.assign({}, { status: 404, error: 'User not found' })))));
     });
@@ -122,6 +132,13 @@ class UserController {
       if (userData === undefined || userData.length === 0) {
         return res.status(404).json(Object.assign({}, { status: 404, error: 'User does not exist' }));
       }
+
+      // check if account is not suspended
+      if (userData[0].status === 'inactive') {
+        const errorResponse = Object.assign({}, { status: 400, error: 'Your account has been suspended.' });
+        return res.status(400).json(errorResponse);
+      }
+
       const isValidUser = await asyncComparePassword(userPayload.password, userData[0].password);
       if (isValidUser === true) {
         // generate user data to tokenize

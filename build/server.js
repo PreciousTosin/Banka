@@ -53,7 +53,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 app.use((0, _cors["default"])({
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Access-Control-Allow-Origin'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
   credentials: true,
   origin: ['http://localhost:3000', 'https://precioustosin.github.io'],
   optionsSuccessStatus: 200

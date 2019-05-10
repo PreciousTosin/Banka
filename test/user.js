@@ -23,8 +23,6 @@ describe('User Tests', () => {
         lastName: 'Akinbobola',
         email: 'precioustosin@hotmail.com',
         password: 'precious',
-        type: 'client',
-        isAdmin: 'false',
       };
       chai.request(server)
         .post('/api/v1/auth/signup')
@@ -45,8 +43,6 @@ describe('User Tests', () => {
         lastName: 'Akinbobola',
         email: 'precioustosin@hotmail.com',
         password: 'precious',
-        type: 'client',
-        isAdmin: false,
       };
       chai.request(server)
         .post('/api/v1/auth/signup')

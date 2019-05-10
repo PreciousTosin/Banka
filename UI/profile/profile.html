@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta http-equiv="X-UA-Compatible" content="ie=edge">
+			<title>Banka</title>
+			<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Baloo+Chettan|Lilita+One" rel="stylesheet">
+			<link rel="stylesheet" href="../css/style.css">
+			<link rel="stylesheet" href="../css/spinner.css">
+			<link rel="stylesheet" href="../modal/generic/modal.css" />
+			<script defer src="../vendors/fontawesome/js/all.js"></script>
+	</head>
+	<body>
+		<header class="main-menu-header">
+			
+		</header>
+
+		<div class="profile--super--container">
+			<div class="profile--container">
+				<div class="profile--header"></div>
+				<div class="profile--body">
+					<div class="profile--image">
+						<div class="image--container">
+							<img src="../img/profile-avatar.jpg" alt="profile_image">
+						</div>
+					</div>
+					<div class="profile--information">
+						<div class="profile--details">
+							<div class="profile--identification">
+								<h2>John Tabbot</h2>
+								<p>a Client</p>
+							</div>
+							<hr />
+							<div class="more--details">
+								<ul>
+									<li>
+										<span class="profile--icon"><i class="fas fa-user"></i></span>
+										<div>activated</div>
+									</li>
+									<li>
+										<span class="profile--icon"><i class="fas fa-envelope-open-text"></i></span>
+										<div>johhtabbot@outlook.com</div>
+									</li>
+								</ul>
+							</div>
+							<hr />
+							<div class="accounts--container">
+								<div class="accounts">
+									<div class="panel panel-default card-input">
+										<div class="panel-heading">Account</div>
+										<div class="panel-body">
+											Account No -
+											<br />
+											Balance -
+										</div>
+									</div>
+								</div>
+								<div class="account--button">
+									<button type="button" class="btn btn--primary">Create Account</button>
+								</div>
+							</div>
+							<hr />
+							<div class="additional--details">
+								<p>Date of Joining: 17th March, 2019</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal Component -->
+
+		<div class="modal">
+			<div class="overlay"></div>
+			<div class="modal_content">
+				<div class="top--bar">
+					<span class="close--modal">Close</span>
+				</div>
+				<!--  Dynamic Section -->
+				<h3 class="modal--title">Told Ya!</h3>
+				<div class="modal--body"></div>
+				<!-- End of Dynamic Section -->
+			</div>
+		</div>
+
+		<!--  Spinner -->
+		<div class="spinner">
+			<div class="spinner--overlay">
+				<div class="spinner--element"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+			</div>
+		</div>
+
+		<!-- START: Footer -->
+		<footer>
+			<div class="footer-container">
+				<div class="footer--logo">
+					<a href="/">
+						Banka
+					</a>
+				</div>
+				<div class="">
+					<a href="#">Faq</a>
+					<a href="#">Terms</a>
+					<a href="#">Privacy</a>
+				</div>
+				<div class="">
+					<div class="copyright">
+						<p class="text-center text-white">
+							<span>2019</span>
+							Banka. All Rights Reserved
+						</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- END: Footer -->
+		<script src="../modal/generic/modal.js"></script>
+		<script src="../modal/profile/create-account-modal.js"></script>
+		<script type="text/javascript" src="../js/navbar.js"></script>
+		<script type="text/javascript" src="../vendors/jwt-decode/build/jwt-decode.min.js"></script>
+		<script type="text/javascript" src="./profileTemplate.js"></script>
+		<script type="text/javascript" src="../js/profile.js"></script>
+		<script>
+      window.onload = function() {
+        // navbar init
+        const navbarContainer = document.querySelector(".main-menu-header");
+        navbarContainer.innerHTML = NavBar();
+
+        // Code block to toggle navbar visibility
+        const siteNavigationToggle = document.getElementById('siteNavigationToggle');
+        const siteNavigation = document.getElementById('siteNavigation');
+
+        siteNavigationToggle.addEventListener('click', () => {
+          if (siteNavigation.classList.contains('isActive')) {
+            siteNavigationToggle.removeAttribute('aria-pressed');
+          } else {
+            siteNavigationToggle.setAttribute('aria-pressed', true);
+          }
+
+          document.body.classList.toggle('mobile-overflowHidden');
+
+          siteNavigation.classList.toggle('isActive');
+          siteNavigationToggle.classList.toggle('isActive');
+        });
+
+        // setup profile
+        initializeProfile();
+      };
+			</script>
+	</body>
+</html>

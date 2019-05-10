@@ -12,6 +12,7 @@ class AccountController {
     return new Promise((resolve, reject) => findFunc(req.query.status)
       .then((data) => {
         const output = data.map(accountData => ({
+          id: accountData.id,
           createdOn: accountData.createdon,
           accountNumber: accountData.accountnumber,
           ownerEmail: accountData.email,
