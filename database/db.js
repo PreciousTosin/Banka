@@ -50,6 +50,29 @@ const createUserTable = () => {
 };
 
 /**
+ * Create Tokens Table
+ */
+const createTokensTable = () => {
+  const queryText = `CREATE TABLE IF NOT EXISTS
+      Tokens(
+        owner INTEGER NOT NULL,
+        token VARCHAR(500),
+        FOREIGN KEY (owner) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+      )`;
+
+  pool.connect()
+    .then(client => client.query(queryText)
+      .then((res) => {
+        client.release();
+        console.log('CREATE TOKENS TABLE RESPONSE: ', res);
+      })
+      .catch((e) => {
+        client.release();
+        console.log('CREATE TOKENS TABLE ERROR: ', e);
+      }));
+};
+
+/**
  * Create Account Table
  */
 const createAccountTable = () => {
@@ -124,6 +147,23 @@ const dropUserTable = () => {
 };
 
 /**
+ * Drop Tokens Table
+ */
+const dropTokensTable = () => {
+  const queryText = 'DROP TABLE IF EXISTS Tokens CASCADE';
+  pool.connect()
+    .then(client => client.query(queryText)
+      .then((res) => {
+        client.release();
+        console.log('DROP TOKENS TABLE RESPONSE: ', res);
+      })
+      .catch((e) => {
+        client.release();
+        console.log('DROP TOKENS TABLE ERROR: ', e);
+      }));
+};
+
+/**
  * Drop Account Table
  */
 const dropAccountTable = () => {
@@ -164,6 +204,7 @@ const createAllTables = async () => {
   await createUserTable();
   await createAccountTable();
   await createTransactionTable();
+  await createTokensTable();
 };
 /**
  * Drop All Tables
@@ -172,6 +213,7 @@ const dropAllTables = async () => {
   await dropUserTable();
   await dropAccountTable();
   await dropTransactionTable();
+  await dropTokensTable();
 };
 
 pool.on('remove', () => {
@@ -184,8 +226,10 @@ module.exports = {
   createAccountTable,
   createUserTable,
   createTransactionTable,
+  createTokensTable,
   createAllTables,
   dropUserTable,
+  dropTokensTable,
   dropAccountTable,
   dropTransactionTable,
   dropAllTables,

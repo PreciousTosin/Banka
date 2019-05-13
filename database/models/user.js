@@ -1,5 +1,6 @@
 import Password from '../../utilities/password';
 import queryDb from '../query';
+import tokenUtility from '../../utilities/jwt-token';
 
 const { asyncHashPassword } = Password;
 
@@ -27,6 +28,12 @@ const makeId = () => {
   return Number(text);
 };
 
+const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => tokenUtility
+  .createToken(userWithoutToken)
+  .then(token => resolve(token))
+  .catch(error => reject(error)));
+
+
 class User {
   static create(data) {
     const payload = data;
@@ -38,6 +45,18 @@ class User {
           const queryText = `INSERT INTO users(id, email, firstName, lastName, password, type, isAdmin, status)
             VALUES($1, $2, $3, $4, $5, $6, $7, $8);`;
           const params = Object.values(payload);
+          return queryDb.query(queryText, params);
+        })
+        .then((userResults) => {
+          if (userResults.rowCount === 1) {
+            return tokenizeUser(payload);
+          }
+          return new Error('User not created');
+        })
+        .then((token) => {
+          payload.token = token;
+          const queryText = 'INSERT INTO tokens(owner, token) VALUES($1, $2);';
+          const params = [payload.id, token];
           return queryDb.query(queryText, params);
         })
         .then((results) => {

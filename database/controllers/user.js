@@ -19,15 +19,6 @@ const generateUserPrint = (userPayload, admin) => ({
   status: 'active',
 });
 
-const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => tokenUtility
-  .createToken(userWithoutToken)
-  .then((token) => {
-    resolve({
-      ...userWithoutToken,
-      token,
-    });
-  })
-  .catch(error => reject(error)));
 
 class UserController {
   static returnAllUsers(req, res) {
@@ -93,9 +84,8 @@ class UserController {
         if (foundUser.length !== 0) throw Object.assign({}, {}, { status: 409, message: 'User exists' });
       })
         .then(() => user.create(userPayload))
-        .then(userCreated => tokenizeUser(userCreated))
-        .then((tokenedUser) => {
-          const clientPayload = tokenedUser;
+        .then((userCreated) => {
+          const clientPayload = userCreated;
           delete clientPayload.password; // remove password key/value
           const response = Object.assign({}, {
             status: 200,
