@@ -260,7 +260,7 @@ class UserController {
           return mail.sendMail(mailOptions);
         })
         .then((response) => {
-          resolve(res.status(200).json(Object.assign({}, { status: 200, message: 'Mail Sent', data: response })));
+          resolve(res.status(200).json(Object.assign({}, { status: 200, message: 'Password reset instructions have been sent to your mail', data: response })));
         })
         .catch((error) => {
           let errorMsg = error;
@@ -328,7 +328,7 @@ class UserController {
           return mail.sendMail(mailOptions); // send password change email
         })
         .then(() => {
-          resolve(res.status(200).json(Object.assign({}, { status: 200, msg: 'Password Changed', data: updatePayload })));
+          resolve(res.status(200).json(Object.assign({}, { status: 200, message: 'Password Changed Successfully. Login with your new password', data: updatePayload })));
         })
         .catch(error => resolve(res.status(400).json(Object.assign({}, { status: 400, error }))));
     });

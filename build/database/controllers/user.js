@@ -531,7 +531,7 @@ function () {
         }).then(function (response) {
           resolve(res.status(200).json(Object.assign({}, {
             status: 200,
-            message: 'Mail Sent',
+            message: 'Password reset instructions have been sent to your mail',
             data: response
           })));
         })["catch"](function (error) {
@@ -626,7 +626,7 @@ function () {
         }).then(function () {
           resolve(res.status(200).json(Object.assign({}, {
             status: 200,
-            msg: 'Password Changed',
+            message: 'Password Changed Successfully. Login with your new password',
             data: updatePayload
           })));
         })["catch"](function (error) {
