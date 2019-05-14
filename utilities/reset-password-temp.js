@@ -9,7 +9,7 @@ const resetPasswordReqTemplate = data => (
     <body>
         <div>
             <h3>Dear ${data.name},</h3>
-            <p>You requested for a password reset, kindly use this <a href="${data.url}">link</a> to reset your password</p>
+            <p>You requested for a password reset, kindly use this <a href="${data.url}">Change Password</a> to reset your password</p>
             <br>
             <p>Cheers!</p>
         </div>

@@ -28,10 +28,15 @@ const makeId = () => {
   return Number(text);
 };
 
-const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => tokenUtility
-  .createToken(userWithoutToken)
-  .then(token => resolve(token))
-  .catch(error => reject(error)));
+const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => {
+  if (userWithoutToken === null) {
+    resolve(null);
+  }
+  return tokenUtility
+    .createToken(userWithoutToken)
+    .then(token => resolve(token))
+    .catch(error => reject(error));
+});
 
 
 class User {
@@ -160,6 +165,34 @@ class User {
         })
         .catch((e) => {
           reject(e);
+        });
+    });
+  }
+
+  static findTokenById(id) {
+    return new Promise((resolve, reject) => {
+      const queryText = `SELECT * FROM Tokens WHERE owner=${id};`;
+      queryDb.query(queryText)
+        .then((res) => {
+          resolve(res.rows);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  static updateToken(payload) {
+    return new Promise((resolve, reject) => {
+      const queryText = `UPDATE Tokens SET token='${payload.token}' WHERE owner = ${payload.id};`;
+      queryDb.query(queryText)
+        .then((res) => {
+          if (res.rowCount === 1) {
+            resolve(res);
+          } else throw new Error('Token Update Failed');
+        })
+        .catch((err) => {
+          reject(err);
         });
     });
   }

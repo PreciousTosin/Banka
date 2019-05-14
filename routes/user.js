@@ -29,6 +29,9 @@ router.post('/signup/admin', isAdmin, checkAdminSignUp, user.createUser);
 
 router.post('/signin', checkLogin, user.loginUser);
 
+router.post('/forgot-password', user.forgotUserPassword);
+router.post('/reset-password', user.resetUserPassword);
+
 router.patch('/users/:id', isAdmin, checkUserUpdate, user.updateUser);
 
 router.delete('/users/:id', isAdmin, user.deleteUser);

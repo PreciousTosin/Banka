@@ -2,9 +2,11 @@ import expressValidator from 'express-validator/check';
 import user from '../models/user';
 import Password from '../../utilities/password';
 import tokenUtility from '../../utilities/jwt-token';
+import mail from './email';
+import resetPasswordReqTemplate, { resetPasswordSuccessTemplate } from '../../utilities/reset-password-temp';
 
 
-const { asyncComparePassword } = Password;
+const { asyncComparePassword, asyncHashPassword } = Password;
 const { validationResult } = expressValidator;
 
 /* --------------- UTILITY FUNCTIONS ----------------------- */
@@ -17,6 +19,16 @@ const generateUserPrint = (userPayload, admin) => ({
   type: userPayload.type === 'staff' ? userPayload.type : 'client',
   isAdmin: admin === true ? admin : false,
   status: 'active',
+});
+
+const tokenizeUser = userWithoutToken => new Promise((resolve, reject) => {
+  if (userWithoutToken === null) {
+    resolve(null);
+  }
+  return tokenUtility
+    .createToken(userWithoutToken)
+    .then(token => resolve(token))
+    .catch(error => reject(error));
 });
 
 
@@ -150,10 +162,9 @@ class UserController {
 
   static async verifyUser(token) {
     try {
-      await tokenUtility.verifyToken(token);
-      return Object.assign({}, { status: 200, message: 'token is valid' });
+      return await tokenUtility.verifyToken(token);
     } catch (e) {
-      return Object.assign({}, { status: 400, error: e.message });
+      return e.message;
     }
   }
 
@@ -210,6 +221,116 @@ class UserController {
           reject(res.status(404).json(Object.assign({}, { status: 404, error: 'User not found' })));
         }
       }).catch(error => reject(res.status(400).json((Object.assign({}, { status: 400, error })))));
+    });
+  }
+
+  static forgotUserPassword(req, res) {
+    return new Promise((resolve) => {
+      const { email } = req.body;
+      let userData;
+      let token;
+      user.findOneByEmail(email).then((foundUser) => {
+        if (foundUser.length === 0) throw Object.assign({}, {}, { status: 409, message: 'User does not exist' });
+        [userData] = foundUser;
+        return userData;
+      })
+        .then(data => tokenizeUser(data))
+        .then((userToken) => {
+          const payload = {
+            id: userData.id,
+            token: userToken,
+          };
+          ({ token } = payload);
+          return user.updateToken(payload);
+        })
+        .then(() => {
+          const payload = {
+            name: `${userData.firstname} ${userData.lastname}`,
+            url: process.env.NODE_ENV === 'development'
+              ? `http://localhost:3000/api/v1/auth/reset-password/${token}`
+              : `https://precioustosin.github.io/Banka/api/v1/auth/reset-password/${token}`,
+          };
+          const html = resetPasswordReqTemplate(payload);
+          const mailOptions = {
+            from: 'noreply@precioustosin.github.io', // sender address
+            to: userData.email, // list of receivers
+            subject: 'Password Reset Request', // Subject line
+            html, // plain text body
+          };
+          return mail.sendMail(mailOptions);
+        })
+        .then((response) => {
+          resolve(res.status(200).json(Object.assign({}, { status: 200, message: 'Mail Sent', data: response })));
+        })
+        .catch((error) => {
+          let errorMsg = error;
+          let resStatus = 400;
+          if (error.message) {
+            errorMsg = error.message;
+            resStatus = error.status;
+          }
+          const message = { status: resStatus, error: errorMsg };
+          resolve(res.status(resStatus).json(Object.assign({}, message)));
+        });
+    });
+  }
+
+  static resetUserPassword(req, res) {
+    return new Promise((resolve) => {
+      const { token, password, confirmPassword } = req.body;
+      let userData;
+      let updatePayload;
+      UserController.verifyUser(token) // verify token
+        .then((response) => {
+          if (response === 'jwt expired') {
+            resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Password reset link has expired' })));
+          }
+          userData = response;
+        })
+        .then(() => user.findTokenById(userData.id)) // check if token exists in database
+        .then((resp) => {
+          if (resp[0].token === 'null' || resp[0].token === null) {
+            resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Password link is Invalid' })));
+          }
+          return resp;
+        })
+        .then(() => { // check if passwords match
+          if (password !== confirmPassword) {
+            resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Passwords do not match' })));
+          }
+          return asyncHashPassword(password); // hash new password
+        })
+        .then((passwordHash) => {
+          const payload = {
+            password: passwordHash,
+          };
+          return user.update(userData.id, payload); // update user with new password hash
+        })
+        .then((response) => {
+          [updatePayload] = response;
+          const payload = {
+            id: updatePayload.id,
+            token: null,
+          };
+          return user.updateToken(payload); // remove token from database
+        })
+        .then(() => {
+          const payload = {
+            name: `${userData.firstname} ${userData.lastname}`,
+          };
+          const html = resetPasswordSuccessTemplate(payload);
+          const mailOptions = {
+            from: 'noreply@precioustosin.github.io', // sender address
+            to: userData.email, // list of receivers
+            subject: 'Password Change Successful', // Subject line
+            html, // plain text body
+          };
+          return mail.sendMail(mailOptions); // send password change email
+        })
+        .then(() => {
+          resolve(res.status(200).json(Object.assign({}, { status: 200, msg: 'Password Changed', data: updatePayload })));
+        })
+        .catch(error => resolve(res.status(400).json(Object.assign({}, { status: 400, error }))));
     });
   }
 }
