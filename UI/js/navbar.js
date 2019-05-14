@@ -10,7 +10,7 @@ function logOut() {
 }
 
 function returnHome() {
-	const testRegex = /admin|staff|profile/ig;
+	const testRegex = /admin|staff|profile|forgot-password/ig;
 	const regexResult = testRegex.test(window.location.pathname);
 	if (regexResult === true) {
 		window.location.href = '../index.html';

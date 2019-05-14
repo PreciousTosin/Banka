@@ -21,31 +21,38 @@
 					<img src="./img/signup.jpg" alt="sign_up">
 				</div>
 				<div class="auth--form">
+					<div class="auth-header">
+						<p class="text-center">Create an Account</p>
+					</div>
 					<div class="alert-danger">
 						<div class="error-msg">Current message</div>
 						<span class="closebtn" onclick="removeError()">&times;</span>
 					</div>
 					<form id="auth-form" class="signup" action="POST">
 						<div class="form--group">
-							<!--<label for="firstName">First Name</label>-->
+							<label for="firstName">First Name</label>
 							<input type="text" placeholder="First Name" class="form--control" name="firstName" id="firstName" value="Tosin" required>
 						</div>
 						<div class="form--group">
-							<!--<label for="lastName">Last Name</label>-->
+							<label for="lastName">Last Name</label>
 							<input type="text" placeholder="Last Name" class="form--control" name="lastName" id="lastName" value="Akin" required>
 						</div>
 						<div class="form--group">
-							<!--<label for="email">Email</label>-->
+							<label for="email">Email</label>
 							<input type="email" placeholder="Email" class="form--control" name="email" id="email" value="tosin@gmail.com" required>
 						</div>
 						<div class="form--group">
-							<!--<label for="password">Password</label>-->
+							<label for="password">Password</label>
 							<input type="password" placeholder="Password" class="form--control" name="password" id="password" value="precioustosin" required>
 						</div>
 						<div class="form--button center">
 							<button class="btn btn--primary" type="submit">SignUp</button>
 						</div>
 					</form>
+					<div class="text-center">
+						<a class="text-center" href="./login.html">Have an account? Login</a><hr>
+						<a class="text-center" href="./forgot-password/forgot-password.html">Forgot Password? Reset it here</a>
+					</div>
 				</div>
 			</div>
 		</div>
