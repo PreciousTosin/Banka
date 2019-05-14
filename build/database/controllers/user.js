@@ -13,7 +13,25 @@ var _password = _interopRequireDefault(require("../../utilities/password"));
 
 var _jwtToken = _interopRequireDefault(require("../../utilities/jwt-token"));
 
+var _email = _interopRequireDefault(require("./email"));
+
+var _resetPasswordTemp = _interopRequireWildcard(require("../../utilities/reset-password-temp"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -25,11 +43,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var asyncComparePassword = _password["default"].asyncComparePassword;
+var asyncComparePassword = _password["default"].asyncComparePassword,
+    asyncHashPassword = _password["default"].asyncHashPassword;
 var validationResult = _check["default"].validationResult;
 /* --------------- UTILITY FUNCTIONS ----------------------- */
 
@@ -48,10 +63,12 @@ var generateUserPrint = function generateUserPrint(userPayload, admin) {
 
 var tokenizeUser = function tokenizeUser(userWithoutToken) {
   return new Promise(function (resolve, reject) {
+    if (userWithoutToken === null) {
+      resolve(null);
+    }
+
     return _jwtToken["default"].createToken(userWithoutToken).then(function (token) {
-      resolve(_objectSpread({}, userWithoutToken, {
-        token: token
-      }));
+      return resolve(token);
     })["catch"](function (error) {
       return reject(error);
     });
@@ -179,9 +196,7 @@ function () {
         }).then(function () {
           return _user["default"].create(userPayload);
         }).then(function (userCreated) {
-          return tokenizeUser(userCreated);
-        }).then(function (tokenedUser) {
-          var clientPayload = tokenedUser;
+          var clientPayload = userCreated;
           delete clientPayload.password; // remove password key/value
 
           var response = Object.assign({}, {
@@ -350,18 +365,12 @@ function () {
                 return _jwtToken["default"].verifyToken(token);
 
               case 3:
-                return _context2.abrupt("return", Object.assign({}, {
-                  status: 200,
-                  message: 'token is valid'
-                }));
+                return _context2.abrupt("return", _context2.sent);
 
               case 6:
                 _context2.prev = 6;
                 _context2.t0 = _context2["catch"](0);
-                return _context2.abrupt("return", Object.assign({}, {
-                  status: 400,
-                  error: _context2.t0.message
-                }));
+                return _context2.abrupt("return", _context2.t0.message);
 
               case 9:
               case "end":
@@ -469,6 +478,159 @@ function () {
           }
         })["catch"](function (error) {
           return reject(res.status(400).json(Object.assign({}, {
+            status: 400,
+            error: error
+          })));
+        });
+      });
+    }
+  }, {
+    key: "forgotUserPassword",
+    value: function forgotUserPassword(req, res) {
+      return new Promise(function (resolve) {
+        var email = req.body.email;
+        var userData;
+        var token;
+
+        _user["default"].findOneByEmail(email).then(function (foundUser) {
+          if (foundUser.length === 0) throw Object.assign({}, {}, {
+            status: 409,
+            message: 'User does not exist'
+          });
+
+          var _foundUser = _slicedToArray(foundUser, 1);
+
+          userData = _foundUser[0];
+          return userData;
+        }).then(function (data) {
+          return tokenizeUser(data);
+        }).then(function (userToken) {
+          var payload = {
+            id: userData.id,
+            token: userToken
+          };
+          token = payload.token;
+          return _user["default"].updateToken(payload);
+        }).then(function () {
+          var payload = {
+            name: "".concat(userData.firstname, " ").concat(userData.lastname),
+            url: process.env.NODE_ENV === 'development' ? "http://localhost:3000/api/v1/auth/reset-password/".concat(token) : "https://precioustosin.github.io/Banka/api/v1/auth/reset-password/".concat(token)
+          };
+          var html = (0, _resetPasswordTemp["default"])(payload);
+          var mailOptions = {
+            from: 'noreply@precioustosin.github.io',
+            // sender address
+            to: userData.email,
+            // list of receivers
+            subject: 'Password Reset Request',
+            // Subject line
+            html: html // plain text body
+
+          };
+          return _email["default"].sendMail(mailOptions);
+        }).then(function (response) {
+          resolve(res.status(200).json(Object.assign({}, {
+            status: 200,
+            message: 'Mail Sent',
+            data: response
+          })));
+        })["catch"](function (error) {
+          var errorMsg = error;
+          var resStatus = 400;
+
+          if (error.message) {
+            errorMsg = error.message;
+            resStatus = error.status;
+          }
+
+          var message = {
+            status: resStatus,
+            error: errorMsg
+          };
+          resolve(res.status(resStatus).json(Object.assign({}, message)));
+        });
+      });
+    }
+  }, {
+    key: "resetUserPassword",
+    value: function resetUserPassword(req, res) {
+      return new Promise(function (resolve) {
+        var _req$body = req.body,
+            token = _req$body.token,
+            password = _req$body.password,
+            confirmPassword = _req$body.confirmPassword;
+        var userData;
+        var updatePayload;
+        UserController.verifyUser(token) // verify token
+        .then(function (response) {
+          if (response === 'jwt expired') {
+            resolve(res.status(400).json(Object.assign({}, {
+              status: 400,
+              error: 'Password reset link has expired'
+            })));
+          }
+
+          userData = response;
+        }).then(function () {
+          return _user["default"].findTokenById(userData.id);
+        }) // check if token exists in database
+        .then(function (resp) {
+          if (resp[0].token === 'null' || resp[0].token === null) {
+            resolve(res.status(400).json(Object.assign({}, {
+              status: 400,
+              error: 'Password link is Invalid'
+            })));
+          }
+
+          return resp;
+        }).then(function () {
+          // check if passwords match
+          if (password !== confirmPassword) {
+            resolve(res.status(400).json(Object.assign({}, {
+              status: 400,
+              error: 'Passwords do not match'
+            })));
+          }
+
+          return asyncHashPassword(password); // hash new password
+        }).then(function (passwordHash) {
+          var payload = {
+            password: passwordHash
+          };
+          return _user["default"].update(userData.id, payload); // update user with new password hash
+        }).then(function (response) {
+          var _response = _slicedToArray(response, 1);
+
+          updatePayload = _response[0];
+          var payload = {
+            id: updatePayload.id,
+            token: null
+          };
+          return _user["default"].updateToken(payload); // remove token from database
+        }).then(function () {
+          var payload = {
+            name: "".concat(userData.firstname, " ").concat(userData.lastname)
+          };
+          var html = (0, _resetPasswordTemp.resetPasswordSuccessTemplate)(payload);
+          var mailOptions = {
+            from: 'noreply@precioustosin.github.io',
+            // sender address
+            to: userData.email,
+            // list of receivers
+            subject: 'Password Change Successful',
+            // Subject line
+            html: html // plain text body
+
+          };
+          return _email["default"].sendMail(mailOptions); // send password change email
+        }).then(function () {
+          resolve(res.status(200).json(Object.assign({}, {
+            status: 200,
+            msg: 'Password Changed',
+            data: updatePayload
+          })));
+        })["catch"](function (error) {
+          return resolve(res.status(400).json(Object.assign({}, {
             status: 400,
             error: error
           })));

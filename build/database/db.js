@@ -41,6 +41,23 @@ var createUserTable = function createUserTable() {
   });
 };
 /**
+ * Create Tokens Table
+ */
+
+
+var createTokensTable = function createTokensTable() {
+  var queryText = "CREATE TABLE IF NOT EXISTS\n      Tokens(\n        owner INTEGER NOT NULL,\n        token VARCHAR(500),\n        FOREIGN KEY (owner) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE\n      )";
+  pool.connect().then(function (client) {
+    return client.query(queryText).then(function (res) {
+      client.release();
+      console.log('CREATE TOKENS TABLE RESPONSE: ', res);
+    })["catch"](function (e) {
+      client.release();
+      console.log('CREATE TOKENS TABLE ERROR: ', e);
+    });
+  });
+};
+/**
  * Create Account Table
  */
 
@@ -88,6 +105,23 @@ var dropUserTable = function dropUserTable() {
     })["catch"](function (e) {
       client.release();
       console.log('DROP USER TABLE ERROR: ', e);
+    });
+  });
+};
+/**
+ * Drop Tokens Table
+ */
+
+
+var dropTokensTable = function dropTokensTable() {
+  var queryText = 'DROP TABLE IF EXISTS Tokens CASCADE';
+  pool.connect().then(function (client) {
+    return client.query(queryText).then(function (res) {
+      client.release();
+      console.log('DROP TOKENS TABLE RESPONSE: ', res);
+    })["catch"](function (e) {
+      client.release();
+      console.log('DROP TOKENS TABLE ERROR: ', e);
     });
   });
 };
@@ -152,6 +186,10 @@ function () {
             return createTransactionTable();
 
           case 6:
+            _context.next = 8;
+            return createTokensTable();
+
+          case 8:
           case "end":
             return _context.stop();
         }
@@ -190,6 +228,10 @@ function () {
             return dropTransactionTable();
 
           case 6:
+            _context2.next = 8;
+            return dropTokensTable();
+
+          case 8:
           case "end":
             return _context2.stop();
         }
@@ -210,8 +252,10 @@ module.exports = {
   createAccountTable: createAccountTable,
   createUserTable: createUserTable,
   createTransactionTable: createTransactionTable,
+  createTokensTable: createTokensTable,
   createAllTables: createAllTables,
   dropUserTable: dropUserTable,
+  dropTokensTable: dropTokensTable,
   dropAccountTable: dropAccountTable,
   dropTransactionTable: dropTransactionTable,
   dropAllTables: dropAllTables

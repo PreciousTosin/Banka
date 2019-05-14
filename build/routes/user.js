@@ -36,6 +36,8 @@ router.get('/users/:email/accounts', isUser, _account["default"].getUserAccounts
 router.post('/signup', checkSignUp, _user["default"].createUser);
 router.post('/signup/admin', isAdmin, checkAdminSignUp, _user["default"].createUser);
 router.post('/signin', checkLogin, _user["default"].loginUser);
+router.post('/forgot-password', _user["default"].forgotUserPassword);
+router.post('/reset-password', _user["default"].resetUserPassword);
 router.patch('/users/:id', isAdmin, checkUserUpdate, _user["default"].updateUser);
 router["delete"]('/users/:id', isAdmin, _user["default"].deleteUser);
 var _default = router;

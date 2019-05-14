@@ -9,6 +9,8 @@ var _password = _interopRequireDefault(require("../../utilities/password"));
 
 var _query = _interopRequireDefault(require("../query"));
 
+var _jwtToken = _interopRequireDefault(require("../../utilities/jwt-token"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,6 +52,20 @@ var makeId = function makeId() {
   return Number(text);
 };
 
+var tokenizeUser = function tokenizeUser(userWithoutToken) {
+  return new Promise(function (resolve, reject) {
+    if (userWithoutToken === null) {
+      resolve(null);
+    }
+
+    return _jwtToken["default"].createToken(userWithoutToken).then(function (token) {
+      return resolve(token);
+    })["catch"](function (error) {
+      return reject(error);
+    });
+  });
+};
+
 var User =
 /*#__PURE__*/
 function () {
@@ -67,6 +83,17 @@ function () {
           payload.password = hash;
           var queryText = "INSERT INTO users(id, email, firstName, lastName, password, type, isAdmin, status)\n            VALUES($1, $2, $3, $4, $5, $6, $7, $8);";
           var params = Object.values(payload);
+          return _query["default"].query(queryText, params);
+        }).then(function (userResults) {
+          if (userResults.rowCount === 1) {
+            return tokenizeUser(payload);
+          }
+
+          return new Error('User not created');
+        }).then(function (token) {
+          payload.token = token;
+          var queryText = 'INSERT INTO tokens(owner, token) VALUES($1, $2);';
+          var params = [payload.id, token];
           return _query["default"].query(queryText, params);
         }).then(function (results) {
           if (results.rowCount === 1) {
@@ -173,6 +200,34 @@ function () {
           resolve();
         })["catch"](function (e) {
           reject(e);
+        });
+      });
+    }
+  }, {
+    key: "findTokenById",
+    value: function findTokenById(id) {
+      return new Promise(function (resolve, reject) {
+        var queryText = "SELECT * FROM Tokens WHERE owner=".concat(id, ";");
+
+        _query["default"].query(queryText).then(function (res) {
+          resolve(res.rows);
+        })["catch"](function (err) {
+          reject(err);
+        });
+      });
+    }
+  }, {
+    key: "updateToken",
+    value: function updateToken(payload) {
+      return new Promise(function (resolve, reject) {
+        var queryText = "UPDATE Tokens SET token='".concat(payload.token, "' WHERE owner = ").concat(payload.id, ";");
+
+        _query["default"].query(queryText).then(function (res) {
+          if (res.rowCount === 1) {
+            resolve(res);
+          } else throw new Error('Token Update Failed');
+        })["catch"](function (err) {
+          reject(err);
         });
       });
     }

@@ -19,6 +19,8 @@ var _transaction = _interopRequireDefault(require("./transaction"));
 
 var _swaggerDocs = _interopRequireDefault(require("./swagger-docs"));
 
+var _testEmail = _interopRequireDefault(require("./test-email"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 /* -------- ROUTES ---------------- */
@@ -30,5 +32,6 @@ router.use('/user', _userRoute["default"]);
 router.use('/accounts', _account["default"]);
 router.use('/transactions', _transaction["default"]);
 router.use('/api-docs', _swaggerDocs["default"]);
+router.use('/test-mail', _testEmail["default"]);
 var _default = router;
 exports["default"] = _default;
