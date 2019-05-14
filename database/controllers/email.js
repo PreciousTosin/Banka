@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
 });
 
 class EmailController {
-  static sendMail(req, res) {
+  static testMail(req, res) {
     const mailOptions = {
       from: 'noreply@precioustosin.github.io', // sender address
       to: 'precioustosin@hotmail.com', // list of receivers
@@ -24,6 +24,12 @@ class EmailController {
       .catch((error) => {
         res.status(400).json({ status: 400, error });
       });
+  }
+
+  static sendMail(mailOptions) {
+    return new Promise((resolve, reject) => transporter.sendMail(mailOptions)
+      .then(info => resolve(info))
+      .catch(error => reject(error)));
   }
 }
 
