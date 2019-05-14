@@ -21,23 +21,30 @@
 					<img src="./img/login.jpg" alt="sign_up">
 				</div>
 				<div class="auth--form">
+					<div class="auth-header">
+						<p class="text-center">Login</p>
+					</div>
 					<div class="alert-danger">
 						<div class="error-msg">Current message</div>
 						<span class="closebtn" onclick="removeError()">&times;</span>
 					</div>
 					<form id="auth-form" class="login">
 						<div class="form--group">
-							<!--<label for="email">Email</label>-->
+							<label for="email">Email</label>
 							<input type="email" placeholder="Email" class="form--control" name="email" id="email" value="tosin@gmail.com" required>
 						</div>
 						<div class="form--group">
-							<!--<label for="password">Password</label>-->
+							<label for="password">Password</label>
 							<input type="password" placeholder="Password" class="form--control" name="password" id="password" value="blah blah blah" required>
 						</div>
 						<div class="form--button center">
 							<button class="btn btn--primary" type="submit">Login</button>
 						</div>
 					</form>
+					<div class="text-center">
+						<a class="text-center" href="./signup.html">Don’t have an account? Sign Up</a><hr>
+						<a class="text-center" href="./forgot-password/forgot-password.html">Forgot Password? Reset it here</a>
+					</div>
 				</div>
 			</div>
 		</div>
