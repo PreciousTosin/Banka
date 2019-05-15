@@ -229,6 +229,18 @@ class UserController {
       const { email } = req.body;
       let userData;
       let token;
+
+      // check for validation errors
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        resolve(res.status(422).json({ status: 422, error: errString.join(', ') }));
+        return;
+      }
+
       user.findOneByEmail(email).then((foundUser) => {
         if (foundUser.length === 0) throw Object.assign({}, {}, { status: 409, message: 'User does not exist' });
         [userData] = foundUser;
@@ -247,8 +259,8 @@ class UserController {
           const payload = {
             name: `${userData.firstname} ${userData.lastname}`,
             url: process.env.NODE_ENV === 'development'
-              ? `http://localhost:3000/api/v1/auth/reset-password/${token}`
-              : `https://precioustosin.github.io/Banka/api/v1/auth/reset-password/${token}`,
+              ? `http://localhost:3000/forgot-password/reset-password.html?token=${token}`
+              : `https://precioustosin.github.io/forgot-password/reset-password.html?token=${token}`,
           };
           const html = resetPasswordReqTemplate(payload);
           const mailOptions = {
@@ -280,23 +292,35 @@ class UserController {
       const { token, password, confirmPassword } = req.body;
       let userData;
       let updatePayload;
+
+      // check for validation errors
+      const errors = validationResult(req);
+      // remove duplicate messages
+      const errorList = new Set(errors.array().map(e => e.msg));
+      if (!errors.isEmpty()) {
+        const errString = [];
+        errorList.forEach(err => errString.push(err));
+        resolve(res.status(422).json({ status: 422, error: errString.join(', ') }));
+        return;
+      }
+
       UserController.verifyUser(token) // verify token
         .then((response) => {
           if (response === 'jwt expired') {
-            resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Password reset link has expired' })));
+            throw new Error('Password reset link has expired');
           }
           userData = response;
         })
         .then(() => user.findTokenById(userData.id)) // check if token exists in database
         .then((resp) => {
           if (resp[0].token === 'null' || resp[0].token === null) {
-            resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Password link is Invalid' })));
+            throw new Error('Password link is Invalid');
           }
           return resp;
         })
         .then(() => { // check if passwords match
           if (password !== confirmPassword) {
-            resolve(res.status(400).json(Object.assign({}, { status: 400, error: 'Passwords do not match' })));
+            throw new Error('Passwords do not match');
           }
           return asyncHashPassword(password); // hash new password
         })
@@ -330,7 +354,13 @@ class UserController {
         .then(() => {
           resolve(res.status(200).json(Object.assign({}, { status: 200, message: 'Password Changed Successfully. Login with your new password', data: updatePayload })));
         })
-        .catch(error => resolve(res.status(400).json(Object.assign({}, { status: 400, error }))));
+        .catch((error) => {
+          if (error.message) {
+            resolve(res.status(400).json(Object.assign({}, { status: 400, error: error.message })));
+          } else {
+            resolve(res.status(400).json(Object.assign({}, { status: 400, error })));
+          }
+        });
     });
   }
 }

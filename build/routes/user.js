@@ -22,11 +22,15 @@ var isUser = _authorization["default"].isUser,
 var checkCreateUser = _validateUser["default"].checkCreateUser,
     checkLoginUser = _validateUser["default"].checkLoginUser,
     checkUpdateUser = _validateUser["default"].checkUpdateUser,
-    checkCreateAdmin = _validateUser["default"].checkCreateAdmin;
+    checkCreateAdmin = _validateUser["default"].checkCreateAdmin,
+    checkForgotPassword = _validateUser["default"].checkForgotPassword,
+    checkResetPassword = _validateUser["default"].checkResetPassword;
 var checkSignUp = checkCreateUser();
 var checkLogin = checkLoginUser();
 var checkUserUpdate = checkUpdateUser();
 var checkAdminSignUp = checkCreateAdmin();
+var checkForget = checkForgotPassword();
+var checkReset = checkResetPassword();
 
 var router = _express["default"].Router();
 
@@ -36,8 +40,8 @@ router.get('/users/:email/accounts', isUser, _account["default"].getUserAccounts
 router.post('/signup', checkSignUp, _user["default"].createUser);
 router.post('/signup/admin', isAdmin, checkAdminSignUp, _user["default"].createUser);
 router.post('/signin', checkLogin, _user["default"].loginUser);
-router.post('/forgot-password', _user["default"].forgotUserPassword);
-router.post('/reset-password', _user["default"].resetUserPassword);
+router.post('/forgot-password', checkForget, _user["default"].forgotUserPassword);
+router.post('/reset-password', checkReset, _user["default"].resetUserPassword);
 router.patch('/users/:id', isAdmin, checkUserUpdate, _user["default"].updateUser);
 router["delete"]('/users/:id', isAdmin, _user["default"].deleteUser);
 var _default = router;

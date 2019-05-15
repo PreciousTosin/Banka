@@ -490,7 +490,25 @@ function () {
       return new Promise(function (resolve) {
         var email = req.body.email;
         var userData;
-        var token;
+        var token; // check for validation errors
+
+        var errors = validationResult(req); // remove duplicate messages
+
+        var errorList = new Set(errors.array().map(function (e) {
+          return e.msg;
+        }));
+
+        if (!errors.isEmpty()) {
+          var errString = [];
+          errorList.forEach(function (err) {
+            return errString.push(err);
+          });
+          resolve(res.status(422).json({
+            status: 422,
+            error: errString.join(', ')
+          }));
+          return;
+        }
 
         _user["default"].findOneByEmail(email).then(function (foundUser) {
           if (foundUser.length === 0) throw Object.assign({}, {}, {
@@ -514,7 +532,7 @@ function () {
         }).then(function () {
           var payload = {
             name: "".concat(userData.firstname, " ").concat(userData.lastname),
-            url: process.env.NODE_ENV === 'development' ? "http://localhost:3000/api/v1/auth/reset-password/".concat(token) : "https://precioustosin.github.io/Banka/api/v1/auth/reset-password/".concat(token)
+            url: process.env.NODE_ENV === 'development' ? "http://localhost:3000/forgot-password/reset-password.html?token=".concat(token) : "https://precioustosin.github.io/forgot-password/reset-password.html?token=".concat(token)
           };
           var html = (0, _resetPasswordTemp["default"])(payload);
           var mailOptions = {
@@ -560,14 +578,30 @@ function () {
             password = _req$body.password,
             confirmPassword = _req$body.confirmPassword;
         var userData;
-        var updatePayload;
+        var updatePayload; // check for validation errors
+
+        var errors = validationResult(req); // remove duplicate messages
+
+        var errorList = new Set(errors.array().map(function (e) {
+          return e.msg;
+        }));
+
+        if (!errors.isEmpty()) {
+          var errString = [];
+          errorList.forEach(function (err) {
+            return errString.push(err);
+          });
+          resolve(res.status(422).json({
+            status: 422,
+            error: errString.join(', ')
+          }));
+          return;
+        }
+
         UserController.verifyUser(token) // verify token
         .then(function (response) {
           if (response === 'jwt expired') {
-            resolve(res.status(400).json(Object.assign({}, {
-              status: 400,
-              error: 'Password reset link has expired'
-            })));
+            throw new Error('Password reset link has expired');
           }
 
           userData = response;
@@ -576,20 +610,14 @@ function () {
         }) // check if token exists in database
         .then(function (resp) {
           if (resp[0].token === 'null' || resp[0].token === null) {
-            resolve(res.status(400).json(Object.assign({}, {
-              status: 400,
-              error: 'Password link is Invalid'
-            })));
+            throw new Error('Password link is Invalid');
           }
 
           return resp;
         }).then(function () {
           // check if passwords match
           if (password !== confirmPassword) {
-            resolve(res.status(400).json(Object.assign({}, {
-              status: 400,
-              error: 'Passwords do not match'
-            })));
+            throw new Error('Passwords do not match');
           }
 
           return asyncHashPassword(password); // hash new password
@@ -630,10 +658,17 @@ function () {
             data: updatePayload
           })));
         })["catch"](function (error) {
-          return resolve(res.status(400).json(Object.assign({}, {
-            status: 400,
-            error: error
-          })));
+          if (error.message) {
+            resolve(res.status(400).json(Object.assign({}, {
+              status: 400,
+              error: error.message
+            })));
+          } else {
+            resolve(res.status(400).json(Object.assign({}, {
+              status: 400,
+              error: error
+            })));
+          }
         });
       });
     }

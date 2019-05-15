@@ -10,11 +10,15 @@ const {
   checkLoginUser,
   checkUpdateUser,
   checkCreateAdmin,
+  checkForgotPassword,
+  checkResetPassword,
 } = ValidateUser;
 const checkSignUp = checkCreateUser();
 const checkLogin = checkLoginUser();
 const checkUserUpdate = checkUpdateUser();
 const checkAdminSignUp = checkCreateAdmin();
+const checkForget = checkForgotPassword();
+const checkReset = checkResetPassword();
 
 const router = express.Router();
 
@@ -29,8 +33,8 @@ router.post('/signup/admin', isAdmin, checkAdminSignUp, user.createUser);
 
 router.post('/signin', checkLogin, user.loginUser);
 
-router.post('/forgot-password', user.forgotUserPassword);
-router.post('/reset-password', user.resetUserPassword);
+router.post('/forgot-password', checkForget, user.forgotUserPassword);
+router.post('/reset-password', checkReset, user.resetUserPassword);
 
 router.patch('/users/:id', isAdmin, checkUserUpdate, user.updateUser);
 

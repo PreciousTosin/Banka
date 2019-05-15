@@ -1,7 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 import expressValidator from 'express-validator/check';
 
-const { body } = expressValidator;
+const { body, check } = expressValidator;
 
 class ValidateUser {
   static checkCreateUser() {
@@ -59,6 +59,34 @@ class ValidateUser {
         .isIn(['client', 'staff']),
       body('isAdmin', 'Invalid value. isAdmin must either be true or false').optional()
         .isBoolean(),
+    ];
+  }
+
+  static checkForgotPassword() {
+    return [
+      body('email', 'Email cannot be blank').exists().isEmail().withMessage('Invalid email'),
+    ];
+  }
+
+  static checkResetPassword() {
+    return [
+      check('token', 'Token is required').exists(),
+      body('password', 'Password is required')
+        .exists()
+        .isLength({
+          min: 6,
+        })
+        .withMessage('Password must contain at least 6 characters')
+        .isLength({
+          max: 20,
+        })
+        .withMessage('Password can contain max 20 characters'),
+      body('confirmPassword').custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Passwords do not match');
+        }
+        return true;
+      }),
     ];
   }
 }

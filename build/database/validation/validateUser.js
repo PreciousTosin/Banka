@@ -15,7 +15,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var body = _check["default"].body;
+var body = _check["default"].body,
+    check = _check["default"].check;
 
 var ValidateUser =
 /*#__PURE__*/
@@ -49,6 +50,28 @@ function () {
       return [body('firstName', 'First Name must include only alphabets').optional().isAlpha().withMessage('First Name must include only alphabets'), body('lastName', 'Last Name cannot be blank').optional().isAlpha().withMessage('Last Name must include only alphabets'), body('email', 'Email cannot be blank').optional().isEmail().withMessage('Invalid email'), body('password', 'Password cannot be blank').optional().isLength({
         min: 8
       }).withMessage('Minimum Password length is 8').matches('[0-9a-zA-Z]').withMessage('Invalid Password'), body('type', 'Invalid type. User type must either be client or staff').optional().isIn(['client', 'staff']), body('isAdmin', 'Invalid value. isAdmin must either be true or false').optional().isBoolean()];
+    }
+  }, {
+    key: "checkForgotPassword",
+    value: function checkForgotPassword() {
+      return [body('email', 'Email cannot be blank').exists().isEmail().withMessage('Invalid email')];
+    }
+  }, {
+    key: "checkResetPassword",
+    value: function checkResetPassword() {
+      return [check('token', 'Token is required').exists(), body('password', 'Password is required').exists().isLength({
+        min: 6
+      }).withMessage('Password must contain at least 6 characters').isLength({
+        max: 20
+      }).withMessage('Password can contain max 20 characters'), body('confirmPassword').custom(function (value, _ref) {
+        var req = _ref.req;
+
+        if (value !== req.body.password) {
+          throw new Error('Passwords do not match');
+        }
+
+        return true;
+      })];
     }
   }]);
 
