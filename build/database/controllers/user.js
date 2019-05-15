@@ -532,7 +532,7 @@ function () {
         }).then(function () {
           var payload = {
             name: "".concat(userData.firstname, " ").concat(userData.lastname),
-            url: process.env.NODE_ENV === 'development' ? "http://localhost:3000/forgot-password/reset-password.html?token=".concat(token) : "https://precioustosin.github.io/forgot-password/reset-password.html?token=".concat(token)
+            url: process.env.NODE_ENV === 'development' ? "http://localhost:3000/forgot-password/reset-password.html?token=".concat(token) : "https://precioustosin.github.io/Banka/forgot-password/reset-password.html?token=".concat(token)
           };
           var html = (0, _resetPasswordTemp["default"])(payload);
           var mailOptions = {

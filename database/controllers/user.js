@@ -260,7 +260,7 @@ class UserController {
             name: `${userData.firstname} ${userData.lastname}`,
             url: process.env.NODE_ENV === 'development'
               ? `http://localhost:3000/forgot-password/reset-password.html?token=${token}`
-              : `https://precioustosin.github.io/forgot-password/reset-password.html?token=${token}`,
+              : `https://precioustosin.github.io/Banka/forgot-password/reset-password.html?token=${token}`,
           };
           const html = resetPasswordReqTemplate(payload);
           const mailOptions = {
