@@ -42,6 +42,7 @@ const authHandler = (e, form) => {
   // LogIn({ type: 'client', isadmin: false, token: 'eyxifufkgggm' });
 
   if (formType === 'login') {
+  	// const loginUrl ='http://localhost:9000/api/v1/auth/signin';
   	const loginUrl ='https://bankar.herokuapp.com/api/v1/auth/signin';
     const headers = {
       'Content-Type': 'application/json',
